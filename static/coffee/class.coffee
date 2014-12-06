@@ -47,13 +47,24 @@ class Grid
                 # Instantiate a new array for each row
                 @blockArray[widthBlock] = []
                 for heightBlock in [0...@size.height]
+                    # Create new block
                     block = new Block(
                         new Size(BLOCK_DEFAULT_WIDTH_PIXEL,BLOCK_DEFAULT_HEIGHT_PIXEL,UNIT_PIXEL)
                     )
+
+                    # Create the HTML block
                     blockElement = block.createBlock()   
                     blockElement.text("[#{widthBlock},#{heightBlock}]")
+
+                    # Assign the html Block back to the block object
+                    block.assignHTMLBlock(blockElement)
+
+                    # Add the block to the Page
                     row.append(blockElement)
+
+                    # assign the block to the grid array
                     @blockArray[widthBlock][heightBlock] = block
+
                 ELEMENT_BOARD_CONTAINER.append(row)
 
         getGrid: () =>
@@ -64,7 +75,7 @@ class Grid
 class Block
     # PROPERTIES
     @size = null
-
+    @htmlBlock = null
     # METHODS
     constructor: (@size) ->
         console.log "New Block Created: (#{@size.height},#{@size.width})"
@@ -74,6 +85,8 @@ class Block
             block.width( @size.getWidthWithUnit() )
             block.height( @size.getWidthWithUnit() )
             return block
+    assignHTMLBlock:(block) =>
+        @htmlBlock = block
 
 class Dice extends Block
     # INHERITED PROPERTIES

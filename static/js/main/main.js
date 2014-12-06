@@ -305,18 +305,4 @@
     return randomNumAlt = this._randomNum(10, 5);
   };
 
-  $(function() {
-    return FastClick.attach(document.body);
-  });
-
-  $(function() {
-    var block, dice, grid, player, size;
-    size = new Size(100, 100);
-    block = new Block(size);
-    dice = new Dice(size);
-    player = new Player("Tom");
-    grid = new Grid(size);
-    return dice.getSize();
-  });
-
 }).call(this);

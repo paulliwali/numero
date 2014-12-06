@@ -111,8 +111,6 @@ class Dice extends Block
     createDice: () =>
         console.log "CREATING DICE"
         @assignHTMLElement(@createBlock())
-        faceUp = @getFaceUp()
-        @htmlElement.text(faceUp)
 
         @gridIndex_X = randomNum(window.grid.getGridWidth(),0)
         @gridIndex_Y = randomNum(window.grid.getGridHeight(),0)
@@ -123,6 +121,9 @@ class Dice extends Block
         return @htmlElement
 
     moveToGrid: ()=>
+        faceUp = @getFaceUp()
+        @htmlElement.text(faceUp)
+
         window.grid.getBlockElement(
             @gridIndex_X, @gridIndex_Y
             ).getBlockElement().append(@htmlElement)
@@ -171,7 +172,7 @@ class Dice extends Block
         console.log "FACEUP: #{@orientation.faceup}"
         console.log "BOTTOM: #{@orientation.bottom}"
         console.log "LEFT: #{@orientation.left}"
-        console.log "RIGHT: #{@rorientation.right}"
+        console.log "RIGHT: #{@orientation.right}"
         console.log "UP: #{@orientation.up}"
         console.log "DOWN: #{@orientation.down}"
         console.log @gridIndex_X,@gridIndex_Y

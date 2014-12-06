@@ -146,11 +146,8 @@
     }
 
     Dice.prototype.createDice = function() {
-      var faceUp;
       console.log("CREATING DICE");
       this.assignHTMLElement(this.createBlock());
-      faceUp = this.getFaceUp();
-      this.htmlElement.text(faceUp);
       this.gridIndex_X = randomNum(window.grid.getGridWidth(), 0);
       this.gridIndex_Y = randomNum(window.grid.getGridHeight(), 0);
       this.moveToGrid();
@@ -159,6 +156,9 @@
     };
 
     Dice.prototype.moveToGrid = function() {
+      var faceUp;
+      faceUp = this.getFaceUp();
+      this.htmlElement.text(faceUp);
       return window.grid.getBlockElement(this.gridIndex_X, this.gridIndex_Y).getBlockElement().append(this.htmlElement);
     };
 
@@ -211,7 +211,7 @@
       console.log("FACEUP: " + this.orientation.faceup);
       console.log("BOTTOM: " + this.orientation.bottom);
       console.log("LEFT: " + this.orientation.left);
-      console.log("RIGHT: " + this.rorientation.right);
+      console.log("RIGHT: " + this.orientation.right);
       console.log("UP: " + this.orientation.up);
       console.log("DOWN: " + this.orientation.down);
       console.log(this.gridIndex_X, this.gridIndex_Y);
@@ -453,7 +453,7 @@
 
   $(function() {
     var blockSize, dice, diceElement, diceSize;
-    blockSize = new Size(2, 3, UNIT_BLOCK);
+    blockSize = new Size(3, 3, UNIT_BLOCK);
     window.grid = new Grid(blockSize);
     grid.createGrid();
     diceSize = new Size("25", "25", UNIT_PIXEL);

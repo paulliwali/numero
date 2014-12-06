@@ -6,7 +6,7 @@ $ ->
 
     # Global
     # ----------
-    blockSize = new Size(3,3,UNIT_BLOCK)
+    blockSize = new Size(4,3,UNIT_BLOCK)
     
     window.grid = new Grid(blockSize)
     grid.createGrid()

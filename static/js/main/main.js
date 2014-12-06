@@ -42,15 +42,15 @@
       } else if (this.size.unit === UNIT_BLOCK) {
         console.log("Creating A " + this.size.width + " by " + this.size.height + " grid of Blocks.");
         _results = [];
-        for (widthBlock = _i = 0, _ref = this.size.width; 0 <= _ref ? _i < _ref : _i > _ref; widthBlock = 0 <= _ref ? ++_i : --_i) {
+        for (heightBlock = _i = 0, _ref = this.size.height; 0 <= _ref ? _i < _ref : _i > _ref; heightBlock = 0 <= _ref ? ++_i : --_i) {
           row = $("<div class='block-row'>");
-          this.blockArray[widthBlock] = [];
-          for (heightBlock = _j = 0, _ref1 = this.size.height; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; heightBlock = 0 <= _ref1 ? ++_j : --_j) {
+          this.blockArray[heightBlock] = [];
+          for (widthBlock = _j = 0, _ref1 = this.size.width; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; widthBlock = 0 <= _ref1 ? ++_j : --_j) {
             block = new Block(new Size(BLOCK_DEFAULT_WIDTH_PIXEL, BLOCK_DEFAULT_HEIGHT_PIXEL, UNIT_PIXEL));
             blockElement = block.createBlock();
-            blockElement.text("[" + widthBlock + "," + heightBlock + "]");
+            blockElement.text("[" + heightBlock + "," + widthBlock + "]");
             row.append(blockElement);
-            this.blockArray[widthBlock][heightBlock] = block;
+            this.blockArray[heightBlock][widthBlock] = block;
           }
           _results.push(ELEMENT_BOARD_CONTAINER.append(row));
         }
@@ -62,7 +62,7 @@
       return this.blockArray;
     };
 
-    Grid.prototype.getBlockElement = function(x, y) {
+    Grid.prototype.getBlockElement = function(y, x) {
       return this.blockArray[x][y];
     };
 
@@ -244,7 +244,7 @@
       this.orientation.bottom = 7 - this.orientation.faceup;
       this.orientation.left = oldFaceUp;
       this.orientation.right = 7 - oldFaceUp;
-      this.gridIndex_X = this.gridIndex_X + 1;
+      this.gridIndex_X = this.gridIndex_X - 1;
       console.log("Dice moved left");
       console.log("New orientation is:");
       console.log("FACEUP: " + this.orientation.faceup);
@@ -264,7 +264,7 @@
       this.orientation.bottom = 7 - this.orientation.faceup;
       this.orientation.right = oldFaceUp;
       this.orientation.left = 7 - oldFaceUp;
-      this.gridIndex_X = this.gridIndex_X - 1;
+      this.gridIndex_X = this.gridIndex_X + 1;
       console.log("Dice moved right");
       console.log("New orientation is:");
       console.log("FACEUP: " + this.orientation.faceup);
@@ -452,7 +452,7 @@
 
   $(function() {
     var blockSize, dice, diceElement, diceSize;
-    blockSize = new Size(3, 3, UNIT_BLOCK);
+    blockSize = new Size(4, 3, UNIT_BLOCK);
     window.grid = new Grid(blockSize);
     grid.createGrid();
     diceSize = new Size("25", "25", UNIT_PIXEL);

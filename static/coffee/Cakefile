@@ -1,0 +1,7 @@
+{spawn, exec} = require 'child_process'
+
+# using spawn instead of exec due to an issue regarding exec only returning on termination or something
+# It wasn't showing the output before so we use spawn to try and fix that so all outputs are shown as they come
+task 'watch', 'Coffee bar Combine and build', ->
+    coffee = spawn 'coffeebar', ['-w','-o','../js/main/main.js', '*.coffee']
+    coffee.stdout.on 'data', (data) -> console.log data.toString().trim()

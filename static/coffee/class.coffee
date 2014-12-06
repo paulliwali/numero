@@ -9,7 +9,7 @@
 # 
 # ====================
 
-class window.Grid 
+class Grid 
     # PROPERTIES
     size = null
     blockArray = null
@@ -131,7 +131,7 @@ class Dice extends Block
     isGameWon: =>
         faceUp = @getFaceUp()
         console.log faceUp
-        winningConditions = window.game.getWinningConditions()
+        winningConditions = Game::getWinningConditions()
         console.log winningConditions
 
     createBlock: =>
@@ -361,7 +361,7 @@ class Condition
         else
             return false
 
-class window.Game
+class Game
     dice = null
     players = null
     grid = null

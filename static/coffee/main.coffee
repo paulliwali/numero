@@ -6,7 +6,7 @@ $ ->
 
     # Global
     # < ========== >
-    window.game = new Game()
+    game = new Game()
     winningConditions = new WinningConditions()
     condition = winningConditions.addCondition(5,0,2)
 

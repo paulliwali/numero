@@ -17,14 +17,49 @@
   Grid = (function() {
     Grid.size = null;
 
+    Grid.blockArray = null;
+
     function Grid(size) {
       this.size = size;
+      this.createGrid = __bind(this.createGrid, this);
       if (this.size === null) {
         console.log("CANNOT CREATE GRID. MISSING SIZE OBJECT.");
         return;
       }
+      this.blockArray = [[]];
       console.log("New Grid created: (" + this.size.height + "," + this.size.width + ")");
     }
+
+    Grid.prototype.createGrid = function() {
+      var block, blockElement, grid, heightBlock, row, widthBlock, _i, _j, _ref, _ref1;
+      if (this.size.unit === UNIT_PIXEL) {
+        grid = $("<div>");
+        grid.width(this.size.getWidthWithUnit());
+        grid.height(this.size.getWidthWithUnit());
+        ELEMENT_BOARD_CONTAINER.append(grid);
+      } else if (this.size.unit === UNIT_BLOCK) {
+        console.log("Creating A " + this.size.width + " by " + this.size.height + " grid of Blocks.");
+        for (widthBlock = _i = 0, _ref = this.size.width; 0 <= _ref ? _i < _ref : _i > _ref; widthBlock = 0 <= _ref ? ++_i : --_i) {
+          row = $("<div class='block-row'>");
+          this.blockArray[widthBlock] = [];
+          for (heightBlock = _j = 0, _ref1 = this.size.height; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; heightBlock = 0 <= _ref1 ? ++_j : --_j) {
+            block = new Block(new Size(BLOCK_DEFAULT_WIDTH_PIXEL, BLOCK_DEFAULT_HEIGHT_PIXEL, UNIT_PIXEL));
+            blockElement = block.createBlock();
+            blockElement.text("[" + widthBlock + "," + heightBlock + "]");
+            row.append(blockElement);
+            this.blockArray[widthBlock][heightBlock] = block;
+          }
+          ELEMENT_BOARD_CONTAINER.append(row);
+        }
+      }
+      return {
+        getGrid: (function(_this) {
+          return function() {
+            return console.log(_this.blockArray);
+          };
+        })(this)
+      };
+    };
 
     return Grid;
 
@@ -35,8 +70,19 @@
 
     function Block(size) {
       this.size = size;
+      this.createBlock = __bind(this.createBlock, this);
       console.log("New Block Created: (" + this.size.height + "," + this.size.width + ")");
     }
+
+    Block.prototype.createBlock = function() {
+      var block;
+      if (this.size.unit === UNIT_PIXEL) {
+        block = $("<div class='block'>");
+        block.width(this.size.getWidthWithUnit());
+        block.height(this.size.getWidthWithUnit());
+        return block;
+      }
+    };
 
     return Block;
 
@@ -111,9 +157,14 @@
 
     Size.width = null;
 
-    function Size(height, width) {
+    Size.unit = null;
+
+    function Size(height, width, unit) {
       this.height = height;
       this.width = width;
+      this.unit = unit;
+      this.getHeightWithUnit = __bind(this.getHeightWithUnit, this);
+      this.getWidthWithUnit = __bind(this.getWidthWithUnit, this);
       if ((this.height == null) || (this.width == null)) {
         if (this.height == null) {
           console.log("MISSING HEIGHT OBJECT");
@@ -125,6 +176,14 @@
       }
       console.log("New Size created: (" + this.height + "," + this.width + ")");
     }
+
+    Size.prototype.getWidthWithUnit = function() {
+      return this.width + this.unit;
+    };
+
+    Size.prototype.getHeightWithUnit = function() {
+      return this.height + this.unit;
+    };
 
     return Size;
 

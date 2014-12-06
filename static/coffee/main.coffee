@@ -15,4 +15,6 @@ $ ->
     diceSize = new Size("25","25",UNIT_PIXEL)
     dice = new Dice(diceSize)
     diceElement = dice.createDice()
-    grid.getBlockElement(0,0).htmlBlock.append(diceElement)
+    blockElement = grid.getBlockElement(0,0)
+    blockElement.htmlElement.append(diceElement)
+    dice.assignHtmlElement(diceElement)

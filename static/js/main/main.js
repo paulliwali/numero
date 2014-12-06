@@ -49,7 +49,7 @@
             block = new Block(new Size(BLOCK_DEFAULT_WIDTH_PIXEL, BLOCK_DEFAULT_HEIGHT_PIXEL, UNIT_PIXEL));
             blockElement = block.createBlock();
             blockElement.text("[" + widthBlock + "," + heightBlock + "]");
-            block.assignHTMLBlock(blockElement);
+            block.assignHTMLElement(blockElement);
             row.append(blockElement);
             this.blockArray[widthBlock][heightBlock] = block;
           }
@@ -74,12 +74,12 @@
   Block = (function() {
     Block.size = null;
 
-    Block.htmlBlock = null;
+    Block.htmlElement = null;
 
     function Block(size) {
       this.size = size;
       this.getBlockElement = __bind(this.getBlockElement, this);
-      this.assignHTMLBlock = __bind(this.assignHTMLBlock, this);
+      this.assignHTMLElement = __bind(this.assignHTMLElement, this);
       this.createBlock = __bind(this.createBlock, this);
       console.log("New Block Created: (" + this.size.height + "," + this.size.width + ")");
     }
@@ -94,12 +94,12 @@
       }
     };
 
-    Block.prototype.assignHTMLBlock = function(block) {
-      return this.htmlBlock = block;
+    Block.prototype.assignHTMLElement = function(block) {
+      return this.htmlElement = block;
     };
 
     Block.prototype.getBlockElement = function() {
-      return this.htmlBlock;
+      return this.htmlElement;
     };
 
     return Block;
@@ -119,7 +119,11 @@
 
     Dice.orientation = null;
 
+    Dice.htmlElement = null;
+
     function Dice(size) {
+      this.getHtmlElement = __bind(this.getHtmlElement, this);
+      this.assignHtmlElement = __bind(this.assignHtmlElement, this);
       this.createBlock = __bind(this.createBlock, this);
       this.createDice = __bind(this.createDice, this);
       this.getSize = __bind(this.getSize, this);
@@ -175,6 +179,14 @@
 
     Dice.prototype.createBlock = function() {
       return Dice.__super__.createBlock.call(this);
+    };
+
+    Dice.prototype.assignHtmlElement = function(element) {
+      return this.htmlElement = element;
+    };
+
+    Dice.prototype.getHtmlElement = function() {
+      return this.htmlElement;
     };
 
     return Dice;
@@ -351,14 +363,16 @@
   });
 
   $(function() {
-    var blockSize, dice, diceElement, diceSize, grid;
+    var blockElement, blockSize, dice, diceElement, diceSize, grid;
     blockSize = new Size(2, 2, UNIT_BLOCK);
     grid = new Grid(blockSize);
     grid.createGrid();
     diceSize = new Size("25", "25", UNIT_PIXEL);
     dice = new Dice(diceSize);
     diceElement = dice.createDice();
-    return grid.getBlockElement(0, 0).htmlBlock.append(diceElement);
+    blockElement = grid.getBlockElement(0, 0);
+    blockElement.htmlElement.append(diceElement);
+    return dice.assignHtmlElement(diceElement);
   });
 
 }).call(this);

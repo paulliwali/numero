@@ -55,7 +55,7 @@ class Grid
                     blockElement = block.createBlock()   
                     blockElement.text("[#{widthBlock},#{heightBlock}]")
                     # Assign the html Block back to the block object
-                    block.assignHTMLBlock(blockElement)
+                    block.assignHTMLElement(blockElement)
                     # Add the block to the Page
                     row.append(blockElement)
                     # assign the block to the grid array
@@ -71,7 +71,7 @@ class Grid
 class Block
     # PROPERTIES
     @size = null
-    @htmlBlock = null
+    @htmlElement = null
     # METHODS
     constructor: (@size) ->
         console.log "New Block Created: (#{@size.height},#{@size.width})"
@@ -81,10 +81,10 @@ class Block
             block.width( @size.getWidthWithUnit() )
             block.height( @size.getWidthWithUnit() )
             return block
-    assignHTMLBlock:(block) =>
-        @htmlBlock = block
+    assignHTMLElement:(block) =>
+        @htmlElement = block
     getBlockElement: =>
-        return @htmlBlock
+        return @htmlElement
 
 class Dice extends Block
     # INHERITED PROPERTIES
@@ -95,6 +95,7 @@ class Dice extends Block
     @gridIndex_X = null
     @gridIndex_Y = null
     @orientation = null
+    @htmlElement =null
     # METHODS
     constructor: (size) ->
         super(size)
@@ -139,6 +140,11 @@ class Dice extends Block
     createBlock: =>
         super()
 
+    assignHtmlElement: (element) =>
+        @htmlElement = element
+
+    getHtmlElement: =>
+        return @htmlElement
 
 class Size
     # PROPERTIES

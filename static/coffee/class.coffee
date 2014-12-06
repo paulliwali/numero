@@ -132,7 +132,7 @@ class Dice extends Block
         faceUp = @getFaceUp()
         console.log faceUp
         winningConditions = Game::getWinningConditions()
-        console.log winningConditions
+        winningConditions.checkConditions(faceUp,@gridIndex_X,@gridIndex_Y)
 
     createBlock: =>
         super()
@@ -344,7 +344,11 @@ class WinningConditions
 
     checkConditions: (number,x,y) =>
         for condition in @conditions
-            condition.checkIfSatisfied(number,x,y)
+            if not condition.checkIfSatisfied(number,x,y)
+                return false
+        # all conditions met
+        showGameWin()
+        
 
 
 
@@ -352,11 +356,13 @@ class Condition
     @number = null
     @blockPositionY = null
     @blockPositionX = null
+    @isMet = false
     constructor: (@number,@blockPositionX,@blockPositionY) ->
         console.log "A condition has been made for #{@number} at [#{@blockPositionX},#{@blockPositionY}] "
 
     checkIfSatisfied: (number,x,y) =>
         if number == @number and @blockPositionX == x  and @blockPositionY == y
+            @isMet = true
             return true
         else
             return false
@@ -369,8 +375,8 @@ class Game
     constructor: () ->
         console.log "New Game has been created."
 
-    setWinningConditions: (winningConditions) =>
-        Game::winningConditions = winningConditions
+    setWinningConditions: (win) =>
+        Game::winningConditions = win
 
     getWinningConditions: () =>
         return Game::winningConditions

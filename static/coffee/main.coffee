@@ -5,23 +5,21 @@ $ ->
 
     # Global
     # < ========== >
-    window.game = new Game()
+    game = new Game()
     winningConditions = new WinningConditions()
     condition = winningConditions.addCondition(5,0,2)
 
     game.setWinningConditions(condition)
     console.log game
 
-
-
-
-    blockSize = new Size(4,3,UNIT_BLOCK)
+    blockSize = new Size(5,5,UNIT_BLOCK)
     
     grid = new Grid(blockSize)
     grid.createGrid()
     diceSize = new Size("25","25",UNIT_PIXEL)
     dice = new Dice(diceSize)
     diceElement = dice.createDice()
+    
     # dice.isGameWon()
     $("body").keyup (e) ->
         switch e.keyCode

@@ -9,7 +9,7 @@
 # 
 # ====================
 
-class window.Grid 
+class Grid 
     # PROPERTIES
     size = null
     blockArray = null
@@ -131,7 +131,7 @@ class Dice extends Block
     isGameWon: =>
         faceUp = @getFaceUp()
         console.log faceUp
-        winningConditions = window.game.getWinningConditions()
+        winningConditions = Game::getWinningConditions()
         console.log winningConditions
 
     createBlock: =>
@@ -190,7 +190,7 @@ class Dice extends Block
 
     moveDown: () => 
         # Error checking
-        outOfBounds = true if @gridIndex_Y + 1 >= window.grid.getGridHeight()
+        outOfBounds = true if @gridIndex_Y + 1 >= Grid::getGridHeight()
         console.log "Dice is moving out of bounds" if outOfBounds
         return if outOfBounds
 
@@ -241,7 +241,7 @@ class Dice extends Block
 
     moveRight: () =>
         # Error checking
-        outOfBounds = true if @gridIndex_X + 1 >= window.grid.getGridWidth()
+        outOfBounds = true if @gridIndex_X + 1 > Grid::getGridWidth()
         console.log "Dice is moving out of bounds" if outOfBounds
         return if outOfBounds
 
@@ -362,8 +362,6 @@ class WinningConditions
         for condition in @conditions
             condition.checkIfSatisfied(number,x,y)
 
-
-
 class Condition
     @number = null
     @blockPositionY = null
@@ -377,7 +375,7 @@ class Condition
         else
             return false
 
-class window.Game
+class Game
     dice = null
     players = null
     grid = null

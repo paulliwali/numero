@@ -4,16 +4,19 @@ $(function() {
 });
 
 $(function() {
-  var blockSize, dice, diceElement, diceSize;
-  blockSize = new Size(4, 3, UNIT_BLOCK);
-  window.grid = new Grid(blockSize);
+  var blockSize, condition, dice, diceElement, diceSize, game, grid, winningConditions;
+  game = new Game();
+  winningConditions = new WinningConditions();
+  condition = winningConditions.addCondition(5, 0, 2);
+  game.setWinningConditions(condition);
+  console.log(game);
+  blockSize = new Size(5, 5, UNIT_BLOCK);
+  grid = new Grid(blockSize);
   grid.createGrid();
   diceSize = new Size("25", "25", UNIT_PIXEL);
   dice = new Dice(diceSize);
   diceElement = dice.createDice();
-  console.log(grid.getGrid());
   return $("body").keyup(function(e) {
-    console.log(e.keyCode);
     switch (e.keyCode) {
       case 68:
         return dice.moveRight();

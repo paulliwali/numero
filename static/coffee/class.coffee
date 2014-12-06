@@ -13,7 +13,7 @@ class Game
     constructor: () ->
         console.log "New Game created."
 
-class Grid 
+class window.Grid 
     # PROPERTIES
     @size = null
     @blockArray = null
@@ -54,8 +54,6 @@ class Grid
                     # Create the HTML block
                     blockElement = block.createBlock()   
                     blockElement.text("[#{widthBlock},#{heightBlock}]")
-                    # Assign the html Block back to the block object
-                    block.assignHTMLElement(blockElement)
                     # Add the block to the Page
                     row.append(blockElement)
                     # assign the block to the grid array
@@ -63,9 +61,15 @@ class Grid
                 ELEMENT_BOARD_CONTAINER.append(row)
 
     getGrid: () =>
-        console.log @blockArray
+        return @blockArray
     getBlockElement: (x,y) =>
         return @blockArray[x][y]
+
+    getGridHeight: () ->
+        return @size.height
+
+    getGridWidth: () ->
+        return @size.width
 
 
 class Block
@@ -74,17 +78,19 @@ class Block
     @htmlElement = null
     # METHODS
     constructor: (@size) ->
-        console.log "New Block Created: (#{@size.height},#{@size.width})"
+        # console.log "New Block Created: (#{@size.height},#{@size.width})"
+    assignHTMLElement: (block) =>
+        @htmlElement = block
+    getBlockElement: =>
+        return @htmlElement
     createBlock: () =>
         if @size.unit is UNIT_PIXEL
             block = $("<div class='block'>")
             block.width( @size.getWidthWithUnit() )
             block.height( @size.getWidthWithUnit() )
+            @assignHTMLElement(block)
             return block
-    assignHTMLElement:(block) =>
-        @htmlElement = block
-    getBlockElement: =>
-        return @htmlElement
+
 
 class Dice extends Block
     # INHERITED PROPERTIES
@@ -102,13 +108,47 @@ class Dice extends Block
         @orientation = new Orientation
         console.log "New Dice created"
 
+    createDice: () =>
+        console.log "CREATING DICE"
+        @assignHTMLElement(@createBlock())
+        faceUp = @getFaceUp()
+        @htmlElement.text(faceUp)
+
+        @moveToGrid(
+            randomNum(
+                window.grid.getGridWidth(),0
+                )
+            ,
+            randomNum(
+                window.grid.getGridHeight(),0
+                )
+            )
+
+        return @htmlElement
+
+    moveToGrid: (gridIndexX,gridIndexY)=>
+        console.log gridIndexX
+        console.log gridIndexY
+        window.grid.getBlockElement(
+            gridIndexX, gridIndexY
+            ).getBlockElement().append(@htmlElement)
+
+    createBlock: =>
+        super()
+
+    assignHTMLElement: (element) =>
+        @htmlElement = element
+
+    getHTMLElement: =>
+        return @htmlElement
+
     getSize: =>
         console.log @size
 
-    getFaceUp = () => 
+    getFaceUp: () => 
         return @orientation.faceup
 
-    moveUp = () =>
+    moveUp: () =>
         # Change orientation
         oldFaceUp = @orientation.faceup
         @orientation.faceup = @orientation.down
@@ -126,8 +166,9 @@ class Dice extends Block
         console.log "RIGHT: #{@right}"
         console.log "UP: #{@up}"
         console.log "DOWN: #{@down}"
+        @moveToGrid(@gridIndex_X,@gridIndex_Y)
 
-    moveDown = () => 
+    moveDown: () => 
         oldFaceUp = @orientation.faceup
         @orientation.faceup = @orientation.up
         @orientation.bottom = 7 - @orientation.faceup
@@ -144,8 +185,9 @@ class Dice extends Block
         console.log "RIGHT: #{@right}"
         console.log "UP: #{@up}"
         console.log "DOWN: #{@down}"
+        @moveToGrid(@gridIndex_X,@gridIndex_Y)
 
-    moveLeft = () =>
+    moveLeft: () =>
         # Change orientation
         oldFaceUp = @orientation.faceup
         @orientation.faceup = @orientation.right
@@ -154,7 +196,7 @@ class Dice extends Block
         @orientation.right = 7 - oldFaceUp
 
         # Change grid index
-        @gridIndex_X = gridIndex_X - 1
+        @gridIndex_X = @gridIndex_X - 1
         console.log "Dice moved left"
         console.log "New orientation is:"
         console.log "FACEUP: #{@faceup}"
@@ -163,8 +205,9 @@ class Dice extends Block
         console.log "RIGHT: #{@right}"
         console.log "UP: #{@up}"
         console.log "DOWN: #{@down}"
+        @moveToGrid(@gridIndex_X,@gridIndex_Y)
 
-    moveRight = () =>
+    moveRight: () =>
         # Change orientation
         oldFaceUp = @orientation.faceup
         @orientation.faceup = @orientation.left
@@ -182,20 +225,8 @@ class Dice extends Block
         console.log "RIGHT: #{@right}"
         console.log "UP: #{@up}"
         console.log "DOWN: #{@down}"
+        @moveToGrid(@gridIndex_X,@gridIndex_Y)
 
-
-    createDice: =>
-        console.log "CREATING DICE"
-        @createBlock()
-
-    createBlock: =>
-        super()
-
-    assignHtmlElement: (element) =>
-        @htmlElement = element
-
-    getHtmlElement: =>
-        return @htmlElement
 
 class Size
     # PROPERTIES

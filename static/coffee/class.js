@@ -96,7 +96,7 @@ Block = (function() {
 })();
 
 Dice = (function(_super) {
-  var getFaceUp, moveDown, moveLeft, moveRight, moveUp;
+  var getDown, getFaceUp, getLeft, getRight, getUp, moveDown, moveLeft, moveRight, moveUp;
 
   __extends(Dice, _super);
 
@@ -121,6 +121,22 @@ Dice = (function(_super) {
 
   getFaceUp = function() {
     return Dice.orientation.faceup;
+  };
+
+  getUp = function() {
+    return Dice.orientation.up;
+  };
+
+  getDown = function() {
+    return Dice.orientation.down;
+  };
+
+  getLeft = function() {
+    return Dice.orientation.left;
+  };
+
+  getRight = function() {
+    return Dice.orientation.right;
   };
 
   moveUp = function() {

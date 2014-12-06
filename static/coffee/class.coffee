@@ -109,6 +109,18 @@ class Dice extends Block
     getFaceUp = () => 
         return @orientation.faceup
 
+    getUp = () => 
+        return @orientation.up
+
+    getDown = () => 
+        return @orientation.down
+
+    getLeft = () => 
+        return @orientation.left
+
+    getRight = () => 
+        return @orientation.right
+        
     moveUp = () =>
         # Change orientation
         oldFaceUp = @orientation.faceup

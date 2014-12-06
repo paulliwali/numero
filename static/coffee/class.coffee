@@ -148,6 +148,18 @@ class Dice extends Block
     getFaceUp: () => 
         return @orientation.faceup
 
+    getUp = () => 
+        return @orientation.up
+
+    getDown = () => 
+        return @orientation.down
+
+    getLeft = () => 
+        return @orientation.left
+
+    getRight = () => 
+        return @orientation.right
+        
     moveUp: () =>
         # Change orientation
         oldFaceUp = @orientation.faceup
@@ -160,12 +172,12 @@ class Dice extends Block
         @gridIndex_Y = @gridIndex_Y + 1
         console.log "Dice moved up"
         console.log "New orientation is:"
-        console.log "FACEUP: #{@faceup}"
-        console.log "BOTTOM: #{@bottom}"
-        console.log "LEFT: #{@left}"
-        console.log "RIGHT: #{@right}"
-        console.log "UP: #{@up}"
-        console.log "DOWN: #{@down}"
+        console.log "FACEUP: #{@orientation.faceup}"
+        console.log "BOTTOM: #{@orientation.bottom}"
+        console.log "LEFT: #{@orientation.left}"
+        console.log "RIGHT: #{@rorientation.right}"
+        console.log "UP: #{@orientation.up}"
+        console.log "DOWN: #{@orientation.down}"
         @moveToGrid(@gridIndex_X,@gridIndex_Y)
 
     moveDown: () => 
@@ -179,12 +191,12 @@ class Dice extends Block
         @gridIndex_Y = @gridIndex_Y - 1
         console.log "Dice moved down"
         console.log "New orientation is:"
-        console.log "FACEUP: #{@faceup}"
-        console.log "BOTTOM: #{@bottom}"
-        console.log "LEFT: #{@left}"
-        console.log "RIGHT: #{@right}"
-        console.log "UP: #{@up}"
-        console.log "DOWN: #{@down}"
+        console.log "FACEUP: #{@orientation.faceup}"
+        console.log "BOTTOM: #{@orientation.bottom}"
+        console.log "LEFT: #{@orientation.left}"
+        console.log "RIGHT: #{@orientation.right}"
+        console.log "UP: #{@orientation.up}"
+        console.log "DOWN: #{@orientation.down}"
         @moveToGrid(@gridIndex_X,@gridIndex_Y)
 
     moveLeft: () =>
@@ -199,12 +211,12 @@ class Dice extends Block
         @gridIndex_X = @gridIndex_X - 1
         console.log "Dice moved left"
         console.log "New orientation is:"
-        console.log "FACEUP: #{@faceup}"
-        console.log "BOTTOM: #{@bottom}"
-        console.log "LEFT: #{@left}"
-        console.log "RIGHT: #{@right}"
-        console.log "UP: #{@up}"
-        console.log "DOWN: #{@down}"
+        console.log "FACEUP: #{@orientation.faceup}"
+        console.log "BOTTOM: #{@orientation.bottom}"
+        console.log "LEFT: #{@orientation.left}"
+        console.log "RIGHT: #{@orientation.right}"
+        console.log "UP: #{@orientation.up}"
+        console.log "DOWN: #{@orientation.down}"
         @moveToGrid(@gridIndex_X,@gridIndex_Y)
 
     moveRight: () =>
@@ -219,12 +231,12 @@ class Dice extends Block
         @gridIndex_X = @gridIndex_X + 1
         console.log "Dice moved right"
         console.log "New orientation is:"
-        console.log "FACEUP: #{@faceup}"
-        console.log "BOTTOM: #{@bottom}"
-        console.log "LEFT: #{@left}"
-        console.log "RIGHT: #{@right}"
-        console.log "UP: #{@up}"
-        console.log "DOWN: #{@down}"
+        console.log "FACEUP: #{@orientation.faceup}"
+        console.log "BOTTOM: #{@orientation.bottom}"
+        console.log "LEFT: #{@orientation.left}"
+        console.log "RIGHT: #{@orientation.right}"
+        console.log "UP: #{@orientation.up}"
+        console.log "DOWN: #{@orientation.down}"
         @moveToGrid(@gridIndex_X,@gridIndex_Y)
 
 

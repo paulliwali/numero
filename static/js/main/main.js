@@ -151,14 +151,15 @@
       this.assignHTMLElement(this.createBlock());
       faceUp = this.getFaceUp();
       this.htmlElement.text(faceUp);
-      this.moveToGrid(randomNum(window.grid.getGridWidth(), 0), randomNum(window.grid.getGridHeight(), 0));
+      this.gridIndex_X = randomNum(window.grid.getGridWidth(), 0);
+      this.gridIndex_Y = randomNum(window.grid.getGridHeight(), 0);
+      this.moveToGrid();
+      console.log(this.gridIndex_X, this.gridIndex_Y);
       return this.htmlElement;
     };
 
-    Dice.prototype.moveToGrid = function(gridIndexX, gridIndexY) {
-      console.log(gridIndexX);
-      console.log(gridIndexY);
-      return window.grid.getBlockElement(gridIndexX, gridIndexY).getBlockElement().append(this.htmlElement);
+    Dice.prototype.moveToGrid = function() {
+      return window.grid.getBlockElement(this.gridIndex_X, this.gridIndex_Y).getBlockElement().append(this.htmlElement);
     };
 
     Dice.prototype.createBlock = function() {
@@ -204,7 +205,7 @@
       this.orientation.bottom = 7 - this.orientation.faceup;
       this.orientation.up = oldFaceUp;
       this.orientation.down = 7 - this.orientation.up;
-      this.gridIndex_Y = this.gridIndex_Y + 1;
+      this.gridIndex_Y = this.gridIndex_Y - 1;
       console.log("Dice moved up");
       console.log("New orientation is:");
       console.log("FACEUP: " + this.orientation.faceup);
@@ -213,7 +214,8 @@
       console.log("RIGHT: " + this.rorientation.right);
       console.log("UP: " + this.orientation.up);
       console.log("DOWN: " + this.orientation.down);
-      return this.moveToGrid(this.gridIndex_X, this.gridIndex_Y);
+      console.log(this.gridIndex_X, this.gridIndex_Y);
+      return this.moveToGrid();
     };
 
     Dice.prototype.moveDown = function() {
@@ -223,7 +225,7 @@
       this.orientation.bottom = 7 - this.orientation.faceup;
       this.orientation.down = oldFaceUp;
       this.orientation.up = 7 - this.orientation.down;
-      this.gridIndex_Y = this.gridIndex_Y - 1;
+      this.gridIndex_Y = this.gridIndex_Y + 1;
       console.log("Dice moved down");
       console.log("New orientation is:");
       console.log("FACEUP: " + this.orientation.faceup);
@@ -232,7 +234,8 @@
       console.log("RIGHT: " + this.orientation.right);
       console.log("UP: " + this.orientation.up);
       console.log("DOWN: " + this.orientation.down);
-      return this.moveToGrid(this.gridIndex_X, this.gridIndex_Y);
+      console.log(this.gridIndex_X, this.gridIndex_Y);
+      return this.moveToGrid();
     };
 
     Dice.prototype.moveLeft = function() {
@@ -242,7 +245,7 @@
       this.orientation.bottom = 7 - this.orientation.faceup;
       this.orientation.left = oldFaceUp;
       this.orientation.right = 7 - oldFaceUp;
-      this.gridIndex_X = this.gridIndex_X - 1;
+      this.gridIndex_X = this.gridIndex_X + 1;
       console.log("Dice moved left");
       console.log("New orientation is:");
       console.log("FACEUP: " + this.orientation.faceup);
@@ -251,7 +254,8 @@
       console.log("RIGHT: " + this.orientation.right);
       console.log("UP: " + this.orientation.up);
       console.log("DOWN: " + this.orientation.down);
-      return this.moveToGrid(this.gridIndex_X, this.gridIndex_Y);
+      console.log(this.gridIndex_X, this.gridIndex_Y);
+      return this.moveToGrid();
     };
 
     Dice.prototype.moveRight = function() {
@@ -261,7 +265,7 @@
       this.orientation.bottom = 7 - this.orientation.faceup;
       this.orientation.right = oldFaceUp;
       this.orientation.left = 7 - oldFaceUp;
-      this.gridIndex_X = this.gridIndex_X + 1;
+      this.gridIndex_X = this.gridIndex_X - 1;
       console.log("Dice moved right");
       console.log("New orientation is:");
       console.log("FACEUP: " + this.orientation.faceup);
@@ -270,7 +274,8 @@
       console.log("RIGHT: " + this.orientation.right);
       console.log("UP: " + this.orientation.up);
       console.log("DOWN: " + this.orientation.down);
-      return this.moveToGrid(this.gridIndex_X, this.gridIndex_Y);
+      console.log(this.gridIndex_X, this.gridIndex_Y);
+      return this.moveToGrid();
     };
 
     return Dice;
@@ -448,13 +453,26 @@
 
   $(function() {
     var blockSize, dice, diceElement, diceSize;
-    blockSize = new Size(5, 7, UNIT_BLOCK);
+    blockSize = new Size(2, 3, UNIT_BLOCK);
     window.grid = new Grid(blockSize);
     grid.createGrid();
     diceSize = new Size("25", "25", UNIT_PIXEL);
     dice = new Dice(diceSize);
     diceElement = dice.createDice();
-    return dice.moveLeft();
+    console.log(grid.getGrid());
+    return $("body").keyup(function(e) {
+      console.log(e.keyCode);
+      switch (e.keyCode) {
+        case 68:
+          return dice.moveRight();
+        case 83:
+          return dice.moveDown();
+        case 65:
+          return dice.moveLeft();
+        case 87:
+          return dice.moveUp();
+      }
+    });
   });
 
 }).call(this);

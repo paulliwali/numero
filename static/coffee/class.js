@@ -150,14 +150,15 @@ Dice = (function(_super) {
     this.assignHTMLElement(this.createBlock());
     faceUp = this.getFaceUp();
     this.htmlElement.text(faceUp);
-    this.moveToGrid(randomNum(window.grid.getGridWidth(), 0), randomNum(window.grid.getGridHeight(), 0));
+    this.gridIndex_X = randomNum(window.grid.getGridWidth(), 0);
+    this.gridIndex_Y = randomNum(window.grid.getGridHeight(), 0);
+    this.moveToGrid();
+    console.log(this.gridIndex_X, this.gridIndex_Y);
     return this.htmlElement;
   };
 
-  Dice.prototype.moveToGrid = function(gridIndexX, gridIndexY) {
-    console.log(gridIndexX);
-    console.log(gridIndexY);
-    return window.grid.getBlockElement(gridIndexX, gridIndexY).getBlockElement().append(this.htmlElement);
+  Dice.prototype.moveToGrid = function() {
+    return window.grid.getBlockElement(this.gridIndex_X, this.gridIndex_Y).getBlockElement().append(this.htmlElement);
   };
 
   Dice.prototype.createBlock = function() {
@@ -203,7 +204,7 @@ Dice = (function(_super) {
     this.orientation.bottom = 7 - this.orientation.faceup;
     this.orientation.up = oldFaceUp;
     this.orientation.down = 7 - this.orientation.up;
-    this.gridIndex_Y = this.gridIndex_Y + 1;
+    this.gridIndex_Y = this.gridIndex_Y - 1;
     console.log("Dice moved up");
     console.log("New orientation is:");
     console.log("FACEUP: " + this.orientation.faceup);
@@ -212,7 +213,8 @@ Dice = (function(_super) {
     console.log("RIGHT: " + this.rorientation.right);
     console.log("UP: " + this.orientation.up);
     console.log("DOWN: " + this.orientation.down);
-    return this.moveToGrid(this.gridIndex_X, this.gridIndex_Y);
+    console.log(this.gridIndex_X, this.gridIndex_Y);
+    return this.moveToGrid();
   };
 
   Dice.prototype.moveDown = function() {
@@ -222,7 +224,7 @@ Dice = (function(_super) {
     this.orientation.bottom = 7 - this.orientation.faceup;
     this.orientation.down = oldFaceUp;
     this.orientation.up = 7 - this.orientation.down;
-    this.gridIndex_Y = this.gridIndex_Y - 1;
+    this.gridIndex_Y = this.gridIndex_Y + 1;
     console.log("Dice moved down");
     console.log("New orientation is:");
     console.log("FACEUP: " + this.orientation.faceup);
@@ -231,7 +233,8 @@ Dice = (function(_super) {
     console.log("RIGHT: " + this.orientation.right);
     console.log("UP: " + this.orientation.up);
     console.log("DOWN: " + this.orientation.down);
-    return this.moveToGrid(this.gridIndex_X, this.gridIndex_Y);
+    console.log(this.gridIndex_X, this.gridIndex_Y);
+    return this.moveToGrid();
   };
 
   Dice.prototype.moveLeft = function() {
@@ -241,7 +244,7 @@ Dice = (function(_super) {
     this.orientation.bottom = 7 - this.orientation.faceup;
     this.orientation.left = oldFaceUp;
     this.orientation.right = 7 - oldFaceUp;
-    this.gridIndex_X = this.gridIndex_X - 1;
+    this.gridIndex_X = this.gridIndex_X + 1;
     console.log("Dice moved left");
     console.log("New orientation is:");
     console.log("FACEUP: " + this.orientation.faceup);
@@ -250,7 +253,8 @@ Dice = (function(_super) {
     console.log("RIGHT: " + this.orientation.right);
     console.log("UP: " + this.orientation.up);
     console.log("DOWN: " + this.orientation.down);
-    return this.moveToGrid(this.gridIndex_X, this.gridIndex_Y);
+    console.log(this.gridIndex_X, this.gridIndex_Y);
+    return this.moveToGrid();
   };
 
   Dice.prototype.moveRight = function() {
@@ -260,7 +264,7 @@ Dice = (function(_super) {
     this.orientation.bottom = 7 - this.orientation.faceup;
     this.orientation.right = oldFaceUp;
     this.orientation.left = 7 - oldFaceUp;
-    this.gridIndex_X = this.gridIndex_X + 1;
+    this.gridIndex_X = this.gridIndex_X - 1;
     console.log("Dice moved right");
     console.log("New orientation is:");
     console.log("FACEUP: " + this.orientation.faceup);
@@ -269,7 +273,8 @@ Dice = (function(_super) {
     console.log("RIGHT: " + this.orientation.right);
     console.log("UP: " + this.orientation.up);
     console.log("DOWN: " + this.orientation.down);
-    return this.moveToGrid(this.gridIndex_X, this.gridIndex_Y);
+    console.log(this.gridIndex_X, this.gridIndex_Y);
+    return this.moveToGrid();
   };
 
   return Dice;

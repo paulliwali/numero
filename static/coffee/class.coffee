@@ -51,25 +51,21 @@ class Grid
                     block = new Block(
                         new Size(BLOCK_DEFAULT_WIDTH_PIXEL,BLOCK_DEFAULT_HEIGHT_PIXEL,UNIT_PIXEL)
                     )
-
                     # Create the HTML block
                     blockElement = block.createBlock()   
                     blockElement.text("[#{widthBlock},#{heightBlock}]")
-
                     # Assign the html Block back to the block object
                     block.assignHTMLBlock(blockElement)
-
                     # Add the block to the Page
                     row.append(blockElement)
-
                     # assign the block to the grid array
                     @blockArray[widthBlock][heightBlock] = block
-
                 ELEMENT_BOARD_CONTAINER.append(row)
 
-        getGrid: () =>
-            console.log @blockArray
-
+    getGrid: () =>
+        console.log @blockArray
+    getBlockElement: (x,y) =>
+        return @blockArray[x][y]
 
 
 class Block
@@ -87,6 +83,8 @@ class Block
             return block
     assignHTMLBlock:(block) =>
         @htmlBlock = block
+    getBlockElement: =>
+        return @htmlBlock
 
 class Dice extends Block
     # INHERITED PROPERTIES
@@ -133,6 +131,14 @@ class Dice extends Block
         @orientation.bottom = 7 - @orientation.faceup
         @orientation.right = oldFaceUp
         @orientation.left = 7 - oldFaceUp
+
+    createDice: =>
+        console.log "CREATING DICE"
+        @createBlock()
+
+    createBlock: =>
+        super()
+
 
 class Size
     # PROPERTIES

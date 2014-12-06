@@ -105,12 +105,27 @@ class Dice extends Block
     getSize: =>
         console.log @size
 
+    getFaceUp = () => 
+        return @orientation.faceup
+
     moveUp = () =>
+        # Change orientation
         oldFaceUp = @orientation.faceup
         @orientation.faceup = @orientation.down
         @orientation.bottom = 7 - @orientation.faceup
         @orientation.up = oldFaceUp
         @orientation.down = 7 - @orientation.up
+
+        # Change grid index
+        @gridIndex_Y = @gridIndex_Y + 1
+        console.log "Dice moved up"
+        console.log "New orientation is:"
+        console.log "FACEUP: #{@faceup}"
+        console.log "BOTTOM: #{@bottom}"
+        console.log "LEFT: #{@left}"
+        console.log "RIGHT: #{@right}"
+        console.log "UP: #{@up}"
+        console.log "DOWN: #{@down}"
 
     moveDown = () => 
         oldFaceUp = @orientation.faceup
@@ -119,19 +134,55 @@ class Dice extends Block
         @orientation.down = oldFaceUp
         @orientation.up = 7 - @orientation.down
 
+        # Change grid index
+        @gridIndex_Y = @gridIndex_Y - 1
+        console.log "Dice moved down"
+        console.log "New orientation is:"
+        console.log "FACEUP: #{@faceup}"
+        console.log "BOTTOM: #{@bottom}"
+        console.log "LEFT: #{@left}"
+        console.log "RIGHT: #{@right}"
+        console.log "UP: #{@up}"
+        console.log "DOWN: #{@down}"
+
     moveLeft = () =>
+        # Change orientation
         oldFaceUp = @orientation.faceup
         @orientation.faceup = @orientation.right
         @orientation.bottom = 7 - @orientation.faceup
         @orientation.left = oldFaceUp
         @orientation.right = 7 - oldFaceUp
 
+        # Change grid index
+        @gridIndex_X = gridIndex_X - 1
+        console.log "Dice moved left"
+        console.log "New orientation is:"
+        console.log "FACEUP: #{@faceup}"
+        console.log "BOTTOM: #{@bottom}"
+        console.log "LEFT: #{@left}"
+        console.log "RIGHT: #{@right}"
+        console.log "UP: #{@up}"
+        console.log "DOWN: #{@down}"
+
     moveRight = () =>
+        # Change orientation
         oldFaceUp = @orientation.faceup
         @orientation.faceup = @orientation.left
         @orientation.bottom = 7 - @orientation.faceup
         @orientation.right = oldFaceUp
         @orientation.left = 7 - oldFaceUp
+
+        # Change grid index
+        @gridIndex_X = @gridIndex_X + 1
+        console.log "Dice moved right"
+        console.log "New orientation is:"
+        console.log "FACEUP: #{@faceup}"
+        console.log "BOTTOM: #{@bottom}"
+        console.log "LEFT: #{@left}"
+        console.log "RIGHT: #{@right}"
+        console.log "UP: #{@up}"
+        console.log "DOWN: #{@down}"
+
 
     createDice: =>
         console.log "CREATING DICE"
@@ -168,7 +219,7 @@ class Size
 class Position
     # PROPERTIES
     @x = null
-    @y= null
+    @y = null
 
     # METHODS
     constructor: (@x,@y) ->
@@ -199,12 +250,12 @@ class Orientation
     # METHODS
     constructor: (@faceup,@bottom,@down,@up,@left,@right) ->
         if @faceup is null or @bottom is null or @down is null or @up is null or @left is null or @right is null
-            console.log "MISSING FACEUP" unless @faceup
-            console.log "MISSING BOTTOM" unless @bottom
-            console.log "MISSING DOWN" unless @down
-            console.log "MISSING UP" unless @up
-            console.log "MISSING LEFT" unless @left
-            console.log "MISSING RIGHT" unless @right
+            console.log "MISSING FACEUP" unless @faceup?
+            console.log "MISSING BOTTOM" unless @bottom?
+            console.log "MISSING DOWN" unless @down?
+            console.log "MISSING UP" unless @up?
+            console.log "MISSING LEFT" unless @left?
+            console.log "MISSING RIGHT" unless @right?
         
         @faceup = randomNum(6,1)
         @bottom = 7 - @faceup

@@ -45,6 +45,7 @@ Grid = (function() {
           block = new Block(new Size(BLOCK_DEFAULT_WIDTH_PIXEL, BLOCK_DEFAULT_HEIGHT_PIXEL, UNIT_PIXEL));
           blockElement = block.createBlock();
           blockElement.text("[" + widthBlock + "," + heightBlock + "]");
+          block.assignHTMLBlock(blockElement);
           row.append(blockElement);
           this.blockArray[widthBlock][heightBlock] = block;
         }
@@ -67,8 +68,11 @@ Grid = (function() {
 Block = (function() {
   Block.size = null;
 
+  Block.htmlBlock = null;
+
   function Block(size) {
     this.size = size;
+    this.assignHTMLBlock = __bind(this.assignHTMLBlock, this);
     this.createBlock = __bind(this.createBlock, this);
     console.log("New Block Created: (" + this.size.height + "," + this.size.width + ")");
   }
@@ -83,12 +87,16 @@ Block = (function() {
     }
   };
 
+  Block.prototype.assignHTMLBlock = function(block) {
+    return this.htmlBlock = block;
+  };
+
   return Block;
 
 })();
 
 Dice = (function(_super) {
-  var moveDown, moveLeft, moveRight, moveUp;
+  var getFaceUp, moveDown, moveLeft, moveRight, moveUp;
 
   __extends(Dice, _super);
 
@@ -111,13 +119,26 @@ Dice = (function(_super) {
     return console.log(this.size);
   };
 
+  getFaceUp = function() {
+    return Dice.orientation.faceup;
+  };
+
   moveUp = function() {
     var oldFaceUp;
     oldFaceUp = Dice.orientation.faceup;
     Dice.orientation.faceup = Dice.orientation.down;
     Dice.orientation.bottom = 7 - Dice.orientation.faceup;
     Dice.orientation.up = oldFaceUp;
-    return Dice.orientation.down = 7 - Dice.orientation.up;
+    Dice.orientation.down = 7 - Dice.orientation.up;
+    Dice.gridIndex_Y = Dice.gridIndex_Y + 1;
+    console.log("Dice moved up");
+    console.log("New orientation is:");
+    console.log("FACEUP: " + Dice.faceup);
+    console.log("BOTTOM: " + Dice.bottom);
+    console.log("LEFT: " + Dice.left);
+    console.log("RIGHT: " + Dice.right);
+    console.log("UP: " + Dice.up);
+    return console.log("DOWN: " + Dice.down);
   };
 
   moveDown = function() {
@@ -126,7 +147,16 @@ Dice = (function(_super) {
     Dice.orientation.faceup = Dice.orientation.up;
     Dice.orientation.bottom = 7 - Dice.orientation.faceup;
     Dice.orientation.down = oldFaceUp;
-    return Dice.orientation.up = 7 - Dice.orientation.down;
+    Dice.orientation.up = 7 - Dice.orientation.down;
+    Dice.gridIndex_Y = Dice.gridIndex_Y - 1;
+    console.log("Dice moved down");
+    console.log("New orientation is:");
+    console.log("FACEUP: " + Dice.faceup);
+    console.log("BOTTOM: " + Dice.bottom);
+    console.log("LEFT: " + Dice.left);
+    console.log("RIGHT: " + Dice.right);
+    console.log("UP: " + Dice.up);
+    return console.log("DOWN: " + Dice.down);
   };
 
   moveLeft = function() {
@@ -135,7 +165,16 @@ Dice = (function(_super) {
     Dice.orientation.faceup = Dice.orientation.right;
     Dice.orientation.bottom = 7 - Dice.orientation.faceup;
     Dice.orientation.left = oldFaceUp;
-    return Dice.orientation.right = 7 - oldFaceUp;
+    Dice.orientation.right = 7 - oldFaceUp;
+    Dice.gridIndex_X = gridIndex_X - 1;
+    console.log("Dice moved left");
+    console.log("New orientation is:");
+    console.log("FACEUP: " + Dice.faceup);
+    console.log("BOTTOM: " + Dice.bottom);
+    console.log("LEFT: " + Dice.left);
+    console.log("RIGHT: " + Dice.right);
+    console.log("UP: " + Dice.up);
+    return console.log("DOWN: " + Dice.down);
   };
 
   moveRight = function() {
@@ -144,7 +183,16 @@ Dice = (function(_super) {
     Dice.orientation.faceup = Dice.orientation.left;
     Dice.orientation.bottom = 7 - Dice.orientation.faceup;
     Dice.orientation.right = oldFaceUp;
-    return Dice.orientation.left = 7 - oldFaceUp;
+    Dice.orientation.left = 7 - oldFaceUp;
+    Dice.gridIndex_X = Dice.gridIndex_X + 1;
+    console.log("Dice moved right");
+    console.log("New orientation is:");
+    console.log("FACEUP: " + Dice.faceup);
+    console.log("BOTTOM: " + Dice.bottom);
+    console.log("LEFT: " + Dice.left);
+    console.log("RIGHT: " + Dice.right);
+    console.log("UP: " + Dice.up);
+    return console.log("DOWN: " + Dice.down);
   };
 
   return Dice;
@@ -247,22 +295,22 @@ Orientation = (function() {
     this.left = left;
     this.right = right;
     if (this.faceup === null || this.bottom === null || this.down === null || this.up === null || this.left === null || this.right === null) {
-      if (!this.faceup) {
+      if (this.faceup == null) {
         console.log("MISSING FACEUP");
       }
-      if (!this.bottom) {
+      if (this.bottom == null) {
         console.log("MISSING BOTTOM");
       }
-      if (!this.down) {
+      if (this.down == null) {
         console.log("MISSING DOWN");
       }
-      if (!this.up) {
+      if (this.up == null) {
         console.log("MISSING UP");
       }
-      if (!this.left) {
+      if (this.left == null) {
         console.log("MISSING LEFT");
       }
-      if (!this.right) {
+      if (this.right == null) {
         console.log("MISSING RIGHT");
       }
     }

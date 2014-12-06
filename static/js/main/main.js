@@ -36,7 +36,6 @@
         grid = $("<div>");
         grid.width(this.size.getWidthWithUnit());
         grid.height(this.size.getWidthWithUnit());
-        grid.css("background-color", "black");
         ELEMENT_BOARD_CONTAINER.append(grid);
       } else if (this.size.unit === UNIT_BLOCK) {
         console.log("Creating A " + this.size.width + " by " + this.size.height + " grid of Blocks.");
@@ -46,6 +45,7 @@
           for (heightBlock = _j = 0, _ref1 = this.size.height; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; heightBlock = 0 <= _ref1 ? ++_j : --_j) {
             block = new Block(new Size(BLOCK_DEFAULT_WIDTH_PIXEL, BLOCK_DEFAULT_HEIGHT_PIXEL, UNIT_PIXEL));
             blockElement = block.createBlock();
+            blockElement.text("[" + widthBlock + "," + heightBlock + "]");
             row.append(blockElement);
             this.blockArray[widthBlock][heightBlock] = block;
           }
@@ -75,12 +75,12 @@
     }
 
     Block.prototype.createBlock = function() {
-      var grid;
+      var block;
       if (this.size.unit === UNIT_PIXEL) {
-        grid = $("<div class='block'>");
-        grid.width(this.size.getWidthWithUnit());
-        grid.height(this.size.getWidthWithUnit());
-        return grid;
+        block = $("<div class='block'>");
+        block.width(this.size.getWidthWithUnit());
+        block.height(this.size.getWidthWithUnit());
+        return block;
       }
     };
 

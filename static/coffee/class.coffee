@@ -29,25 +29,28 @@ class Grid
         ]
         console.log "New Grid created: (#{@size.height},#{@size.width})"
 
+    # Creates a Grid of @size.height x @size.width
+    # Stores the grid in @blockArray 
     createGrid: () =>
         # Create Grid in Pixels
         if @size.unit is UNIT_PIXEL
             grid = $("<div>")
             grid.width( @size.getWidthWithUnit() )
             grid.height( @size.getWidthWithUnit() )
-            grid.css("background-color","black")
             ELEMENT_BOARD_CONTAINER.append(grid)    
         # Create grid in Blocks
         else if @size.unit is UNIT_BLOCK
             console.log "Creating A #{@size.width} by #{@size.height} grid of Blocks."
             for widthBlock in [0...@size.width]
                 row = $("<div class='block-row'>") 
+                # Instantiate a new array for each row
                 @blockArray[widthBlock] = []
                 for heightBlock in [0...@size.height]
                     block = new Block(
                         new Size(BLOCK_DEFAULT_WIDTH_PIXEL,BLOCK_DEFAULT_HEIGHT_PIXEL,UNIT_PIXEL)
                     )
-                    blockElement = block.createBlock()    
+                    blockElement = block.createBlock()   
+                    blockElement.text("[#{widthBlock},#{heightBlock}]")
                     row.append(blockElement)
                     @blockArray[widthBlock][heightBlock] = block
                 ELEMENT_BOARD_CONTAINER.append(row)
@@ -66,10 +69,10 @@ class Block
         console.log "New Block Created: (#{@size.height},#{@size.width})"
     createBlock: () =>
         if @size.unit is UNIT_PIXEL
-            grid = $("<div class='block'>")
-            grid.width( @size.getWidthWithUnit() )
-            grid.height( @size.getWidthWithUnit() )
-            return grid
+            block = $("<div class='block'>")
+            block.width( @size.getWidthWithUnit() )
+            block.height( @size.getWidthWithUnit() )
+            return block
 
 class Dice extends Block
     # INHERITED PROPERTIES

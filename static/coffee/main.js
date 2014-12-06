@@ -4,11 +4,9 @@ $(function() {
 });
 
 $(function() {
-  var block, dice, grid, player, size;
-  size = new Size(100, 100);
-  block = new Block(size);
-  dice = new Dice(size);
-  player = new Player("Tom");
-  grid = new Grid(size);
-  return dice.getSize();
+  var blockSize, grid;
+  blockSize = new Size(3, 3, UNIT_BLOCK);
+  grid = new Grid(blockSize);
+  grid.createGrid();
+  return console.log(grid.blockArray);
 });

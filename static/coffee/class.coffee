@@ -42,27 +42,28 @@ class window.Grid
         # Create grid in Blocks
         else if @size.unit is UNIT_BLOCK
             console.log "Creating A #{@size.width} by #{@size.height} grid of Blocks."
-            for widthBlock in [0...@size.width]
+            for heightBlock in [0...@size.height]
                 row = $("<div class='block-row'>") 
                 # Instantiate a new array for each row
-                @blockArray[widthBlock] = []
-                for heightBlock in [0...@size.height]
+                @blockArray[heightBlock] = []
+                for widthBlock in [0...@size.width]
                     # Create new block
                     block = new Block(
                         new Size(BLOCK_DEFAULT_WIDTH_PIXEL,BLOCK_DEFAULT_HEIGHT_PIXEL,UNIT_PIXEL)
                     )
                     # Create the HTML block
                     blockElement = block.createBlock()   
-                    blockElement.text("[#{widthBlock},#{heightBlock}]")
+                    blockElement.text("[#{heightBlock},#{widthBlock}]")
                     # Add the block to the Page
                     row.append(blockElement)
                     # assign the block to the grid array
-                    @blockArray[widthBlock][heightBlock] = block
+                    @blockArray[heightBlock][widthBlock] = block
                 ELEMENT_BOARD_CONTAINER.append(row)
 
     getGrid: () =>
         return @blockArray
-    getBlockElement: (x,y) =>
+    # SHOULD EXPLAIN WHY THIS IS BACKWARDS
+    getBlockElement: (y,x) =>
         return @blockArray[x][y]
 
     getGridHeight: () ->
@@ -207,7 +208,7 @@ class Dice extends Block
         @orientation.right = 7 - oldFaceUp
 
         # Change grid index
-        @gridIndex_X = @gridIndex_X + 1
+        @gridIndex_X = @gridIndex_X - 1
         console.log "Dice moved left"
         console.log "New orientation is:"
         console.log "FACEUP: #{@orientation.faceup}"
@@ -228,7 +229,7 @@ class Dice extends Block
         @orientation.left = 7 - oldFaceUp
 
         # Change grid index
-        @gridIndex_X = @gridIndex_X - 1
+        @gridIndex_X = @gridIndex_X + 1
         console.log "Dice moved right"
         console.log "New orientation is:"
         console.log "FACEUP: #{@orientation.faceup}"

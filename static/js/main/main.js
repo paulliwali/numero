@@ -46,6 +46,7 @@
             block = new Block(new Size(BLOCK_DEFAULT_WIDTH_PIXEL, BLOCK_DEFAULT_HEIGHT_PIXEL, UNIT_PIXEL));
             blockElement = block.createBlock();
             blockElement.text("[" + widthBlock + "," + heightBlock + "]");
+            block.assignHTMLBlock(blockElement);
             row.append(blockElement);
             this.blockArray[widthBlock][heightBlock] = block;
           }
@@ -68,8 +69,11 @@
   Block = (function() {
     Block.size = null;
 
+    Block.htmlBlock = null;
+
     function Block(size) {
       this.size = size;
+      this.assignHTMLBlock = __bind(this.assignHTMLBlock, this);
       this.createBlock = __bind(this.createBlock, this);
       console.log("New Block Created: (" + this.size.height + "," + this.size.width + ")");
     }
@@ -82,6 +86,10 @@
         block.height(this.size.getWidthWithUnit());
         return block;
       }
+    };
+
+    Block.prototype.assignHTMLBlock = function(block) {
+      return this.htmlBlock = block;
     };
 
     return Block;
@@ -215,7 +223,7 @@
 
   $(function() {
     var blockSize, grid;
-    blockSize = new Size(6, 6, UNIT_BLOCK);
+    blockSize = new Size(3, 3, UNIT_BLOCK);
     grid = new Grid(blockSize);
     grid.createGrid();
     return console.log(grid.blockArray);

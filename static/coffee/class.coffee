@@ -157,6 +157,11 @@ class Dice extends Block
         return @orientation.right
         
     moveUp: () =>
+        # Error checking
+        outOfBounds = true if @gridIndex_Y - 1 < 0 
+        console.log "Dice is moving out of bounds" if outOfBounds
+        return if outOfBounds
+
         # Change orientation
         oldFaceUp = @orientation.faceup
         @orientation.faceup = @orientation.down
@@ -166,7 +171,6 @@ class Dice extends Block
 
         # Change grid index
         @gridIndex_Y = @gridIndex_Y - 1
-
 
         console.log "Dice moved up"
         console.log "New orientation is:"
@@ -180,6 +184,11 @@ class Dice extends Block
         @moveToGrid()
 
     moveDown: () => 
+        # Error checking
+        outOfBounds = true if @gridIndex_Y + 1 >= window.grid.getGridHeight()
+        console.log "Dice is moving out of bounds" if outOfBounds
+        return if outOfBounds
+
         oldFaceUp = @orientation.faceup
         @orientation.faceup = @orientation.up
         @orientation.bottom = 7 - @orientation.faceup
@@ -200,6 +209,11 @@ class Dice extends Block
         @moveToGrid()
 
     moveLeft: () =>
+        # Error checking
+        outOfBounds = true if @gridIndex_X - 1 < 0 
+        console.log "Dice is moving out of bounds" if outOfBounds
+        return if outOfBounds
+
         # Change orientation
         oldFaceUp = @orientation.faceup
         @orientation.faceup = @orientation.right
@@ -221,6 +235,11 @@ class Dice extends Block
         @moveToGrid()
 
     moveRight: () =>
+        # Error checking
+        outOfBounds = true if @gridIndex_X + 1 >= window.grid.getGridWidth()
+        console.log "Dice is moving out of bounds" if outOfBounds
+        return if outOfBounds
+
         # Change orientation
         oldFaceUp = @orientation.faceup
         @orientation.faceup = @orientation.left
@@ -324,23 +343,5 @@ class Orientation
         console.log "RIGHT: #{@right}"
         console.log "UP: #{@up}"
         console.log "DOWN: #{@down}"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # Game class?

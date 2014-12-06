@@ -199,7 +199,16 @@
     };
 
     Dice.prototype.moveUp = function() {
-      var oldFaceUp;
+      var oldFaceUp, outOfBounds;
+      if (this.gridIndex_Y - 1 < 0) {
+        outOfBounds = true;
+      }
+      if (outOfBounds) {
+        console.log("Dice is moving out of bounds");
+      }
+      if (outOfBounds) {
+        return;
+      }
       oldFaceUp = this.orientation.faceup;
       this.orientation.faceup = this.orientation.down;
       this.orientation.bottom = 7 - this.orientation.faceup;
@@ -219,7 +228,16 @@
     };
 
     Dice.prototype.moveDown = function() {
-      var oldFaceUp;
+      var oldFaceUp, outOfBounds;
+      if (this.gridIndex_Y + 1 >= window.grid.getGridHeight()) {
+        outOfBounds = true;
+      }
+      if (outOfBounds) {
+        console.log("Dice is moving out of bounds");
+      }
+      if (outOfBounds) {
+        return;
+      }
       oldFaceUp = this.orientation.faceup;
       this.orientation.faceup = this.orientation.up;
       this.orientation.bottom = 7 - this.orientation.faceup;
@@ -239,7 +257,16 @@
     };
 
     Dice.prototype.moveLeft = function() {
-      var oldFaceUp;
+      var oldFaceUp, outOfBounds;
+      if (this.gridIndex_X - 1 < 0) {
+        outOfBounds = true;
+      }
+      if (outOfBounds) {
+        console.log("Dice is moving out of bounds");
+      }
+      if (outOfBounds) {
+        return;
+      }
       oldFaceUp = this.orientation.faceup;
       this.orientation.faceup = this.orientation.right;
       this.orientation.bottom = 7 - this.orientation.faceup;
@@ -259,7 +286,16 @@
     };
 
     Dice.prototype.moveRight = function() {
-      var oldFaceUp;
+      var oldFaceUp, outOfBounds;
+      if (this.gridIndex_X + 1 >= window.grid.getGridWidth()) {
+        outOfBounds = true;
+      }
+      if (outOfBounds) {
+        console.log("Dice is moving out of bounds");
+      }
+      if (outOfBounds) {
+        return;
+      }
       oldFaceUp = this.orientation.faceup;
       this.orientation.faceup = this.orientation.left;
       this.orientation.bottom = 7 - this.orientation.faceup;

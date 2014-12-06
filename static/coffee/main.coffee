@@ -6,13 +6,8 @@ $ ->
 
     # Global
     # ----------
-<<<<<<< HEAD
     blockSize = new Size(2,2,UNIT_BLOCK)
     
-
-=======
-    blockSize = new Size(3,3,UNIT_BLOCK)
->>>>>>> 6811d3a367c73440fb4bae57966eaff19a6d7f1f
     grid = new Grid(blockSize)
     grid.createGrid()
 

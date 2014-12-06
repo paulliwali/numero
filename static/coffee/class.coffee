@@ -20,8 +20,9 @@ class Grid
     # METHODS
     constructor: (@size) ->
         if (@size is null)
-            console.log "MISSING SIZE OBJECT"
+            console.log "CANNOT CREATE GRID. MISSING SIZE OBJECT."
             return
+        
 
         console.log "New Grid created: (#{@size.height},#{@size.width})"
 

@@ -20,7 +20,7 @@
     function Grid(size) {
       this.size = size;
       if (this.size === null) {
-        console.log("MISSING SIZE OBJECT");
+        console.log("CANNOT CREATE GRID. MISSING SIZE OBJECT.");
         return;
       }
       console.log("New Grid created: (" + this.size.height + "," + this.size.width + ")");

@@ -5,7 +5,7 @@ $(function() {
 
 $(function() {
   var blockSize, dice, diceElement, diceSize;
-  blockSize = new Size(2, 3, UNIT_BLOCK);
+  blockSize = new Size(3, 3, UNIT_BLOCK);
   window.grid = new Grid(blockSize);
   grid.createGrid();
   diceSize = new Size("25", "25", UNIT_PIXEL);

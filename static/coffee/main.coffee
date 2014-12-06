@@ -1,7 +1,6 @@
 $ ->
     FastClick.attach(document.body)
 
-
 $ ->
 
     # Global

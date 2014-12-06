@@ -9,44 +9,41 @@
 # 
 # ====================
 
-class Game
-    constructor: () ->
-        console.log "New Game created."
-
 class window.Grid 
     # PROPERTIES
-    @size = null
-    @blockArray = null
+    size = null
+    blockArray = null
 
 
     # METHODS
-    constructor: (@size) ->
-        if (@size is null)
+    constructor: (size) ->
+        if (size is null)
             console.log "CANNOT CREATE GRID. MISSING SIZE OBJECT."
             return
+        Grid::size = size
 
-        @blockArray = [
+        Grid::blockArray = [
             []
         ]
-        console.log "New Grid created: (#{@size.height},#{@size.width})"
+        console.log "New Grid created: (#{Grid::size.height},#{Grid::size.width})"
 
     # Creates a Grid of @size.height x @size.width
     # Stores the grid in @blockArray 
     createGrid: () =>
         # Create Grid in Pixels
-        if @size.unit is UNIT_PIXEL
+        if Grid::size.unit is UNIT_PIXEL
             grid = $("<div>")
-            grid.width( @size.getWidthWithUnit() )
-            grid.height( @size.getWidthWithUnit() )
+            grid.width( Grid::size.getWidthWithUnit() )
+            grid.height( Grid::size.getWidthWithUnit() )
             ELEMENT_BOARD_CONTAINER.append(grid)    
         # Create grid in Blocks
-        else if @size.unit is UNIT_BLOCK
-            console.log "Creating A #{@size.width} by #{@size.height} grid of Blocks."
-            for heightBlock in [0...@size.height]
+        else if Grid::size.unit is UNIT_BLOCK
+            console.log "Creating A #{Grid::size.width} by #{Grid::size.height} grid of Blocks."
+            for heightBlock in [0...Grid::size.height]
                 row = $("<div class='block-row'>") 
                 # Instantiate a new array for each row
-                @blockArray[heightBlock] = []
-                for widthBlock in [0...@size.width]
+                Grid::blockArray[heightBlock] = []
+                for widthBlock in [0..Grid::size.width]
                     # Create new block
                     block = new Block(
                         new Size(BLOCK_DEFAULT_WIDTH_PIXEL,BLOCK_DEFAULT_HEIGHT_PIXEL,UNIT_PIXEL)
@@ -57,20 +54,20 @@ class window.Grid
                     # Add the block to the Page
                     row.append(blockElement)
                     # assign the block to the grid array
-                    @blockArray[heightBlock][widthBlock] = block
+                    Grid::blockArray[heightBlock][widthBlock] = block
                 ELEMENT_BOARD_CONTAINER.append(row)
 
     getGrid: () =>
-        return @blockArray
+        return Grid::blockArray
     # SHOULD EXPLAIN WHY THIS IS BACKWARDS
     getBlockElement: (y,x) =>
-        return @blockArray[x][y]
+        return Grid::blockArray[x][y]
 
     getGridHeight: () ->
-        return @size.height
+        return Grid::size.height
 
     getGridWidth: () ->
-        return @size.width
+        return Grid::size.width
 
 
 class Block
@@ -113,8 +110,8 @@ class Dice extends Block
         console.log "CREATING DICE"
         @assignHTMLElement(@createBlock())
 
-        @gridIndex_X = randomNum(window.grid.getGridWidth(),0)
-        @gridIndex_Y = randomNum(window.grid.getGridHeight(),0)
+        @gridIndex_X = randomNum(Grid::.getGridWidth(),0)
+        @gridIndex_Y = randomNum(Grid::getGridHeight(),0)
 
         @moveToGrid()
 
@@ -125,9 +122,17 @@ class Dice extends Block
         faceUp = @getFaceUp()
         @htmlElement.text(faceUp)
 
-        window.grid.getBlockElement(
+        Grid::getBlockElement(
             @gridIndex_X, @gridIndex_Y
             ).getBlockElement().append(@htmlElement)
+
+        @isGameWon()
+
+    isGameWon: =>
+        faceUp = @getFaceUp()
+        console.log faceUp
+        winningConditions = window.game.getWinningConditions()
+        console.log winningConditions
 
     createBlock: =>
         super()
@@ -328,11 +333,47 @@ class Orientation
         console.log "DOWN: #{@down}"
 
 
+class WinningConditions
+    @conditions = null
+    constructor: () ->
+        @conditions = []
+    addCondition: (number,x,y) =>
+        condition = new Condition(number,x,y)
+        @conditions.push(condition)
+        return condition
+
+    checkConditions: (number,x,y) =>
+        for condition in @conditions
+            condition.checkIfSatisfied(number,x,y)
 
 
 
+class Condition
+    @number = null
+    @blockPositionY = null
+    @blockPositionX = null
+    constructor: (@number,@blockPositionX,@blockPositionY) ->
+        console.log "A condition has been made for #{@number} at [#{@blockPositionX},#{@blockPositionY}] "
 
+    checkIfSatisfied: (number,x,y) =>
+        if number == @number and @blockPositionX == x  and @blockPositionY == y
+            return true
+        else
+            return false
 
+class window.Game
+    dice = null
+    players = null
+    grid = null
+    winningConditions = null
+    constructor: () ->
+        console.log "New Game has been created."
+
+    setWinningConditions: (winningConditions) =>
+        Game::winningConditions = winningConditions
+
+    getWinningConditions: () =>
+        return Game::winningConditions
 
 
 

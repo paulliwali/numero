@@ -8,3 +8,4 @@ $ ->
     dice = new Dice(size)
     player = new Player("Tom")
     grid = new Grid(size)
+    dice.getSize()

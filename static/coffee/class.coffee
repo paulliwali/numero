@@ -34,16 +34,21 @@ class Block
         console.log "New Block Created: (#{@size.height},#{@size.width})"
 
 class Dice extends Block
+    # INHERITED PROPERTIES
+    # @size
+
     # PROPERTIES
-    @size = null
     @bottomPosition = null
     @gridIndex_X = null
     @gridIndex_Y = null
     @orientation = null
     # METHODS
-    constructor: (@size) ->
-        super(@size)
+    constructor: (size) ->
+        super(size)
         console.log "New Dice created"
+
+    getSize: =>
+        console.log @size
 
 class Size
     # PROPERTIES

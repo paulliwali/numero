@@ -3,9 +3,14 @@ $ ->
 
 
 $ ->
-    size = new Size(100,100)
-    block = new Block(size)
-    dice = new Dice(size)
-    player = new Player("Tom")
-    grid = new Grid(size)
-    dice.getSize()
+
+    # Global
+    # ----------
+    blockSize = new Size(6,6,UNIT_BLOCK)
+    
+
+    grid = new Grid(blockSize)
+    grid.createGrid()
+    console.log grid.blockArray
+
+    

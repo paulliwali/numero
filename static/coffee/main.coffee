@@ -7,12 +7,11 @@ $ ->
     # < ========== >
     game = new Game()
     winningConditions = new WinningConditions()
-    condition = winningConditions.addCondition(5,0,2)
+    winningConditions.addCondition(5,0,2)
 
-    game.setWinningConditions(condition)
-    console.log game
+    game.setWinningConditions(winningConditions)
 
-    blockSize = new Size(5,5,UNIT_BLOCK)
+    blockSize = new Size(3,3,UNIT_BLOCK)
     
     grid = new Grid(blockSize)
     grid.createGrid()

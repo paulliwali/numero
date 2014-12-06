@@ -4,13 +4,12 @@ $(function() {
 });
 
 $(function() {
-  var blockSize, condition, dice, diceElement, diceSize, game, grid, winningConditions;
+  var blockSize, dice, diceElement, diceSize, game, grid, winningConditions;
   game = new Game();
   winningConditions = new WinningConditions();
-  condition = winningConditions.addCondition(5, 0, 2);
-  game.setWinningConditions(condition);
-  console.log(game);
-  blockSize = new Size(5, 5, UNIT_BLOCK);
+  winningConditions.addCondition(5, 0, 2);
+  game.setWinningConditions(winningConditions);
+  blockSize = new Size(3, 3, UNIT_BLOCK);
   grid = new Grid(blockSize);
   grid.createGrid();
   diceSize = new Size("25", "25", UNIT_PIXEL);

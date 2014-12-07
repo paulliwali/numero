@@ -363,6 +363,7 @@
     var blockArray, size;
 
     function Grid() {
+      this.isObstacle = __bind(this.isObstacle, this);
       this.unsetLocked = __bind(this.unsetLocked, this);
       this.setLocked = __bind(this.setLocked, this);
       this.isLocked = __bind(this.isLocked, this);
@@ -473,6 +474,10 @@
       return console.log("UNLOCKING " + x + " " + y);
     };
 
+    Grid.prototype.isObstacle = function() {
+      return Grid.prototype.blockArray[x][y].isObstacle;
+    };
+
     return Grid;
 
   })();
@@ -483,6 +488,8 @@
     Block.htmlElement = null;
 
     Block.locked = null;
+
+    Block.isObstacle = null;
 
     function Block(size) {
       this.size = size;
@@ -508,6 +515,7 @@
         block.height(this.size.getWidthWithUnit());
         this.assignHTMLElement(block);
         this.locked = false;
+        this.isObstacle = false;
         return block;
       }
     };
@@ -582,6 +590,9 @@
     Dice.htmlElement = null;
 
     function Dice() {
+      this.getToLeftAnimation = __bind(this.getToLeftAnimation, this);
+      this.rotateAnimation = __bind(this.rotateAnimation, this);
+      this.animateDice = __bind(this.animateDice, this);
       this.moveRight = __bind(this.moveRight, this);
       this.moveLeft = __bind(this.moveLeft, this);
       this.moveDown = __bind(this.moveDown, this);
@@ -830,6 +841,101 @@
         console.log("DOWN: " + this.orientation.down);
         console.log(this.gridIndex_X, this.gridIndex_Y);
         return this.moveToGrid();
+      }
+    };
+
+    Dice.prototype.animateDice = function(currentFaceup, nextFaceup, direction) {
+      var animation, finalAnimation;
+      animation = getToLeftAnimation(currentFaceup, nextFaceup);
+      return finalAnimation = rotateAnimation(animation, direction);
+    };
+
+    Dice.prototype.rotateAnimation = function(animation, direction) {
+      switch (direction) {
+        case up:
+          return console.log("Rotate 90 degrees clockwise");
+        case down:
+          return console.log("Rotate 270 degrees clockwise");
+        case left:
+          return console.log("Rotate 0 degrees clockwise");
+        case right:
+          return console.log("Rotate 180 degrees");
+      }
+    };
+
+    Dice.prototype.getToLeftAnimation = function(currentFaceup, nextFaceup) {
+      switch (currentFaceup) {
+        case 1:
+          switch (nextFaceup) {
+            case 2:
+              return console.log("Returning animation going to the left");
+            case 3:
+              return console.log("Returning animation going to the left");
+            case 4:
+              return console.log("Returning animation going to the left");
+            case 5:
+              return console.log("Returning animation going to the left");
+          }
+          break;
+        case 2:
+          switch (nextFaceup) {
+            case 1:
+              return console.log("Returning animation going to the left");
+            case 3:
+              return console.log("Returning animation going to the left");
+            case 4:
+              return console.log("Returning animation going to the left");
+            case 6:
+              return console.log("Returning animation going to the left");
+          }
+          break;
+        case 3:
+          switch (nextFaceup) {
+            case 1:
+              return console.log("Returning animation going to the left");
+            case 2:
+              return console.log("Returning animation going to the left");
+            case 5:
+              return console.log("Returning animation going to the left");
+            case 6:
+              return console.log("Returning animation going to the left");
+          }
+          break;
+        case 4:
+          switch (nextFaceup) {
+            case 1:
+              return console.log("Returning animation going to the left");
+            case 2:
+              return console.log("Returning animation going to the left");
+            case 5:
+              return console.log("Returning animation going to the left");
+            case 6:
+              return console.log("Returning animation going to the left");
+          }
+          break;
+        case 5:
+          switch (nextFaceup) {
+            case 1:
+              return console.log("Returning animation going to the left");
+            case 3:
+              return console.log("Returning animation going to the left");
+            case 4:
+              return console.log("Returning animation going to the left");
+            case 6:
+              return console.log("Returning animation going to the left");
+          }
+          break;
+        case 6:
+          switch (nextFaceup) {
+            case 2:
+              return console.log("Returning animation going to the left");
+            case 3:
+              return console.log("Returning animation going to the left");
+            case 4:
+              return console.log("Returning animation going to the left");
+            case 5:
+              return console.log("Returning animation going to the left");
+          }
       }
     };
 

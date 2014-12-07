@@ -11,8 +11,6 @@ $ ->
         return false
       true
 
-
-
     $(".go-to-game").click (e)->
         e.preventDefault()
         startGameMessage()

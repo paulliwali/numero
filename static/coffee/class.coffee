@@ -248,7 +248,6 @@ class Player
         $("body").unbind("keyup")
 # ==================== END PLAYER =============================
 
-
 # =================== START GRID ===============
 class Grid 
     # PROPERTIES
@@ -340,6 +339,9 @@ class Grid
     unsetLocked: (y,x) =>
         Grid::blockArray[x][y].locked = false
         console.log "UNLOCKING #{x} #{y}"
+
+    isObstacle: =>
+        return Grid::blockArray[x][y].isObstacle
 # ====================== END GRID ===========================
 
 # ====================== START BLOCK =========================
@@ -348,6 +350,7 @@ class Block
     @size = null
     @htmlElement = null
     @locked = null
+    @isObstacle = null
     # METHODS
     constructor: (@size) ->
         # console.log "New Block Created: (#{@size.height},#{@size.width})"
@@ -362,6 +365,7 @@ class Block
             block.height( @size.getWidthWithUnit() )
             @assignHTMLElement(block)
             @locked = false
+            @isObstacle = false
             return block
     reset: =>
         @size.reset()
@@ -649,6 +653,57 @@ class Dice extends Block
             console.log "DOWN: #{@orientation.down}"
             console.log @gridIndex_X,@gridIndex_Y
             @moveToGrid()
+
+    animateDice: (currentFaceup, nextFaceup, direction) =>
+        animation = getToLeftAnimation(currentFaceup, nextFaceup)
+        finalAnimation = rotateAnimation(animation, direction)
+
+    rotateAnimation: (animation, direction) =>
+        switch direction
+            when up then console.log "Rotate 90 degrees clockwise"
+            when down then  console.log "Rotate 270 degrees clockwise"
+            when left then console.log "Rotate 0 degrees clockwise"
+            when right then console.log "Rotate 180 degrees"
+
+    getToLeftAnimation: (currentFaceup, nextFaceup) =>
+        switch currentFaceup
+            when 1
+                switch nextFaceup
+                    when 2 then console.log "Returning animation going to the left"
+                    when 3 then console.log "Returning animation going to the left"
+                    when 4 then console.log "Returning animation going to the left"
+                    when 5 then console.log "Returning animation going to the left"
+            when 2
+                switch nextFaceup
+                    when 1 then console.log "Returning animation going to the left"
+                    when 3 then console.log "Returning animation going to the left"
+                    when 4 then console.log "Returning animation going to the left"
+                    when 6 then console.log "Returning animation going to the left"
+            when 3
+                switch nextFaceup
+                    when 1 then console.log "Returning animation going to the left"
+                    when 2 then console.log "Returning animation going to the left"
+                    when 5 then console.log "Returning animation going to the left"
+                    when 6 then console.log "Returning animation going to the left"
+            when 4
+                switch nextFaceup
+                    when 1 then console.log "Returning animation going to the left"
+                    when 2 then console.log "Returning animation going to the left"
+                    when 5 then console.log "Returning animation going to the left"
+                    when 6 then console.log "Returning animation going to the left"
+            when 5
+                switch nextFaceup
+                    when 1 then console.log "Returning animation going to the left"
+                    when 3 then console.log "Returning animation going to the left"
+                    when 4 then console.log "Returning animation going to the left"
+                    when 6 then console.log "Returning animation going to the left"
+            when 6
+                switch nextFaceup
+                    when 2 then console.log "Returning animation going to the left"
+                    when 3 then console.log "Returning animation going to the left"
+                    when 4 then console.log "Returning animation going to the left"
+                    when 5 then console.log "Returning animation going to the left"
+
 
 # ======================== END DICE ==================
 # class Position

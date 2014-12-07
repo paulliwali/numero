@@ -12,6 +12,7 @@ $ ->
       true
 
 
+
     $(".go-to-game").click (e)->
         e.preventDefault()
         startGameMessage()
@@ -42,4 +43,5 @@ $ ->
         Game::addNewPlayers("Pua","Brian")
         console.log Game::
         console.log Grid::
+        $(".scores").show()
 

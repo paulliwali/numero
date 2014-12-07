@@ -9,6 +9,242 @@
 # 
 # ====================
 
+# ================= GAME START ====================
+class Game
+    Game::players = []
+    Game::grid = null
+    Game::winningConditions = null
+    Game::isActiveGame = false
+    Game::numberOfPlayers = 0
+    newGame: =>
+        if Game::isActiveGame is true
+            $("body").unbind("keyup")
+            Game::resetGame()
+        Game::isActiveGame = true
+
+        if Game::boardSize is BOARD_SIZE_MEDIUM
+            blockSize = new Size(4,4,UNIT_BLOCK)
+        else if Game::boardSize is BOARD_SIZE_SMALL
+            blockSize = new Size(3,3,UNIT_BLOCK)
+        else if Game::boardSize is BOARD_SIZE_LARGE
+            blockSize = new Size(5,5,UNIT_BLOCK)
+        else
+            sizeX = randomNum(6,3)
+            sizeY = randomNum(6,3)
+            blockSize = new Size(sizeX,sizeY,UNIT_BLOCK)
+        Game::blockSize = blockSize
+        Game::players = []
+        Grid::createGridStarter(Game::blockSize)
+
+        # Set the victory conditions
+        winningConditions = new WinningConditions()
+        winningConditions.addCondition()
+
+        Game::setWinningConditions(winningConditions)
+
+    setWinningConditions: (win) =>
+        Game::winningConditions = win
+
+    getWinningConditions: () =>
+        return Game::winningConditions
+
+    addPlayer: (player) =>
+        Game::players.push(player)
+
+    addNewPlayers: (name1,name2 = "") =>
+        window.player1 = new Player(name1)
+        dice = new Dice()
+        player1.setDice(dice)
+        Game::addPlayer(player1)
+
+
+        if Game::numberOfPlayers == 2
+            window.player2 = new Player(name2)
+            dice2 = new Dice()
+            player2.setDice(dice2)
+            Game::addPlayer(player2)
+            $(".player-two").show()
+
+        $("body").on "keyup", (e) ->
+            player1.bindControls(e)
+            if Game::numberOfPlayers == 2
+                player2.bindControls(e)
+
+
+    resetGame: ->
+        console.log "RESETTING GAME"
+        if Game::grid isnt null
+            Game::grid.reset()
+        if Game::winningConditions isnt null
+            Game::winningConditions.reset()
+        if Game::blockSize isnt null
+            Game::blockSize.reset()
+        # if Game::players isnt null
+        #     for player in Game::players
+        #         player.reset()
+        #         player = null
+
+        Game::boardSize = null
+        Game::isActiveGame = false
+        Game::boardSize = null
+        Game::winningConditions = null
+        Game::grid = null
+        # Game::players = null
+
+# ================== END GAME ============================
+
+# ================== START WINNING CONDITIONS =================
+class WinningConditions
+    @conditions = null
+    constructor: () ->
+        @conditions = []
+
+    addCondition: () =>
+        condition = new Condition()
+        @conditions.push(condition)
+        return condition
+
+    checkConditions: (number,x,y) =>
+        for condition in @conditions
+            if not condition.checkIfSatisfied(number,x,y)
+                return false
+        # all conditions met
+        showGameWin()
+        for player in Game::players
+            player.unbindControls()
+        return true
+
+    checkConditionsSetup: (number,x,y) =>
+        for condition in @conditions
+            if not condition.checkIfSatisfied(number,x,y)
+                return false
+        return true
+
+    reset: () =>
+        for condition in @conditions
+            condition.reset()
+        @conditions = null
+
+# =================== END WINNING CONDITIONS =====================
+# =================== START CONDITIONS ==========================
+
+class Condition
+    @number = null
+    @blockPositionY = null
+    @blockPositionX = null
+    @isMet = false
+    @htmlElement = null
+    constructor: () ->
+        @number = randomNum(6,1)
+
+        @blockPositionX = randomNum(Grid::getGridWidth(),0)
+        @blockPositionY = randomNum(Grid::getGridHeight(),0)
+        console.log "A condition has been made for #{@number} at [#{@blockPositionX},#{@blockPositionY}] "
+        Grid::getBlockElement(@blockPositionX,@blockPositionY).getHTMLElement().addClass(CLASS_BLOCK_WINNING_CONDITION)
+        @createHTMLElement()
+        addConditionInViewableBox(@htmlElement)
+
+    checkIfSatisfied: (number,x,y) =>
+        if number == @number and @blockPositionX == x  and @blockPositionY == y
+            @isMet = true
+            return true
+        else
+            return false
+
+    createHTMLElement: =>
+        div = $("<div>")
+        xPos = $("<div class='col-xs-4'>").text("Grid X: " + @blockPositionX)
+        yPos =$("<div class='col-xs-4'>").text("Grid Y: " + @blockPositionY)
+        number = $("<div class='col-xs-4'>").text("Face Up Number: " + @number)
+        div.append(xPos).append(yPos).append(number)
+
+
+        @htmlElement = div
+        return div
+
+    assignHTMLElement: (element) =>
+        @htmlElement = element
+
+    getHTMLElement: =>
+        return @htmlElement
+
+    reset: =>
+        @htmlElement.remove()
+        @number = null
+        @blockPositionY = null
+        @blockPositionX = null
+        @isMet = false
+        @htmlElement = null
+
+#=================== END CONDITIONS ====================
+# =================== START PLAYER ========================
+
+class Player
+    @score = null
+    @name = null
+    @dice = null
+    playerNumber = 0
+    @id = 0
+    @htmlElement = null
+    # PROPERTIES
+    # METHODS
+    constructor: (@name) ->
+        @score = 0
+        if @name is null or @name is ""
+            console.log "MISSING PLAYER NAME"
+            return
+        @id = ++playerNumber
+        @assignHTMLElement($(".player-score:nth-child(#{@id})"))
+        @htmlElement.find(".player-name").text(@name)
+        console.log "New Player created: #{@name} ID: #{@id}"
+    getScore: =>
+        return @score
+
+    addPoint: =>
+        @score++
+        @htmlElement.find("."+CLASS_PLAYER_SCORE).text("#{@score}")
+
+    assignHTMLElement: (element)=>
+        @htmlElement = element
+
+    getHTMLElement: =>
+        return @htmlElement
+
+    getName: =>
+        return @name
+
+    setDice: (dice) =>
+        @dice = dice
+
+    getID: =>
+        return @id
+
+    getDice: =>
+        return @dice
+
+    reset: =>
+        @dice.reset()
+        @dice = null
+
+    bindControls: (e)=>
+        if @id == 1
+            switch e.keyCode
+                when 68 then @dice.moveRight()
+                when 83 then @dice.moveDown()
+                when 65 then @dice.moveLeft()
+                when 87 then @dice.moveUp()
+        else if @id == 2
+            switch e.keyCode
+                when 39 then @dice.moveRight()
+                when 40 then @dice.moveDown()
+                when 37 then @dice.moveLeft()
+                when 38 then @dice.moveUp()
+    unbindControls: =>
+        $("body").unbind("keyup")
+# ==================== END PLAYER =============================
+
+
+# =================== START GRID ===============
 class Grid 
     # PROPERTIES
     size = null
@@ -89,8 +325,8 @@ class Grid
 
     getGridWidth: () ->
         return Grid::size.width
-
-
+# ====================== END GRID ===========================
+# ====================== START BLOCK =========================
 class Block
     # PROPERTIES
     @size = null
@@ -100,7 +336,7 @@ class Block
         # console.log "New Block Created: (#{@size.height},#{@size.width})"
     assignHTMLElement: (block) =>
         @htmlElement = block
-    getBlockElement: =>
+    getHTMLElement: =>
         return @htmlElement
     createBlock: () =>
         if @size.unit is UNIT_PIXEL
@@ -114,8 +350,34 @@ class Block
         @size = null
         @htmlElement.remove()
         @htmlElement = null
+# ====================== END BLOCK ==========================
+# =================== START SIZE =======================
+class Size
+    # PROPERTIES
+    @height = null
+    @width = null
+    @unit = null
 
+    # METHODS
+    constructor: (@height,@width,@unit) ->
+        if not @height? or not @width?
+            console.log "MISSING HEIGHT OBJECT" unless @height?
+            console.log "MISSING WIDTH OBJECT" unless @width?
+            return
+        console.log "New Size created: (#{@height},#{@width})"
 
+    getWidthWithUnit: =>
+        return @width + @unit
+    getHeightWithUnit: =>
+        return @height + @unit
+
+    reset: =>
+        @height = null
+        @width = null
+        @unit = null
+# ========================= END SIZE =================
+
+# ====================== START DICE ==========================
 class Dice extends Block
     # INHERITED PROPERTIES
     # @size
@@ -154,11 +416,12 @@ class Dice extends Block
 
         Grid::getBlockElement(
             @gridIndex_X, @gridIndex_Y
-            ).getBlockElement().append(@htmlElement)
+            ).getHTMLElement().append(@htmlElement)
         @isGameWon()
 
     reset: =>
-        @htmlElement.remove()
+        if @htmlElement isnt null
+            @htmlElement.remove()
         @bottomPosition = null
         @gridIndex_X = null
         @gridIndex_Y = null
@@ -169,14 +432,19 @@ class Dice extends Block
         faceUp = @getFaceUp()
         console.log faceUp
         winningConditions = Game::getWinningConditions()
-        winningConditions.checkConditions(faceUp,@gridIndex_X,@gridIndex_Y)
-
+        if winningConditions.checkConditions(faceUp,@gridIndex_X,@gridIndex_Y)
+            @getPlayer().addPoint()
 
     isGameWonSetup: =>
         faceUp = @getFaceUp()
         console.log "Checking if already won. FACEUP: #{faceUp}"
         winningConditions = Game::getWinningConditions()
         winningConditions.checkConditionsSetup(faceUp,@gridIndex_X,@gridIndex_Y)
+
+    getPlayer: =>
+        for player in Game::players
+            if player.getDice() == this
+                return player
 
     createBlock: =>
         super()
@@ -308,99 +576,23 @@ class Dice extends Block
         console.log "DOWN: #{@orientation.down}"
         console.log @gridIndex_X,@gridIndex_Y
         @moveToGrid()
+# ======================== END DICE ==================
+
+# class Position
+#     # PROPERTIES
+#     @x = null
+#     @y = null
+
+#     # METHODS
+#     constructor: (@x,@y) ->
+#         if @x is null  or @y is null
+#             console.log "MISSING X VARIABLE" unless @x?
+#             console.log "MISSING Y VARIABLE" unless @y?
+#             return
+#         console.log "New Position created: (#{@x},#{@y})"
 
 
-class Size
-    # PROPERTIES
-    @height = null
-    @width = null
-    @unit = null
-
-    # METHODS
-    constructor: (@height,@width,@unit) ->
-        if not @height? or not @width?
-            console.log "MISSING HEIGHT OBJECT" unless @height?
-            console.log "MISSING WIDTH OBJECT" unless @width?
-            return
-        console.log "New Size created: (#{@height},#{@width})"
-
-    getWidthWithUnit: =>
-        return @width + @unit
-    getHeightWithUnit: =>
-        return @height + @unit
-
-    reset: =>
-        @height = null
-        @width = null
-        @unit = null
-
-class Position
-    # PROPERTIES
-    @x = null
-    @y = null
-
-    # METHODS
-    constructor: (@x,@y) ->
-        if @x is null  or @y is null
-            console.log "MISSING X VARIABLE" unless @x?
-            console.log "MISSING Y VARIABLE" unless @y?
-            return
-        console.log "New Position created: (#{@x},#{@y})"
-
-class Player
-    @score = 0
-    @name = null
-    @dice = null
-    playerNumber = 0
-    @id = 0
-    # PROPERTIES
-    # METHODS
-    constructor: (@name) ->
-        if @name is null or @name is ""
-            console.log "MISSING PLAYER NAME"
-            return
-        @id = ++playerNumber
-
-        console.log "New Player created: #{@name} ID: #{@id}"
-    getScore: =>
-        return @score
-
-    addPoint: =>
-        @score = @score + 1
-
-    getName: =>
-        return @name
-
-    setDice: (dice) =>
-        @dice = dice
-
-    getID: =>
-        return @id
-
-    getDice: =>
-        return @dice
-
-    reset: =>
-        @dice.reset()
-        @dice = null
-
-    bindControls: (e)=>
-        if @id == 1
-            switch e.keyCode
-                when 68 then @dice.moveRight()
-                when 83 then @dice.moveDown()
-                when 65 then @dice.moveLeft()
-                when 87 then @dice.moveUp()
-        else if @id == 2
-            switch e.keyCode
-                when 39 then @dice.moveRight()
-                when 40 then @dice.moveDown()
-                when 37 then @dice.moveLeft()
-                when 38 then @dice.moveUp()
-    unbindControls: =>
-        $("body").unbind("keyup")
-
-
+# ==================== START ORIENTATION ========================
 class Orientation
     # PROPERTIES
     @faceup = null
@@ -450,160 +642,5 @@ class Orientation
         @up = null
         @left = null
         @right = null
+# ================= END ORIENTATION =================
 
-class WinningConditions
-    @conditions = null
-    constructor: () ->
-        @conditions = []
-
-    addCondition: () =>
-        condition = new Condition()
-        @conditions.push(condition)
-        return condition
-
-    checkConditions: (number,x,y) =>
-        for condition in @conditions
-            if not condition.checkIfSatisfied(number,x,y)
-                return false
-        # all conditions met
-        showGameWin()
-        for player in Game::players
-            player.unbindControls()
-
-    checkConditionsSetup: (number,x,y) =>
-        for condition in @conditions
-            if not condition.checkIfSatisfied(number,x,y)
-                return false
-        return true
-
-    reset: () =>
-        for condition in @conditions
-            condition.reset()
-        @conditions = null
-
-class Condition
-    @number = null
-    @blockPositionY = null
-    @blockPositionX = null
-    @isMet = false
-    @htmlElement = null
-    constructor: () ->
-        @number = randomNum(6,1)
-
-        @blockPositionX = randomNum(Grid::getGridWidth(),0)
-        @blockPositionY = randomNum(Grid::getGridHeight(),0)
-        console.log "A condition has been made for #{@number} at [#{@blockPositionX},#{@blockPositionY}] "
-        Grid::getBlockElement(@blockPositionX,@blockPositionY).getBlockElement().addClass(CLASS_BLOCK_WINNING_CONDITION)
-        @createHTMLElement()
-        addConditionInViewableBox(@htmlElement)
-
-    checkIfSatisfied: (number,x,y) =>
-        if number == @number and @blockPositionX == x  and @blockPositionY == y
-            @isMet = true
-            return true
-        else
-            return false
-
-    createHTMLElement: =>
-        div = $("<div>")
-        xPos = $("<div class='col-xs-4'>").text("Grid X: " + @blockPositionX)
-        yPos =$("<div class='col-xs-4'>").text("Grid Y: " + @blockPositionY)
-        number = $("<div class='col-xs-4'>").text("Face Up Number: " + @number)
-        div.append(xPos).append(yPos).append(number)
-
-
-        @htmlElement = div
-        return div
-
-    assignHTMLElement: (element) =>
-        @htmlElement = element
-
-    getHTMLElement: =>
-        return @htmlElement
-
-    reset: =>
-        @htmlElement.remove()
-        @number = null
-        @blockPositionY = null
-        @blockPositionX = null
-        @isMet = false
-        @htmlElement = null
-
-class Game
-    Game::players = []
-    Game::grid = null
-    Game::winningConditions = null
-    Game::isActiveGame = false
-    Game::numberOfPlayers = 0
-    newGame: =>
-        if Game::isActiveGame is true
-            $("body").unbind("keyup")
-            Game::resetGame()
-        Game::isActiveGame = true
-
-        if Game::boardSize is BOARD_SIZE_MEDIUM
-            blockSize = new Size(4,4,UNIT_BLOCK)
-        else if Game::boardSize is BOARD_SIZE_SMALL
-            blockSize = new Size(3,3,UNIT_BLOCK)
-        else if Game::boardSize is BOARD_SIZE_LARGE
-            blockSize = new Size(5,5,UNIT_BLOCK)
-        else
-            sizeX = randomNum(6,3)
-            sizeY = randomNum(6,3)
-            blockSize = new Size(sizeX,sizeY,UNIT_BLOCK)
-        Game::blockSize = blockSize
-        Game::players = []
-        Grid::createGridStarter(Game::blockSize)
-
-        # Set the victory conditions
-        winningConditions = new WinningConditions()
-        winningConditions.addCondition()
-
-        Game::setWinningConditions(winningConditions)
-
-    setWinningConditions: (win) =>
-        Game::winningConditions = win
-
-    getWinningConditions: () =>
-        return Game::winningConditions
-
-    addPlayer: (player) =>
-        Game::players.push(player)
-
-    addNewPlayers: (name1,name2 = "") =>
-        window.player1 = new Player(name1)
-        dice = new Dice()
-        player1.setDice(dice)
-        Game::addPlayer(player1)
-
-        if Game::numberOfPlayers == 2
-            window.player2 = new Player(name2)
-            dice2 = new Dice()
-            player2.setDice(dice2)
-            Game::addPlayer(player2)
-
-        $("body").on "keyup", (e) ->
-            player1.bindControls(e)
-            if Game::numberOfPlayers == 2
-                player2.bindControls(e)
-
-
-    resetGame: ->
-        console.log "RESETTING GAME"
-        if Game::grid isnt null
-            Game::grid.reset()
-        if Game::winningConditions isnt null
-            Game::winningConditions.reset()
-        if Game::blockSize isnt null
-            Game::blockSize.reset()
-        # if Game::players isnt null
-        #     for player in Game::players
-        #         player.reset()
-        #         player = null
-
-        Game::boardSize = null
-        Game::isActiveGame = false
-        Game::boardSize = null
-        Game::winningConditions = null
-        Game::grid = null
-        # Game::players = null

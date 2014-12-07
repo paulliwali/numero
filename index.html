@@ -21,6 +21,8 @@
 		<link rel="stylesheet" type="text/css" href="static/css/vendor/normalize.css"/>
             <!-- Sweet Alert -->
             <link rel="stylesheet" type="text/css" href="static/css/vendor/sweet-alert.css"/>
+            <!-- Odometer -->
+            <link rel="stylesheet" type="text/css" href="static/css/vendor/odometer.css"/>
 
 		<!-- Don't need, have custom local ref
 		<! Latest compiled and minified CSS
@@ -74,11 +76,24 @@
 
    				</div>
 
+<<<<<<< HEAD
 					<div class="player-score player-one col-xs-6">
 
    				</div>
 
 					<div class="player-score player-two col-xs-6">
+=======
+                         </div>
+                         <div class="scores" style="display:none;">
+                           <div class="player-score player-one col-xs-6">
+                           <h3><span class="player-name">Player 1 </span> Score: <span class="score odometer">0</span></h3>
+                           </div>
+                           <div class="player-score player-two col-xs-6" style="display:none;">
+                           <h3><span class="player-name">Player 2 </span> Score: <span class="score odometer">0</span></h3>
+                         </div>
+                         </div>
+		            <div class="board-container col-xs-12">
+>>>>>>> 969c1ce0cc63889924f3e875b7b74bce01c9fbaa
 
    				</div>
 
@@ -88,6 +103,7 @@
 				</div>
 			</div>
 		</main>
+<<<<<<< HEAD
     <!-- End of Game content -->
 
     <!-- Modals -->
@@ -113,6 +129,42 @@
               <button type="button" class="btn btn-primary" value="medium">Medium</button>
               <button type="button" class="btn btn-primary" value="large">Big</button>
               <button type="button" class="btn btn-primary" value="random">Surprise Me</button>
+=======
+            <!-- End of Game content -->
+
+            <!-- Modals -->
+            <div class="modal fade" id="gameOptions" tabindex="-1" role="dialog" aria-labelledby="gameOptionsLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="gameOptionsLabel">Choose Game Options</h4>
+                  </div>
+                  <div class="modal-body">
+                    <label> Number of Players </label>
+                    <br>
+                    <div class="btn-group number-players" role="group" aria-label="...">
+                      <button type="button" class="btn btn-primary active" value="1">1</button>
+                      <button type="button" class="btn btn-primary" value="2">2</button>
+                    </div>
+                    <br><br>
+                    <label> Board Size</label>
+                    <br>
+                    <div class="btn-group board-size" role="group" aria-label="...">
+                      <button type="button" class="btn btn-primary" value="small">Small</button>
+                      <button type="button" class="btn btn-primary active" value="medium">Medium</button>
+                      <button type="button" class="btn btn-primary" value="large">Big</button>
+                      <button type="button" class="btn btn-primary" value="random">Surprise Me</button>
+                    </div>
+
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary start-game">Start Game</button>
+                  </div>
+                </div>
+              </div>
+>>>>>>> 969c1ce0cc63889924f3e875b7b74bce01c9fbaa
             </div>
 
           </div>
@@ -215,6 +267,7 @@
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="static/js/vendor/sweet-alert.min.js"></script>
+            <script src="static/js/vendor/odometer.min.js" type="text/javascript"></script>
 		<!-- Own JS File-->
 		<script src="static/js/main/main.js"></script>
 	</footer>

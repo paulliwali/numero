@@ -26,7 +26,7 @@
     Game.prototype.numberOfPlayers = 0;
 
     Game.prototype.newGame = function() {
-      var blockSize, sizeX, sizeY, winningConditions;
+      var blockSize, player1, player2, sizeX, sizeY, winningConditions;
       if (Game.prototype.isActiveGame === true) {
         $("body").unbind("keyup");
         Game.prototype.resetGame();
@@ -50,7 +50,9 @@
       Grid.prototype.createGridStarter(Game.prototype.blockSize);
       winningConditions = new WinningConditions();
       winningConditions.addCondition();
-      return Game.prototype.setWinningConditions(winningConditions);
+      Game.prototype.setWinningConditions(winningConditions);
+      player1 = window.player1 != null ? window.player1.name : null;
+      return player2 = window.player2 != null ? window.player2.name : null;
     };
 
     Game.prototype.setWinningConditions = function(win) {
@@ -611,6 +613,7 @@
         alreadyWon = true;
       }
       this.assignHTMLElement(this.createBlock());
+      this.htmlElement.addClass("block-dice");
       if (alreadyWon) {
         this.reset();
         this.constructor();
@@ -733,7 +736,9 @@
         console.log("UP: " + this.orientation.up);
         console.log("DOWN: " + this.orientation.down);
         console.log(this.gridIndex_X, this.gridIndex_Y);
-        return this.moveToGrid();
+        this.htmlElement.addClass("block-move-up");
+        this.moveToGrid();
+        return this.htmlElement.removeClass("block-move-up");
       }
     };
 
@@ -765,7 +770,9 @@
         console.log("UP: " + this.orientation.up);
         console.log("DOWN: " + this.orientation.down);
         console.log(this.gridIndex_X, this.gridIndex_Y);
-        return this.moveToGrid();
+        this.htmlElement.addClass("block-move-down");
+        this.moveToGrid();
+        return this.htmlElement.removeClass("block-move-down");
       }
     };
 
@@ -797,7 +804,9 @@
         console.log("UP: " + this.orientation.up);
         console.log("DOWN: " + this.orientation.down);
         console.log(this.gridIndex_X, this.gridIndex_Y);
-        return this.moveToGrid();
+        this.htmlElement.addClass("block-move-left");
+        this.moveToGrid();
+        return this.htmlElement.removeClass("block-move-left");
       }
     };
 
@@ -829,7 +838,9 @@
         console.log("UP: " + this.orientation.up);
         console.log("DOWN: " + this.orientation.down);
         console.log(this.gridIndex_X, this.gridIndex_Y);
-        return this.moveToGrid();
+        this.htmlElement.addClass("block-move-right");
+        this.moveToGrid();
+        return this.htmlElement.removeClass("block-move-right");
       }
     };
 
@@ -984,6 +995,14 @@
       if (isConfirm) {
         Game.prototype.newGame();
         return Game.prototype.addNewPlayers("Pua", "Brian");
+      } else {
+        swal({
+          title: "You mean you want to play again?!",
+          text: "Let's play!",
+          timer: 2000
+        });
+        Game.prototype.newGame();
+        return Game.prototype.addNewPlayers(window.player1.name);
       }
     });
   };

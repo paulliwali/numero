@@ -1,9 +1,46 @@
+// Mixins
+// =============
+@import "animation";
+
+.transform(@string){
+    -webkit-transform: @string;
+    -moz-transform:      @string;
+    -ms-transform:       @string;
+    -o-transform:        @string;
+}
+
+
 .block{
   float: left;
   text-align: center;
   background: url(../../icons/tile-2.jpg);
   background-size: cover;
 }
+
+.block.block-dice{
+    background: url(../../icons/Sprite/1-2.png) -300px;
+    height: 75px !important;
+    width: 75px !important;
+    .animation(rollDice);
+    position: relative;
+}
+
+.block.block-dice.block-move-left{
+    left: -100px;
+}
+
+.block.block-dice.block-move-right{
+    left: 100px;
+}
+
+.block.block-dice.block-move-up{
+    top: -100px;
+}
+
+.block.block-dice.block-move-down{
+    top: 100px;
+}
+
 
 .block-row{
   clear: both;

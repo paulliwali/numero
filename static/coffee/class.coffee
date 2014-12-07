@@ -351,7 +351,6 @@ class Orientation
             console.log "MISSING LEFT" unless @left?
             console.log "MISSING RIGHT" unless @right?
         
-
         @faceup = randomNum(6,1)
         @bottom = 7 - @faceup
 

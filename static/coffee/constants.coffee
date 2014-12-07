@@ -31,7 +31,7 @@ CLASS_GRID_BORDER_TOP = "grid-border grid-border-top"
 CLASS_GRID_BORDER_BOTTOM= "grid-border grid-border-bottom"
 CLASS_GRID_BORDER_LEFT= "grid-border grid-border-left"
 CLASS_GRID_BORDER_RIGHT= "grid-border grid-border-right"
-
+CLASS_PLAYER_SCORE	= "score";
 
 
 # VALUES

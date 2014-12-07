@@ -158,7 +158,8 @@ class Dice extends Block
         @isGameWon()
 
     reset: =>
-        @htmlElement.remove()
+        if @htmlElement isnt null
+            @htmlElement.remove()
         @bottomPosition = null
         @gridIndex_X = null
         @gridIndex_Y = null
@@ -169,14 +170,19 @@ class Dice extends Block
         faceUp = @getFaceUp()
         console.log faceUp
         winningConditions = Game::getWinningConditions()
-        winningConditions.checkConditions(faceUp,@gridIndex_X,@gridIndex_Y)
-
+        if winningConditions.checkConditions(faceUp,@gridIndex_X,@gridIndex_Y)
+            @getPlayer().addPoint()
 
     isGameWonSetup: =>
         faceUp = @getFaceUp()
         console.log "Checking if already won. FACEUP: #{faceUp}"
         winningConditions = Game::getWinningConditions()
         winningConditions.checkConditionsSetup(faceUp,@gridIndex_X,@gridIndex_Y)
+
+    getPlayer: =>
+        for player in Game::players
+            if player.getDice() == this
+                return player
 
     createBlock: =>
         super()
@@ -348,14 +354,16 @@ class Position
         console.log "New Position created: (#{@x},#{@y})"
 
 class Player
-    @score = 0
+    @score = null
     @name = null
     @dice = null
     playerNumber = 0
     @id = 0
+    @htmlElement = null
     # PROPERTIES
     # METHODS
     constructor: (@name) ->
+        @score = 0
         if @name is null or @name is ""
             console.log "MISSING PLAYER NAME"
             return
@@ -366,7 +374,14 @@ class Player
         return @score
 
     addPoint: =>
-        @score = @score + 1
+        @score++
+        @htmlElement.find("."+CLASS_PLAYER_SCORE).text("#{@score}")
+
+    assignHTMLElement: (element)=>
+        @htmlElement = element
+
+    getHTMLElement: =>
+        return @htmlElement
 
     getName: =>
         return @name
@@ -469,6 +484,7 @@ class WinningConditions
         showGameWin()
         for player in Game::players
             player.unbindControls()
+        return true
 
     checkConditionsSetup: (number,x,y) =>
         for condition in @conditions
@@ -575,12 +591,16 @@ class Game
         dice = new Dice()
         player1.setDice(dice)
         Game::addPlayer(player1)
+        player1.assignHTMLElement($(".player-one"))
+
 
         if Game::numberOfPlayers == 2
             window.player2 = new Player(name2)
             dice2 = new Dice()
             player2.setDice(dice2)
             Game::addPlayer(player2)
+            player2.assignHTMLElement($(".player-two"))
+            $(".player-two").show()
 
         $("body").on "keyup", (e) ->
             player1.bindControls(e)

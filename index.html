@@ -21,6 +21,8 @@
 		<link rel="stylesheet" type="text/css" href="static/css/vendor/normalize.css"/>
             <!-- Sweet Alert -->
             <link rel="stylesheet" type="text/css" href="static/css/vendor/sweet-alert.css"/>
+            <!-- Odometer -->
+            <link rel="stylesheet" type="text/css" href="static/css/vendor/odometer.css"/>
 
 		<!-- Don't need, have custom local ref
 		<! Latest compiled and minified CSS
@@ -67,11 +69,13 @@
                          <div class="winning-conditions">
 
                          </div>
-                         <div class="player-score player-one col-xs-6">
-
+                         <div class="scores" style="display:none;">
+                           <div class="player-score player-one col-xs-6">
+                            <h3>Player 1 Score: <span class="score odometer">0</span></h3>
+                           </div>
+                           <div class="player-score player-two col-xs-6" style="display:none;">
+                            <h3>Player 2 Score: <span class="score odometer">0</span></h3>
                          </div>
-                         <div class="player-score player-two col-xs-6">
-
                          </div>
 		            <div class="board-container col-xs-12">
 
@@ -190,6 +194,7 @@
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="static/js/vendor/sweet-alert.min.js"></script>
+            <script src="static/js/vendor/odometer.min.js" type="text/javascript"></script>
 		<!-- Own JS File-->
 		<script src="static/js/main/main.js"></script>
 	</footer>

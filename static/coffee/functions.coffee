@@ -19,10 +19,22 @@ randomise = () ->
     # returns a random integer betwen 5 and 10
 
 showGameWin = () ->
-      swal({
-          title: "You've Won!"
-          type: "success"
-      })
+  swal({   
+    title: "You've Won!",  
+    text: "Do you want to play again?",   
+    type: "success",   
+    showCancelButton: true,   
+    confirmButtonColor: "#5CB85C",   
+    confirmButtonText: "Play Again!",   
+    cancelButtonText: "No More QQ",   
+    closeOnConfirm: true,   
+    closeOnCancel: false 
+    }, (isConfirm) ->
+      if isConfirm
+        Game::newGame()
+        Game::addNewPlayers("Pua","Brian")
+        
+    )
 
 showMessage = (message) ->
       swal({

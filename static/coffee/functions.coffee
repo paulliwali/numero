@@ -36,7 +36,7 @@ showGameWin = () ->
     }, (isConfirm) ->
       if isConfirm
         Game::newGame()
-        Game::addNewPlayers("Pua","Brian")
+        Game::addNewPlayers("PlayerA","PlayerB")
       else 
         swal({   
           title: "You mean you want to play again?!",

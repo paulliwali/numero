@@ -57,6 +57,7 @@ class Game
         if not window.player1?
             window.player1 = new Player(name1)
         dice = new Dice()
+        dice.orientation.assignHTMLElement($(".player-one .layout-container"))
         player1.setDice(dice)
         if player1 not in Game::players
             Game::addPlayer(player1)
@@ -67,6 +68,7 @@ class Game
                 window.player2 = new Player(name2)
             dice2 = new Dice()
             player2.setDice(dice2)
+            dice2.orientation.assignHTMLElement($(".player-two .layout-container"))
             if player2 not in Game::players
                 Game::addPlayer(player2)
             $(".player-two").show()
@@ -446,7 +448,7 @@ class Dice extends Block
         @moveToGrid()
 
         @bindAnimation(this)
-
+        @orientation.updateDiceLayout()
         return @htmlElement
 
     bindAnimation:(Dice) =>
@@ -460,6 +462,7 @@ class Dice extends Block
         faceUp = @getFaceUp()
         @htmlElement.text(faceUp)
         @htmlElement.css("background",URL_FOR_DICE + "/Dice-#{faceUp}.png)")
+        @orientation.updateDiceLayout()
         console.log "MOVING TO GRID"
         Grid::getBlockElement(
             @gridIndex_X, @gridIndex_Y
@@ -772,7 +775,7 @@ class Orientation
     @up = null
     @left = null
     @right = null
-
+    @htmlElement = null
     # METHODS
     constructor: (@faceup,@bottom,@down,@up,@left,@right) ->
         if @faceup is null or @bottom is null or @down is null or @up is null or @left is null or @right is null
@@ -798,15 +801,23 @@ class Orientation
         
         @down = 7 - @up
 
-        # console.log "New Orientation Created"
-        # console.log "FACEUP: #{@faceup}"
-        # console.log "BOTTOM: #{@bottom}"
-        # console.log "LEFT: #{@left}"
-        # console.log "RIGHT: #{@right}"
-        # console.log "UP: #{@up}"
-        # console.log "DOWN: #{@down}"
+    assignHTMLElement: (element) =>
+        @htmlElement = element
+
+    getHTMLElement: =>
+        return @htmlElement
+
+    updateDiceLayout: () =>
+        if @htmlElement?
+            @htmlElement.find(".dice-face").removeClass(DICE_FACE_ALL)
+            @htmlElement.find(".front-face").addClass("face-#{@up}")
+            @htmlElement.find(".left-face").addClass("face-#{@left}")
+            @htmlElement.find(".current-face").addClass("face-#{@faceup}").addClass("active-face")
+            @htmlElement.find(".right-face").addClass("face-#{@right}")
+            @htmlElement.find(".back-face").addClass("face-#{@down}")
 
     reset: =>
+        @htmlElement = null
         @faceup = null
         @bottom = null
         @down = null

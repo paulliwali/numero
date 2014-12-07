@@ -36,8 +36,13 @@ $ ->
 
         Game::newGame()
 
-        Game::addNewPlayers("Pua","Brian")
+        Game::addNewPlayers("PlayerA","PlayerB")
+
+
+        for player in Game::players 
+            console.log player.getDice()
         console.log Game::
         console.log Grid::
         $(".scores").show()
+        $(".dice-layout").show()
 

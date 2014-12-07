@@ -2,23 +2,46 @@
 // =============
 @import "animation";
 
-.transform(@string){
-    -webkit-transform: @string;
-    -moz-transform:      @string;
-    -ms-transform:       @string;
-    -o-transform:        @string;
+
+
+.dice-face{
+    width:75px !important;
+    height: 75px;
+    position:relative;
+    &.face-1{
+        background: url(../../icons/Sprite/Dice-face/Dice-1.png);
+    }
+    &.face-2{
+        background: url(../../icons/Sprite/Dice-face/Dice-2.png);
+    }
+    &.face-3{
+        background: url(../../icons/Sprite/Dice-face/Dice-3.png);
+    }
+    &.face-4{
+        background: url(../../icons/Sprite/Dice-face/Dice-4.png);
+    }
+    &.face-5{
+        background: url(../../icons/Sprite/Dice-face/Dice-5.png);
+    }
+    &.face-6{
+        background: url(../../icons/Sprite/Dice-face/Dice-6.png);
+    }
+
+    &.front-face{
+        left: 75px;
+    }
+
+    &.back-face{
+        left: 75px;
+    }
 }
 
-.rotate90{
-    .transform(rotate(90deg));
-}
 
-.rotate180{
-    .transform(rotate(180deg));
+a:hover{
+    text-decoration:none !important ;
 }
-
-.rotate270{
-    .transform(rotate(270deg));
+a:visited{
+    text-decoration:none  !important;
 }
 
 .block{

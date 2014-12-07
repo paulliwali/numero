@@ -62,6 +62,10 @@ class Grid
                     # Create the HTML block
                     blockElement = block.createBlock()   
                     blockElement.text("[#{widthBlock},#{heightBlock}]")
+                    if heightBlock is 0 or heightBlock is Grid::size.height - 1
+                        blockElement.addClass(CLASS_GRID_BORDER)
+                    else if widthBlock is 0 or widthBlock is Grid::size.width - 1
+                        blockElement.addClass(CLASS_GRID_BORDER)
                     # Add the block to the Page
                     row.append(blockElement)
                     # assign the block to the grid array
@@ -117,8 +121,9 @@ class Dice extends Block
     @orientation = null
     @htmlElement = null
     # METHODS
-    constructor: (size) ->
-        super(size)
+    constructor: () ->
+        @size = new Size("25","25",UNIT_PIXEL)
+        
         @gridIndex_X = randomNum(Grid::getGridWidth(),0)
         @gridIndex_Y = randomNum(Grid::getGridHeight(),0)  
         @orientation = new Orientation
@@ -324,6 +329,9 @@ class Position
         console.log "New Position created: (#{@x},#{@y})"
 
 class Player
+    @score = 0
+    @name = null
+    @dice = null
     # PROPERTIES
     # METHODS
     constructor: (@name) ->
@@ -331,6 +339,19 @@ class Player
             console.log "MISSING PLAYER NAME"
             return
         console.log "New Player created: #{@name}"
+
+    getScore: =>
+        return @score
+
+    addPoint: =>
+        @score = @score + 1
+
+    getName: =>
+        return @name
+
+    setDice: (dice) =>
+        @dice = dice
+
 
 class Orientation
     # PROPERTIES

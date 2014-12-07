@@ -5,9 +5,9 @@
 
 # HTML ELEMENTS
 # ===========
-ELEMENT_GAME_CONTAINER  = $(".game-container")
-ELEMENT_BOARD_CONTAINER = $(".board-container")
-
+ELEMENT_GAME_CONTAINER       = $(".game-container")
+ELEMENT_BOARD_CONTAINER      = $(".board-container")
+ELEMENT_CONDITIONS_CONTAINER = $(".winning-conditions")
 
 # UNITS
 # ==========

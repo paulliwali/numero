@@ -43,7 +43,7 @@ class Grid
                 row = $("<div class='block-row'>") 
                 # Instantiate a new array for each row
                 Grid::blockArray[heightBlock] = []
-                for widthBlock in [0..Grid::size.width]
+                for widthBlock in [0...Grid::size.width]
                     # Create new block
                     block = new Block(
                         new Size(BLOCK_DEFAULT_WIDTH_PIXEL,BLOCK_DEFAULT_HEIGHT_PIXEL,UNIT_PIXEL)
@@ -352,8 +352,8 @@ class WinningConditions
     @conditions = null
     constructor: () ->
         @conditions = []
-    addCondition: (number,x,y) =>
-        condition = new Condition(number,x,y)
+    addCondition: () =>
+        condition = new Condition()
         @conditions.push(condition)
         return condition
 
@@ -363,15 +363,23 @@ class WinningConditions
                 return false
         # all conditions met
         showGameWin()
-        
+
 
 class Condition
     @number = null
     @blockPositionY = null
     @blockPositionX = null
     @isMet = false
-    constructor: (@number,@blockPositionX,@blockPositionY) ->
+    @htmlElement = null
+    constructor: () ->
+        @number = randomNum(6,1)
+
+        @blockPositionX = randomNum(Grid::getGridHeight(),0)
+        @blockPositionY = randomNum(Grid::getGridWidth(),0)
         console.log "A condition has been made for #{@number} at [#{@blockPositionX},#{@blockPositionY}] "
+        @createHTMLElement()
+        addConditionInViewableBox(@htmlElement)
+
 
     checkIfSatisfied: (number,x,y) =>
         if number == @number and @blockPositionX == x  and @blockPositionY == y
@@ -379,6 +387,25 @@ class Condition
             return true
         else
             return false
+
+    createHTMLElement: =>
+        div = $("<div>")
+        xPos = $("<div class='col-xs-4'>").text("Grid X: " + @blockPositionX)
+        yPos =$("<div class='col-xs-4'>").text("Grid Y: " + @blockPositionY)
+        number = $("<div class='col-xs-4'>").text("Face Up Number: " + @number)
+        div.append(xPos).append(yPos).append(number)
+
+
+        @htmlElement = div
+        return div
+
+    assignHTMLElement: (element) =>
+        @htmlElement = element
+
+    getHTMLElement: =>
+        return @htmlElement
+
+
 
 class Game
     dice = null

@@ -30,3 +30,7 @@ showError = (error) ->
           text: error
           type: "failure"
       })
+
+
+addConditionInViewableBox = (condition) ->
+      ELEMENT_CONDITIONS_CONTAINER.append(condition)

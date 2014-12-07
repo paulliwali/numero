@@ -889,7 +889,7 @@
         case "right":
           this.htmlElement.addClass("rotate180");
       }
-      return this.htmlElement.addClass("rollDice" + currentFaceup + "To" + nextFaceup + " " + direction);
+      return this.htmlElement.addClass("rollDice" + currentFaceup + "To" + nextFaceup + "-v" + (this.getPlayer().id) + " " + direction);
     };
 
     Dice.prototype.setAnimationLock = function() {

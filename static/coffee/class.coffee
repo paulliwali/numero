@@ -741,7 +741,7 @@ class Dice extends Block
             when "down" then  @htmlElement.addClass("rotate270")
             when "left" then @htmlElement.addClass("rotate0")
             when "right" then @htmlElement.addClass("rotate180")
-        @htmlElement.addClass("rollDice#{currentFaceup}To#{nextFaceup} #{direction}")
+        @htmlElement.addClass("rollDice#{currentFaceup}To#{nextFaceup}-v#{@getPlayer().id} #{direction}")
     setAnimationLock: () =>
         @animationLock = true
 

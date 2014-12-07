@@ -117,8 +117,9 @@ class Dice extends Block
     @orientation = null
     @htmlElement = null
     # METHODS
-    constructor: (size) ->
-        super(size)
+    constructor: () ->
+        diceSize = new Size("25","25",UNIT_PIXEL)
+        super(diceSize)
         @orientation = new Orientation
         console.log "New Dice created"
         @createDice()
@@ -326,6 +327,9 @@ class Position
         console.log "New Position created: (#{@x},#{@y})"
 
 class Player
+    @score = 0
+    @name = null
+    @dice = null
     # PROPERTIES
     # METHODS
     constructor: (@name) ->
@@ -333,6 +337,19 @@ class Player
             console.log "MISSING PLAYER NAME"
             return
         console.log "New Player created: #{@name}"
+
+    getScore: =>
+        return @score
+
+    addPoint: =>
+        @score = @score + 1
+
+    getName: =>
+        return @name
+
+    setDice: (dice) =>
+        @dice = dice
+
 
 class Orientation
     # PROPERTIES

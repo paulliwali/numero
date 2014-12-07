@@ -152,7 +152,7 @@
 
     Dice.htmlElement = null;
 
-    function Dice(size) {
+    function Dice() {
       this.moveRight = __bind(this.moveRight, this);
       this.moveLeft = __bind(this.moveLeft, this);
       this.moveDown = __bind(this.moveDown, this);
@@ -166,7 +166,9 @@
       this.reset = __bind(this.reset, this);
       this.moveToGrid = __bind(this.moveToGrid, this);
       this.createDice = __bind(this.createDice, this);
-      Dice.__super__.constructor.call(this, size);
+      var diceSize;
+      diceSize = new Size("25", "25", UNIT_PIXEL);
+      Dice.__super__.constructor.call(this, diceSize);
       this.orientation = new Orientation;
       console.log("New Dice created");
       this.createDice();
@@ -431,14 +433,40 @@
   })();
 
   Player = (function() {
+    Player.score = 0;
+
+    Player.name = null;
+
+    Player.dice = null;
+
     function Player(name) {
       this.name = name;
+      this.setDice = __bind(this.setDice, this);
+      this.getName = __bind(this.getName, this);
+      this.addPoint = __bind(this.addPoint, this);
+      this.getScore = __bind(this.getScore, this);
       if (this.name === null || this.name === "") {
         console.log("MISSING PLAYER NAME");
         return;
       }
       console.log("New Player created: " + this.name);
     }
+
+    Player.prototype.getScore = function() {
+      return this.score;
+    };
+
+    Player.prototype.addPoint = function() {
+      return this.score = this.score + 1;
+    };
+
+    Player.prototype.getName = function() {
+      return this.name;
+    };
+
+    Player.prototype.setDice = function(dice) {
+      return this.dice = dice;
+    };
 
     return Player;
 
@@ -781,11 +809,12 @@
       return $(this).addClass(CLASS_ACTIVE);
     });
     return $(".start-game").click(function() {
-      var blockSize, boardSize, dice, diceSize, numberPlayers, sizeX, sizeY, winningConditions;
+      var blockSize, boardSize, dice, numberPlayers, sizeX, sizeY, winningConditions;
       boardSize = $(".board-size .active").val();
       numberPlayers = $(".number-players .active").val();
       $("#gameOptions").modal("hide");
       if (Game.prototype.isActiveGame === true) {
+        $("body").unbind("keyup");
         Game.prototype.resetGame();
       }
       Game.prototype.isActiveGame = true;
@@ -806,11 +835,13 @@
       winningConditions = new WinningConditions();
       winningConditions.addCondition();
       Game.prototype.setWinningConditions(winningConditions);
-      diceSize = new Size("25", "25", UNIT_PIXEL);
-      dice = new Dice(diceSize);
+      window.player1 = new Player("Pua");
+      dice = new Dice();
+      player1.setDice(dice);
       Game.prototype.dice = dice;
       console.log(Game.prototype);
       console.log(Grid.prototype);
+      console.log(player1);
       return $("body").keyup(function(e) {
         switch (e.keyCode) {
           case 68:

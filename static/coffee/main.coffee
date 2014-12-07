@@ -26,8 +26,11 @@ $ ->
 
         # Reset the game if it's an active game
         if Game::isActiveGame is true
+            $("body").unbind("keyup")
             Game::resetGame()
 
+
+        # TODO: Move to Grid class
         # Create the new Game board
         Game::isActiveGame = true
         Game::boardSize = boardSize
@@ -53,13 +56,15 @@ $ ->
 
         Game::setWinningConditions(winningConditions)
 
+        window.player1 = new Player("Pua")
+        dice = new Dice()
+        player1.setDice(dice)
 
-        diceSize = new Size("25","25",UNIT_PIXEL)
-        dice = new Dice(diceSize)
         Game::dice = dice
 
         console.log Game::
         console.log Grid::
+        console.log player1
 
         $("body").keyup (e) ->
             switch e.keyCode

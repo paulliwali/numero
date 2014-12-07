@@ -740,7 +740,7 @@ class Dice extends Block
             when "left" then console.log "Rotate 0 degrees clockwise"
             when "right" then console.log "Rotate 180 degrees"
         # @htmlElement.addClass("rollDice#{currentFaceup}To#{nextFaceup}")
-        @htmlElement.addClass("rollDice1To2 #{direction}")
+        @htmlElement.addClass("rollDice#{currentFaceup}To#{nextFaceup} #{direction}")
         # 
     # getToLeftAnimation: (currentFaceup, nextFaceup) =>
     #     switch currentFaceup
@@ -841,13 +841,13 @@ class Orientation
         
         @down = 7 - @up
 
-        console.log "New Orientation Created"
-        console.log "FACEUP: #{@faceup}"
-        console.log "BOTTOM: #{@bottom}"
-        console.log "LEFT: #{@left}"
-        console.log "RIGHT: #{@right}"
-        console.log "UP: #{@up}"
-        console.log "DOWN: #{@down}"
+        # console.log "New Orientation Created"
+        # console.log "FACEUP: #{@faceup}"
+        # console.log "BOTTOM: #{@bottom}"
+        # console.log "LEFT: #{@left}"
+        # console.log "RIGHT: #{@right}"
+        # console.log "UP: #{@up}"
+        # console.log "DOWN: #{@down}"
 
     reset: =>
         @faceup = null

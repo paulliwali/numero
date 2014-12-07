@@ -885,7 +885,7 @@
         case "right":
           console.log("Rotate 180 degrees");
       }
-      return this.htmlElement.addClass("rollDice1To2 " + direction);
+      return this.htmlElement.addClass("rollDice" + currentFaceup + "To" + nextFaceup + " " + direction);
     };
 
     Dice.prototype.setAnimationLock = function() {
@@ -957,13 +957,6 @@
         this.up = randomNum(6, 1);
       }
       this.down = 7 - this.up;
-      console.log("New Orientation Created");
-      console.log("FACEUP: " + this.faceup);
-      console.log("BOTTOM: " + this.bottom);
-      console.log("LEFT: " + this.left);
-      console.log("RIGHT: " + this.right);
-      console.log("UP: " + this.up);
-      console.log("DOWN: " + this.down);
     }
 
     Orientation.prototype.reset = function() {

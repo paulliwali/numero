@@ -8,6 +8,38 @@
 .block-row{
   clear: both;
 }
+.grid-border-top {
+  background: url(../../icons/tile-top.jpg);
+  background-size: cover;
+}
+.grid-border-top.grid-border-left {
+  background: url(../../icons/tile-top-left.jpg);
+  background-size: cover;
+}
+.grid-border-top.grid-border-right {
+  background: url(../../icons/tile-top-right.jpg);
+  background-size: cover;
+}
+.grid-border-bottom {
+  background: url(../../icons/tile-bottom.jpg);
+  background-size: cover;
+}
+.grid-border-bottom.grid-border-left {
+  background: url(../../icons/tile-bottom-left.jpg);
+  background-size: cover;
+}
+.grid-border-bottom.grid-border-right {
+  background: url(../../icons/tile-bottom-right.jpg);
+  background-size: cover;
+}
+.grid-border-left {
+  background: url(../../icons/tile-left.jpg);
+  background-size: cover;
+}
+.grid-border-right {
+  background: url(../../icons/tile-right.jpg);
+  background-size: cover;
+}
 
 body,
 html {
@@ -36,12 +68,12 @@ h6 {
 }
 
 .intro-header {
-  padding-top: 50px; /* If you're making other pages, make sure there is 50px of padding to make sure the navbar doesn't overlap content! */
+  padding-top: 50px;
   padding-bottom: 50px;
   height: 100vh;
   text-align: center;
   color: #f8f8f8;
-  background: url('../../icons/intro-bg-5.jpg') no-repeat center center;
+  background: url('../../icons/intro-bg-1.jpg') no-repeat center center;
   background-size: cover;
 }
 
@@ -134,11 +166,25 @@ h6 {
   background: url(../../icons/intro-bg-2.jpg) no-repeat center center;
   background-size: cover;
 }
-
-.banner h2 {
+.banner-message {
+  position: relative;
+  padding-top: 0%;
+  padding-bottom: 0%;
+}
+.banner-message h1 {
   margin: 0;
   text-shadow: 2px 2px 3px rgba(0,0,0,0.6);
-  font-size: 3em;
+  font-size: 5em;
+  color: white;
+}
+.banner-message h3 {
+  text-shadow: 2px 2px 3px rgba(0,0,0,0.6);
+  font-size: 2em;
+  color:white;
+}
+.banner-message p {
+  font-size: 13pts;
+  color: white;
 }
 
 .banner ul {
@@ -147,7 +193,7 @@ h6 {
 
 .banner-social-buttons {
   float: center;
-  margin-top: 0;
+  margin: none;
 }
 
 

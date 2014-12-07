@@ -2,6 +2,7 @@
 (function() {
   var BLOCK_DEFAULT_HEIGHT_PIXEL, BLOCK_DEFAULT_WIDTH_PIXEL, BOARD_SIZE_LARGE, BOARD_SIZE_MEDIUM, BOARD_SIZE_RANDOM, BOARD_SIZE_SMALL, Block, CLASS_ACTIVE, CLASS_BLOCK_WINNING_CONDITION, CLASS_GRID_BORDER, CLASS_GRID_BORDER_BOTTOM, CLASS_GRID_BORDER_LEFT, CLASS_GRID_BORDER_RIGHT, CLASS_GRID_BORDER_TOP, CLASS_PLAYER_SCORE, Condition, Dice, ELEMENT_BOARD_CONTAINER, ELEMENT_CONDITIONS_CONTAINER, ELEMENT_GAME_CONTAINER, ELEMENT_GAME_OPTIONS_BOARD_SIZE, ELEMENT_GAME_OPTIONS_CONTAINER, ELEMENT_GAME_OPTIONS_NUM_PLAYERS, Game, Grid, Orientation, Player, Size, UNIT_BLOCK, UNIT_PIXEL, WinningConditions, addConditionInViewableBox, randomNum, randomise, showError, showGameWin, showMessage, startGameMessage,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -43,7 +44,9 @@
         blockSize = new Size(sizeX, sizeY, UNIT_BLOCK);
       }
       Game.prototype.blockSize = blockSize;
-      Game.prototype.players = [];
+      if (Game.prototype.players === null) {
+        Game.prototype.players = [];
+      }
       Grid.prototype.createGridStarter(Game.prototype.blockSize);
       winningConditions = new WinningConditions();
       winningConditions.addCondition();
@@ -67,15 +70,23 @@
       if (name2 == null) {
         name2 = "";
       }
-      window.player1 = new Player(name1);
+      if (window.player1 == null) {
+        window.player1 = new Player(name1);
+      }
       dice = new Dice();
       player1.setDice(dice);
-      Game.prototype.addPlayer(player1);
+      if (__indexOf.call(Game.prototype.players, player1) < 0) {
+        Game.prototype.addPlayer(player1);
+      }
       if (Game.prototype.numberOfPlayers === 2) {
-        window.player2 = new Player(name2);
+        if (window.player2 == null) {
+          window.player2 = new Player(name2);
+        }
         dice2 = new Dice();
         player2.setDice(dice2);
-        Game.prototype.addPlayer(player2);
+        if (__indexOf.call(Game.prototype.players, player2) < 0) {
+          Game.prototype.addPlayer(player2);
+        }
         $(".player-two").show();
       }
       return $("body").on("keyup", function(e) {
@@ -352,6 +363,9 @@
     var blockArray, size;
 
     function Grid() {
+      this.unsetLocked = __bind(this.unsetLocked, this);
+      this.setLocked = __bind(this.setLocked, this);
+      this.isLocked = __bind(this.isLocked, this);
       this.getBlockElement = __bind(this.getBlockElement, this);
       this.getGrid = __bind(this.getGrid, this);
       this.createGrid = __bind(this.createGrid, this);
@@ -445,6 +459,20 @@
       return Grid.prototype.size.width;
     };
 
+    Grid.prototype.isLocked = function(y, x) {
+      return Grid.prototype.blockArray[x][y].locked;
+    };
+
+    Grid.prototype.setLocked = function(y, x) {
+      Grid.prototype.blockArray[x][y].locked = true;
+      return console.log("LOCKING " + y + " " + x);
+    };
+
+    Grid.prototype.unsetLocked = function(y, x) {
+      Grid.prototype.blockArray[x][y].locked = false;
+      return console.log("UNLOCKING " + x + " " + y);
+    };
+
     return Grid;
 
   })();
@@ -453,6 +481,8 @@
     Block.size = null;
 
     Block.htmlElement = null;
+
+    Block.locked = null;
 
     function Block(size) {
       this.size = size;
@@ -477,6 +507,7 @@
         block.width(this.size.getWidthWithUnit());
         block.height(this.size.getWidthWithUnit());
         this.assignHTMLElement(block);
+        this.locked = false;
         return block;
       }
     };
@@ -515,7 +546,6 @@
         }
         return;
       }
-      console.log("New Size created: (" + this.height + "," + this.width + ")");
     }
 
     Size.prototype.getWidthWithUnit = function() {
@@ -580,11 +610,12 @@
       if (this.isGameWonSetup()) {
         alreadyWon = true;
       }
+      this.assignHTMLElement(this.createBlock());
       if (alreadyWon) {
         this.reset();
         this.constructor();
       }
-      this.assignHTMLElement(this.createBlock());
+      Grid.prototype.setLocked(this.gridIndex_X, this.gridIndex_Y);
       this.moveToGrid();
       console.log(this.gridIndex_X, this.gridIndex_Y);
       return this.htmlElement;
@@ -675,119 +706,131 @@
     };
 
     Dice.prototype.moveUp = function() {
-      var oldFaceUp, outOfBounds;
+      var CurrentX, CurrentY, NextX, NextY, oldFaceUp;
       if (this.gridIndex_Y - 1 < 0) {
-        outOfBounds = true;
+        console.log("Dice moving out of bounds");
+      } else if (Grid.prototype.isLocked(this.gridIndex_X, this.gridIndex_Y - 1)) {
+        console.log("Space blocked");
+      } else {
+        CurrentY = this.gridIndex_Y;
+        CurrentX = this.gridIndex_X;
+        NextY = this.gridIndex_Y - 1;
+        NextX = this.gridIndex_X;
+        Grid.prototype.setLocked(NextX, NextY);
+        Grid.prototype.unsetLocked(CurrentX, CurrentY);
+        oldFaceUp = this.orientation.faceup;
+        this.orientation.faceup = this.orientation.down;
+        this.orientation.bottom = 7 - this.orientation.faceup;
+        this.orientation.up = oldFaceUp;
+        this.orientation.down = 7 - this.orientation.up;
+        this.gridIndex_Y = this.gridIndex_Y - 1;
+        console.log("Dice moved up");
+        console.log("New orientation is:");
+        console.log("FACEUP: " + this.orientation.faceup);
+        console.log("BOTTOM: " + this.orientation.bottom);
+        console.log("LEFT: " + this.orientation.left);
+        console.log("RIGHT: " + this.orientation.right);
+        console.log("UP: " + this.orientation.up);
+        console.log("DOWN: " + this.orientation.down);
+        console.log(this.gridIndex_X, this.gridIndex_Y);
+        return this.moveToGrid();
       }
-      if (outOfBounds) {
-        console.log("Dice is moving out of bounds");
-      }
-      if (outOfBounds) {
-        return;
-      }
-      oldFaceUp = this.orientation.faceup;
-      this.orientation.faceup = this.orientation.down;
-      this.orientation.bottom = 7 - this.orientation.faceup;
-      this.orientation.up = oldFaceUp;
-      this.orientation.down = 7 - this.orientation.up;
-      this.gridIndex_Y = this.gridIndex_Y - 1;
-      console.log("Dice moved up");
-      console.log("New orientation is:");
-      console.log("FACEUP: " + this.orientation.faceup);
-      console.log("BOTTOM: " + this.orientation.bottom);
-      console.log("LEFT: " + this.orientation.left);
-      console.log("RIGHT: " + this.orientation.right);
-      console.log("UP: " + this.orientation.up);
-      console.log("DOWN: " + this.orientation.down);
-      console.log(this.gridIndex_X, this.gridIndex_Y);
-      return this.moveToGrid();
     };
 
     Dice.prototype.moveDown = function() {
-      var oldFaceUp, outOfBounds;
+      var CurrentX, CurrentY, NextX, NextY, oldFaceUp;
       if (this.gridIndex_Y + 1 >= Grid.prototype.getGridHeight()) {
-        outOfBounds = true;
+        console.log("Dice moving out of bounds");
+      } else if (Grid.prototype.isLocked(this.gridIndex_X, this.gridIndex_Y + 1)) {
+        console.log("Space blocked");
+      } else {
+        CurrentY = this.gridIndex_Y;
+        CurrentX = this.gridIndex_X;
+        NextY = this.gridIndex_Y + 1;
+        NextX = this.gridIndex_X;
+        Grid.prototype.setLocked(NextX, NextY);
+        Grid.prototype.unsetLocked(CurrentX, CurrentY);
+        oldFaceUp = this.orientation.faceup;
+        this.orientation.faceup = this.orientation.up;
+        this.orientation.bottom = 7 - this.orientation.faceup;
+        this.orientation.down = oldFaceUp;
+        this.orientation.up = 7 - this.orientation.down;
+        this.gridIndex_Y = this.gridIndex_Y + 1;
+        console.log("Dice moved down");
+        console.log("New orientation is:");
+        console.log("FACEUP: " + this.orientation.faceup);
+        console.log("BOTTOM: " + this.orientation.bottom);
+        console.log("LEFT: " + this.orientation.left);
+        console.log("RIGHT: " + this.orientation.right);
+        console.log("UP: " + this.orientation.up);
+        console.log("DOWN: " + this.orientation.down);
+        console.log(this.gridIndex_X, this.gridIndex_Y);
+        return this.moveToGrid();
       }
-      if (outOfBounds) {
-        console.log("Dice is moving out of bounds");
-      }
-      if (outOfBounds) {
-        return;
-      }
-      oldFaceUp = this.orientation.faceup;
-      this.orientation.faceup = this.orientation.up;
-      this.orientation.bottom = 7 - this.orientation.faceup;
-      this.orientation.down = oldFaceUp;
-      this.orientation.up = 7 - this.orientation.down;
-      this.gridIndex_Y = this.gridIndex_Y + 1;
-      console.log("Dice moved down");
-      console.log("New orientation is:");
-      console.log("FACEUP: " + this.orientation.faceup);
-      console.log("BOTTOM: " + this.orientation.bottom);
-      console.log("LEFT: " + this.orientation.left);
-      console.log("RIGHT: " + this.orientation.right);
-      console.log("UP: " + this.orientation.up);
-      console.log("DOWN: " + this.orientation.down);
-      console.log(this.gridIndex_X, this.gridIndex_Y);
-      return this.moveToGrid();
     };
 
     Dice.prototype.moveLeft = function() {
-      var oldFaceUp, outOfBounds;
+      var CurrentX, CurrentY, NextX, NextY, oldFaceUp;
       if (this.gridIndex_X - 1 < 0) {
-        outOfBounds = true;
+        console.log("Dice moving out of bounds");
+      } else if (Grid.prototype.isLocked(this.gridIndex_X - 1, this.gridIndex_Y)) {
+        console.log("Space blocked");
+      } else {
+        CurrentY = this.gridIndex_Y;
+        CurrentX = this.gridIndex_X;
+        NextY = this.gridIndex_Y;
+        NextX = this.gridIndex_X - 1;
+        Grid.prototype.setLocked(NextX, NextY);
+        Grid.prototype.unsetLocked(CurrentX, CurrentY);
+        oldFaceUp = this.orientation.faceup;
+        this.orientation.faceup = this.orientation.right;
+        this.orientation.bottom = 7 - this.orientation.faceup;
+        this.orientation.left = oldFaceUp;
+        this.orientation.right = 7 - oldFaceUp;
+        this.gridIndex_X = this.gridIndex_X - 1;
+        console.log("Dice moved left");
+        console.log("New orientation is:");
+        console.log("FACEUP: " + this.orientation.faceup);
+        console.log("BOTTOM: " + this.orientation.bottom);
+        console.log("LEFT: " + this.orientation.left);
+        console.log("RIGHT: " + this.orientation.right);
+        console.log("UP: " + this.orientation.up);
+        console.log("DOWN: " + this.orientation.down);
+        console.log(this.gridIndex_X, this.gridIndex_Y);
+        return this.moveToGrid();
       }
-      if (outOfBounds) {
-        console.log("Dice is moving out of bounds");
-      }
-      if (outOfBounds) {
-        return;
-      }
-      oldFaceUp = this.orientation.faceup;
-      this.orientation.faceup = this.orientation.right;
-      this.orientation.bottom = 7 - this.orientation.faceup;
-      this.orientation.left = oldFaceUp;
-      this.orientation.right = 7 - oldFaceUp;
-      this.gridIndex_X = this.gridIndex_X - 1;
-      console.log("Dice moved left");
-      console.log("New orientation is:");
-      console.log("FACEUP: " + this.orientation.faceup);
-      console.log("BOTTOM: " + this.orientation.bottom);
-      console.log("LEFT: " + this.orientation.left);
-      console.log("RIGHT: " + this.orientation.right);
-      console.log("UP: " + this.orientation.up);
-      console.log("DOWN: " + this.orientation.down);
-      console.log(this.gridIndex_X, this.gridIndex_Y);
-      return this.moveToGrid();
     };
 
     Dice.prototype.moveRight = function() {
-      var oldFaceUp, outOfBounds;
+      var CurrentX, CurrentY, NextX, NextY, oldFaceUp;
       if (this.gridIndex_X + 1 >= Grid.prototype.getGridWidth()) {
-        outOfBounds = true;
+        console.log("Dice moving out of bounds");
+      } else if (Grid.prototype.isLocked(this.gridIndex_X + 1, this.gridIndex_Y)) {
+        console.log("Space blocked");
+      } else {
+        CurrentY = this.gridIndex_Y;
+        CurrentX = this.gridIndex_X;
+        NextY = this.gridIndex_Y;
+        NextX = this.gridIndex_X + 1;
+        Grid.prototype.setLocked(NextX, NextY);
+        Grid.prototype.unsetLocked(CurrentX, CurrentY);
+        oldFaceUp = this.orientation.faceup;
+        this.orientation.faceup = this.orientation.left;
+        this.orientation.bottom = 7 - this.orientation.faceup;
+        this.orientation.right = oldFaceUp;
+        this.orientation.left = 7 - oldFaceUp;
+        this.gridIndex_X = this.gridIndex_X + 1;
+        console.log("Dice moved right");
+        console.log("New orientation is:");
+        console.log("FACEUP: " + this.orientation.faceup);
+        console.log("BOTTOM: " + this.orientation.bottom);
+        console.log("LEFT: " + this.orientation.left);
+        console.log("RIGHT: " + this.orientation.right);
+        console.log("UP: " + this.orientation.up);
+        console.log("DOWN: " + this.orientation.down);
+        console.log(this.gridIndex_X, this.gridIndex_Y);
+        return this.moveToGrid();
       }
-      if (outOfBounds) {
-        console.log("Dice is moving out of bounds");
-      }
-      if (outOfBounds) {
-        return;
-      }
-      oldFaceUp = this.orientation.faceup;
-      this.orientation.faceup = this.orientation.left;
-      this.orientation.bottom = 7 - this.orientation.faceup;
-      this.orientation.right = oldFaceUp;
-      this.orientation.left = 7 - oldFaceUp;
-      this.gridIndex_X = this.gridIndex_X + 1;
-      console.log("Dice moved right");
-      console.log("New orientation is:");
-      console.log("FACEUP: " + this.orientation.faceup);
-      console.log("BOTTOM: " + this.orientation.bottom);
-      console.log("LEFT: " + this.orientation.left);
-      console.log("RIGHT: " + this.orientation.right);
-      console.log("UP: " + this.orientation.up);
-      console.log("DOWN: " + this.orientation.down);
-      console.log(this.gridIndex_X, this.gridIndex_Y);
-      return this.moveToGrid();
     };
 
     return Dice;

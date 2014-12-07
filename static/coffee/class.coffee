@@ -164,7 +164,6 @@ class Condition
         number = $("<div class='col-xs-4'>").text("Face Up Number: " + @number)
         div.append(xPos).append(yPos).append(number)
 
-
         @htmlElement = div
         return div
 
@@ -236,30 +235,22 @@ class Player
         if @id == 1
             switch e.keyCode
                 when 68
-                    @dice.setAnimationLock() 
                     @dice.moveRight()
                 when 83
-                    @dice.setAnimationLock() 
                     @dice.moveDown()
                 when 65
-                    @dice.setAnimationLock() 
                     @dice.moveLeft()
                 when 87
-                    @dice.setAnimationLock() 
                     @dice.moveUp()
         else if @id == 2
             switch e.keyCode
                 when 39
-                    @dice.setAnimationLock() 
                     @dice.moveRight()
                 when 40
-                    @dice.setAnimationLock() 
                     @dice.moveDown()
                 when 37
-                    @dice.setAnimationLock() 
                     @dice.moveLeft()
                 when 38
-                    @dice.setAnimationLock() 
                     @dice.moveUp()
     unbindControls: =>
         $("body").unbind("keyup")
@@ -460,9 +451,9 @@ class Dice extends Block
 
     bindAnimation:(Dice) =>
         @getHTMLElement().on "animationend webkitAnimationEnd oAnimationEnd MSAnimationEnd", (e) ->
-            Dice.setAnimationUnlock()
             Dice.getHTMLElement().removeClass().addClass("block-dice block")
             Dice.moveToGrid()
+            Dice.setAnimationUnlock()
             console.log "finished animation"
 
     moveToGrid: () =>
@@ -531,15 +522,21 @@ class Dice extends Block
         return @orientation.right
         
     moveUp: () =>
+        if @getAnimationLock()
+            console.log "Animation lock already held"
+            return
+
+        @setAnimationLock()
+
         # Error checking
+
         if @gridIndex_Y - 1 < 0
             console.log "Dice moving out of bounds"
+            @setAnimationUnlock()
             return
         else if Grid::isLocked(@gridIndex_X,@gridIndex_Y - 1)
             console.log "Space blocked"
-            return
-        else if not @getAnimationLock()
-            console.log "Not holding animation lock"
+            @setAnimationUnlock()
             return
         else
             @direction  = "up"
@@ -578,15 +575,24 @@ class Dice extends Block
 
 
     moveDown: () => 
+
+        if @getAnimationLock()
+            console.log "Animation lock already held"
+            return
+
+        @setAnimationLock()
+
         # Error checking
         if @gridIndex_Y + 1 >= Grid::getGridHeight()
             console.log "Dice moving out of bounds"
             return
         else if Grid::isLocked(@gridIndex_X,@gridIndex_Y + 1)
             console.log "Space blocked"
+            @setAnimationUnlock()
             return
         else if not @getAnimationLock()
             console.log "Not holding animation lock"
+            @setAnimationUnlock()
             return
         else
             @direction  = "down"
@@ -623,15 +629,21 @@ class Dice extends Block
             # @moveToGrid()
 
     moveLeft: () =>
+
+        if @getAnimationLock()
+            console.log "Animation lock already held"
+            return
+
+        @setAnimationLock()
+
         # Error checking
         if @gridIndex_X - 1 < 0
             console.log "Dice moving out of bounds"
+            @setAnimationUnlock()
             return
         else if Grid::isLocked(@gridIndex_X - 1,@gridIndex_Y)
             console.log "Space blocked"
-            return
-        else if not @getAnimationLock()
-            console.log "Not holding animation lock"
+            @setAnimationUnlock()
             return
         else
             @direction = "left"
@@ -668,15 +680,21 @@ class Dice extends Block
             # @moveToGrid()
 
     moveRight: () =>
+
+        if @getAnimationLock()
+            console.log "Animation lock already held"
+            return
+
+        @setAnimationLock()
+
         # Error checking
         if @gridIndex_X + 1 >= Grid::getGridWidth()
             console.log "Dice moving out of bounds"
+            @setAnimationUnlock()
             return
         else if Grid::isLocked(@gridIndex_X + 1,@gridIndex_Y)
             console.log "Space blocked"
-            return
-        else if not @getAnimationLock()
-            console.log "Not holding animation lock"
+            @setAnimationUnlock()
             return
         else
             @direction  = "right"

@@ -33,7 +33,8 @@ class Game
             sizeY = randomNum(6,3)
             blockSize = new Size(sizeX,sizeY,UNIT_BLOCK)
         Game::blockSize = blockSize
-        Game::players = []
+        if Game::players is null
+            Game::players = []
         Grid::createGridStarter(Game::blockSize)
 
         # Set the victory conditions
@@ -52,17 +53,21 @@ class Game
         Game::players.push(player)
 
     addNewPlayers: (name1,name2 = "") =>
-        window.player1 = new Player(name1)
+        if not window.player1?
+            window.player1 = new Player(name1)
         dice = new Dice()
         player1.setDice(dice)
-        Game::addPlayer(player1)
+        if player1 not in Game::players
+            Game::addPlayer(player1)
 
 
         if Game::numberOfPlayers == 2
-            window.player2 = new Player(name2)
+            if not window.player2?
+                window.player2 = new Player(name2)
             dice2 = new Dice()
             player2.setDice(dice2)
-            Game::addPlayer(player2)
+            if player2 not in Game::players
+                Game::addPlayer(player2)
             $(".player-two").show()
 
         $("body").on "keyup", (e) ->
@@ -364,7 +369,7 @@ class Size
             console.log "MISSING HEIGHT OBJECT" unless @height?
             console.log "MISSING WIDTH OBJECT" unless @width?
             return
-        console.log "New Size created: (#{@height},#{@width})"
+        # console.log "New Size created: (#{@height},#{@width})"
 
     getWidthWithUnit: =>
         return @width + @unit

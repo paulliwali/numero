@@ -2,6 +2,7 @@
 (function() {
   var BLOCK_DEFAULT_HEIGHT_PIXEL, BLOCK_DEFAULT_WIDTH_PIXEL, BOARD_SIZE_LARGE, BOARD_SIZE_MEDIUM, BOARD_SIZE_RANDOM, BOARD_SIZE_SMALL, Block, CLASS_ACTIVE, CLASS_BLOCK_WINNING_CONDITION, CLASS_GRID_BORDER, CLASS_GRID_BORDER_BOTTOM, CLASS_GRID_BORDER_LEFT, CLASS_GRID_BORDER_RIGHT, CLASS_GRID_BORDER_TOP, CLASS_PLAYER_SCORE, Condition, Dice, ELEMENT_BOARD_CONTAINER, ELEMENT_CONDITIONS_CONTAINER, ELEMENT_GAME_CONTAINER, ELEMENT_GAME_OPTIONS_BOARD_SIZE, ELEMENT_GAME_OPTIONS_CONTAINER, ELEMENT_GAME_OPTIONS_NUM_PLAYERS, Game, Grid, Orientation, Player, Size, UNIT_BLOCK, UNIT_PIXEL, WinningConditions, addConditionInViewableBox, randomNum, randomise, showError, showGameWin, showMessage, startGameMessage,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -43,7 +44,9 @@
         blockSize = new Size(sizeX, sizeY, UNIT_BLOCK);
       }
       Game.prototype.blockSize = blockSize;
-      Game.prototype.players = [];
+      if (Game.prototype.players === null) {
+        Game.prototype.players = [];
+      }
       Grid.prototype.createGridStarter(Game.prototype.blockSize);
       winningConditions = new WinningConditions();
       winningConditions.addCondition();
@@ -67,15 +70,23 @@
       if (name2 == null) {
         name2 = "";
       }
-      window.player1 = new Player(name1);
+      if (window.player1 == null) {
+        window.player1 = new Player(name1);
+      }
       dice = new Dice();
       player1.setDice(dice);
-      Game.prototype.addPlayer(player1);
+      if (__indexOf.call(Game.prototype.players, player1) < 0) {
+        Game.prototype.addPlayer(player1);
+      }
       if (Game.prototype.numberOfPlayers === 2) {
-        window.player2 = new Player(name2);
+        if (window.player2 == null) {
+          window.player2 = new Player(name2);
+        }
         dice2 = new Dice();
         player2.setDice(dice2);
-        Game.prototype.addPlayer(player2);
+        if (__indexOf.call(Game.prototype.players, player2) < 0) {
+          Game.prototype.addPlayer(player2);
+        }
         $(".player-two").show();
       }
       return $("body").on("keyup", function(e) {
@@ -515,7 +526,6 @@
         }
         return;
       }
-      console.log("New Size created: (" + this.height + "," + this.width + ")");
     }
 
     Size.prototype.getWidthWithUnit = function() {

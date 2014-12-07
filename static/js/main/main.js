@@ -174,6 +174,7 @@
       this.getHTMLElement = __bind(this.getHTMLElement, this);
       this.assignHTMLElement = __bind(this.assignHTMLElement, this);
       this.createBlock = __bind(this.createBlock, this);
+      this.isGameWonSetup = __bind(this.isGameWonSetup, this);
       this.isGameWon = __bind(this.isGameWon, this);
       this.reset = __bind(this.reset, this);
       this.moveToGrid = __bind(this.moveToGrid, this);
@@ -187,6 +188,14 @@
     }
 
     Dice.prototype.createDice = function() {
+      var alreadyWon;
+      if (this.isGameWonSetup()) {
+        alreadyWon = true;
+      }
+      if (alreadyWon) {
+        this.reset();
+        this.constructor();
+      }
       this.assignHTMLElement(this.createBlock());
       this.moveToGrid();
       console.log(this.gridIndex_X, this.gridIndex_Y);
@@ -216,6 +225,14 @@
       console.log(faceUp);
       winningConditions = Game.prototype.getWinningConditions();
       return winningConditions.checkConditions(faceUp, this.gridIndex_X, this.gridIndex_Y);
+    };
+
+    Dice.prototype.isGameWonSetup = function() {
+      var faceUp, winningConditions;
+      faceUp = this.getFaceUp();
+      console.log("Checking if already won. FACEUP: " + faceUp);
+      winningConditions = Game.prototype.getWinningConditions();
+      return winningConditions.checkConditionsSetup(faceUp, this.gridIndex_X, this.gridIndex_Y);
     };
 
     Dice.prototype.createBlock = function() {
@@ -585,6 +602,7 @@
 
     function WinningConditions() {
       this.reset = __bind(this.reset, this);
+      this.checkConditionsSetup = __bind(this.checkConditionsSetup, this);
       this.checkConditions = __bind(this.checkConditions, this);
       this.addCondition = __bind(this.addCondition, this);
       this.conditions = [];
@@ -607,6 +625,18 @@
         }
       }
       return showGameWin();
+    };
+
+    WinningConditions.prototype.checkConditionsSetup = function(number, x, y) {
+      var condition, _i, _len, _ref;
+      _ref = this.conditions;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        condition = _ref[_i];
+        if (!condition.checkIfSatisfied(number, x, y)) {
+          return false;
+        }
+      }
+      return true;
     };
 
     WinningConditions.prototype.reset = function() {

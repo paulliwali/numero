@@ -39,7 +39,6 @@ $ ->
             $("body").unbind("keyup")
             Game::resetGame()
 
-
         # TODO: Move to Grid class
         # Create the new Game board
         Game::isActiveGame = true

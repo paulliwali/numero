@@ -137,12 +137,18 @@ class Dice extends Block
         console.log "New Dice created"
         
     createDice: () =>
+        alreadyWon = true if @isGameWonSetup()
+
+        if alreadyWon
+            @reset()
+            @constructor()
+
         @assignHTMLElement(@createBlock())
         @moveToGrid()
         console.log @gridIndex_X,@gridIndex_Y
         return @htmlElement
 
-    moveToGrid: ()=>
+    moveToGrid: () =>
         faceUp = @getFaceUp()
         @htmlElement.text(faceUp)
 
@@ -164,6 +170,12 @@ class Dice extends Block
         console.log faceUp
         winningConditions = Game::getWinningConditions()
         winningConditions.checkConditions(faceUp,@gridIndex_X,@gridIndex_Y)
+
+    isGameWonSetup: =>
+        faceUp = @getFaceUp()
+        console.log "Checking if already won. FACEUP: #{faceUp}"
+        winningConditions = Game::getWinningConditions()
+        winningConditions.checkConditionsSetup(faceUp,@gridIndex_X,@gridIndex_Y)
 
     createBlock: =>
         super()
@@ -391,7 +403,6 @@ class Orientation
             console.log "MISSING LEFT" unless @left?
             console.log "MISSING RIGHT" unless @right?
         
-
         @faceup = randomNum(6,1)
         @bottom = 7 - @faceup
 
@@ -439,6 +450,12 @@ class WinningConditions
                 return false
         # all conditions met
         showGameWin()
+
+    checkConditionsSetup: (number,x,y) =>
+        for condition in @conditions
+            if not condition.checkIfSatisfied(number,x,y)
+                return false
+        return true
 
     reset: () =>
         for condition in @conditions

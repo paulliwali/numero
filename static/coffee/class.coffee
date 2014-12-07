@@ -26,7 +26,7 @@ class Grid
             []
         ]
         console.log "New Grid created: (#{Grid::size.height},#{Grid::size.width})"
-
+        @createGrid()
     # Creates a Grid of @size.height x @size.width
     # Stores the grid in @blockArray 
     createGrid: () =>
@@ -105,9 +105,8 @@ class Dice extends Block
         super(size)
         @orientation = new Orientation
         console.log "New Dice created"
-
+        @createDice()
     createDice: () =>
-        console.log "CREATING DICE"
         @assignHTMLElement(@createBlock())
 
         @gridIndex_X = randomNum(Grid::.getGridWidth(),0)

@@ -11,13 +11,12 @@ $ ->
 
     game.setWinningConditions(winningConditions)
 
-    blockSize = new Size(3,3,UNIT_BLOCK)
+    blockSize = new Size(2,2,UNIT_BLOCK)
     
+
     grid = new Grid(blockSize)
-    grid.createGrid()
     diceSize = new Size("25","25",UNIT_PIXEL)
     dice = new Dice(diceSize)
-    diceElement = dice.createDice()
     
     # dice.isGameWon()
     $("body").keyup (e) ->

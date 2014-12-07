@@ -3,13 +3,11 @@ $ ->
 
 $ ->
 
-
+    # stop page scrolling for now with arrow keys
     $(document).keydown (e) ->
       ar = new Array(33, 34, 35, 36, 37, 38, 39, 40)
       key = e.which
       
-      #console.log(key);
-      #if(key==35 || key == 36 || key == 37 || key == 39)
       if $.inArray(key, ar) > -1
         e.preventDefault()
         return false

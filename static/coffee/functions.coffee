@@ -83,9 +83,3 @@ bindPlayerControls = (playerNumber,e) ->
               when 37 then Game::dice.moveLeft()
               when 38 then Game::dice.moveUp()
 
-stopPageScrolling = (e) ->
-  $(document).keydown ->
-      key = e.which
-      if key ==35 or key == 36 or key ==37 or key ==39
-        e.preventDefault()
-

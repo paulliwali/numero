@@ -332,14 +332,17 @@ class Player
     @score = 0
     @name = null
     @dice = null
+    playerNumber = 1
+    @id = 0
     # PROPERTIES
     # METHODS
     constructor: (@name) ->
         if @name is null or @name is ""
             console.log "MISSING PLAYER NAME"
             return
-        console.log "New Player created: #{@name}"
+        @id = ++playerNumber
 
+        console.log "New Player created: #{@name} ID: #{@id}"
     getScore: =>
         return @score
 
@@ -351,6 +354,9 @@ class Player
 
     setDice: (dice) =>
         @dice = dice
+
+    getID: =>
+        return @id
 
 
 class Orientation

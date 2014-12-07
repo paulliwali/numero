@@ -3,10 +3,23 @@ $ ->
 
 $ ->
 
+
+    $(document).keydown (e) ->
+      ar = new Array(33, 34, 35, 36, 37, 38, 39, 40)
+      key = e.which
+      
+      #console.log(key);
+      #if(key==35 || key == 36 || key == 37 || key == 39)
+      if $.inArray(key, ar) > -1
+        e.preventDefault()
+        return false
+      true
+
+
     $(".go-to-game").click (e)->
         e.preventDefault()
         startGameMessage()
-        
+    
 
 
     $("#gameOptions .number-players button").click ->
@@ -66,8 +79,5 @@ $ ->
         console.log player1
 
         $("body").keyup (e) ->
-            switch e.keyCode
-                when 68 then Game::dice.moveRight()
-                when 83 then Game::dice.moveDown()
-                when 65 then Game::dice.moveLeft()
-                when 87 then Game::dice.moveUp()
+            bindPlayerControls(player1.getID(),e)
+

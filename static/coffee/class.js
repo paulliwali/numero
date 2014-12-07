@@ -41,7 +41,7 @@ Grid = (function() {
         for (widthBlock = _j = 0, _ref1 = Grid.prototype.size.width; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; widthBlock = 0 <= _ref1 ? ++_j : --_j) {
           block = new Block(new Size(BLOCK_DEFAULT_WIDTH_PIXEL, BLOCK_DEFAULT_HEIGHT_PIXEL, UNIT_PIXEL));
           blockElement = block.createBlock();
-          blockElement.text("[" + heightBlock + "," + widthBlock + "]");
+          blockElement.text("[" + widthBlock + "," + heightBlock + "]");
           row.append(blockElement);
           Grid.prototype.blockArray[heightBlock][widthBlock] = block;
         }
@@ -131,6 +131,7 @@ Dice = (function(_super) {
     this.getHTMLElement = __bind(this.getHTMLElement, this);
     this.assignHTMLElement = __bind(this.assignHTMLElement, this);
     this.createBlock = __bind(this.createBlock, this);
+    this.isGameWonSetup = __bind(this.isGameWonSetup, this);
     this.isGameWon = __bind(this.isGameWon, this);
     this.moveToGrid = __bind(this.moveToGrid, this);
     this.createDice = __bind(this.createDice, this);
@@ -163,6 +164,10 @@ Dice = (function(_super) {
     console.log(faceUp);
     winningConditions = Game.prototype.getWinningConditions();
     return winningConditions.checkConditions(faceUp, this.gridIndex_X, this.gridIndex_Y);
+  };
+
+  Dice.prototype.isGameWonSetup = function(faceUp) {
+    return console.log(faceUp);
   };
 
   Dice.prototype.createBlock = function() {
@@ -437,6 +442,7 @@ Orientation = (function() {
       }
     }
     this.faceup = randomNum(6, 1);
+    Dice.prototype.isGameWonSetup(this.faceup);
     this.bottom = 7 - this.faceup;
     this.left = randomNum(6, 1);
     while (this.left === this.faceup || this.left === this.bottom) {
@@ -470,9 +476,9 @@ WinningConditions = (function() {
     this.conditions = [];
   }
 
-  WinningConditions.prototype.addCondition = function(number, x, y) {
+  WinningConditions.prototype.addCondition = function() {
     var condition;
-    condition = new Condition(number, x, y);
+    condition = new Condition();
     this.conditions.push(condition);
     return condition;
   };
@@ -502,12 +508,19 @@ Condition = (function() {
 
   Condition.isMet = false;
 
-  function Condition(number, blockPositionX, blockPositionY) {
-    this.number = number;
-    this.blockPositionX = blockPositionX;
-    this.blockPositionY = blockPositionY;
+  Condition.htmlElement = null;
+
+  function Condition() {
+    this.getHTMLElement = __bind(this.getHTMLElement, this);
+    this.assignHTMLElement = __bind(this.assignHTMLElement, this);
+    this.createHTMLElement = __bind(this.createHTMLElement, this);
     this.checkIfSatisfied = __bind(this.checkIfSatisfied, this);
+    this.number = randomNum(6, 1);
+    this.blockPositionX = randomNum(Grid.prototype.getGridWidth(), 0);
+    this.blockPositionY = randomNum(Grid.prototype.getGridHeight(), 0);
     console.log("A condition has been made for " + this.number + " at [" + this.blockPositionX + "," + this.blockPositionY + "] ");
+    this.createHTMLElement();
+    addConditionInViewableBox(this.htmlElement);
   }
 
   Condition.prototype.checkIfSatisfied = function(number, x, y) {
@@ -517,6 +530,25 @@ Condition = (function() {
     } else {
       return false;
     }
+  };
+
+  Condition.prototype.createHTMLElement = function() {
+    var div, number, xPos, yPos;
+    div = $("<div>");
+    xPos = $("<div class='col-xs-4'>").text("Grid X: " + this.blockPositionX);
+    yPos = $("<div class='col-xs-4'>").text("Grid Y: " + this.blockPositionY);
+    number = $("<div class='col-xs-4'>").text("Face Up Number: " + this.number);
+    div.append(xPos).append(yPos).append(number);
+    this.htmlElement = div;
+    return div;
+  };
+
+  Condition.prototype.assignHTMLElement = function(element) {
+    return this.htmlElement = element;
+  };
+
+  Condition.prototype.getHTMLElement = function() {
+    return this.htmlElement;
   };
 
   return Condition;

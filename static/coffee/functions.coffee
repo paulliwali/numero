@@ -30,3 +30,23 @@ showError = (error) ->
           text: error
           type: "failure"
       })
+
+
+startGameMessage = () ->
+  swal({   
+    title: "Numero!",  
+    text: "Do you wanna play?",   
+    type: "info",   
+    showCancelButton: true,   
+    confirmButtonColor: "#5CB85C",   
+    confirmButtonText: "Let's Play!",   
+    cancelButtonText: "I don't want to play ):",   
+    closeOnConfirm: true,   
+    closeOnCancel: false 
+    }, (isConfirm) ->
+      if isConfirm
+        console.log 'test'
+    )
+
+addConditionInViewableBox = (condition) ->
+      ELEMENT_CONDITIONS_CONTAINER.append(condition)

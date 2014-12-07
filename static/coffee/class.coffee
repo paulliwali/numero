@@ -50,7 +50,7 @@ class Grid
                     )
                     # Create the HTML block
                     blockElement = block.createBlock()   
-                    blockElement.text("[#{heightBlock},#{widthBlock}]")
+                    blockElement.text("[#{widthBlock},#{heightBlock}]")
                     # Add the block to the Page
                     row.append(blockElement)
                     # assign the block to the grid array
@@ -122,7 +122,6 @@ class Dice extends Block
         Grid::getBlockElement(
             @gridIndex_X, @gridIndex_Y
             ).getBlockElement().append(@htmlElement)
-
         @isGameWon()
 
     isGameWon: =>
@@ -130,6 +129,9 @@ class Dice extends Block
         console.log faceUp
         winningConditions = Game::getWinningConditions()
         winningConditions.checkConditions(faceUp,@gridIndex_X,@gridIndex_Y)
+
+    isGameWonSetup: (faceUp) =>
+        console.log faceUp
 
     createBlock: =>
         super()
@@ -325,6 +327,7 @@ class Orientation
         
 
         @faceup = randomNum(6,1)
+        Dice::isGameWonSetup(@faceup)
         @bottom = 7 - @faceup
 
         @left = randomNum(6,1)
@@ -352,8 +355,8 @@ class WinningConditions
     constructor: () ->
         @conditions = []
 
-    addCondition: (number,x,y) =>
-        condition = new Condition(number,x,y)
+    addCondition: () =>
+        condition = new Condition()
         @conditions.push(condition)
         return condition
 
@@ -363,14 +366,22 @@ class WinningConditions
                 return false
         # all conditions met
         showGameWin()
-        
+
 class Condition
     @number = null
     @blockPositionY = null
     @blockPositionX = null
     @isMet = false
-    constructor: (@number,@blockPositionX,@blockPositionY) ->
+    @htmlElement = null
+    constructor: () ->
+        @number = randomNum(6,1)
+
+        @blockPositionX = randomNum(Grid::getGridWidth(),0)
+        @blockPositionY = randomNum(Grid::getGridHeight(),0)
         console.log "A condition has been made for #{@number} at [#{@blockPositionX},#{@blockPositionY}] "
+        @createHTMLElement()
+        addConditionInViewableBox(@htmlElement)
+
 
     checkIfSatisfied: (number,x,y) =>
         if number == @number and @blockPositionX == x  and @blockPositionY == y
@@ -379,11 +390,29 @@ class Condition
         else
             return false
 
+    createHTMLElement: =>
+        div = $("<div>")
+        xPos = $("<div class='col-xs-4'>").text("Grid X: " + @blockPositionX)
+        yPos =$("<div class='col-xs-4'>").text("Grid Y: " + @blockPositionY)
+        number = $("<div class='col-xs-4'>").text("Face Up Number: " + @number)
+        div.append(xPos).append(yPos).append(number)
+
+
+        @htmlElement = div
+        return div
+
+    assignHTMLElement: (element) =>
+        @htmlElement = element
+
+    getHTMLElement: =>
+        return @htmlElement
+
 class Game
     dice = null
     players = null
     grid = null
     winningConditions = null
+
     constructor: () ->
         console.log "New Game has been created."
 
@@ -393,4 +422,3 @@ class Game
     getWinningConditions: () =>
         return Game::winningConditions
 
-# Game class?

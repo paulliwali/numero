@@ -5,12 +5,15 @@ $(function() {
 
 $(function() {
   var blockSize, dice, diceSize, game, grid, winningConditions;
+  setTimeout((function() {
+    return startGameMessage();
+  }), 200);
   game = new Game();
-  winningConditions = new WinningConditions();
-  winningConditions.addCondition(5, 0, 2);
-  game.setWinningConditions(winningConditions);
-  blockSize = new Size(3, 3, UNIT_BLOCK);
+  blockSize = new Size(4, 4, UNIT_BLOCK);
   grid = new Grid(blockSize);
+  winningConditions = new WinningConditions();
+  winningConditions.addCondition();
+  game.setWinningConditions(winningConditions);
   diceSize = new Size("25", "25", UNIT_PIXEL);
   dice = new Dice(diceSize);
   return $("body").keyup(function(e) {

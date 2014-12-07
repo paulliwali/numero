@@ -2,23 +2,26 @@ $ ->
     FastClick.attach(document.body)
 
 $ ->
+    setTimeout ( ->
+        startGameMessage()
 
+    ),200
     # Global
     # < ========== >
     game = new Game()
+
+    blockSize = new Size(4,4,UNIT_BLOCK)
+   
+    grid = new Grid(blockSize)
+
     winningConditions = new WinningConditions()
-    winningConditions.addCondition(5,0,2)
+    winningConditions.addCondition()
 
     game.setWinningConditions(winningConditions)
 
-    blockSize = new Size(3,3,UNIT_BLOCK)
-    
-
-    grid = new Grid(blockSize)
     diceSize = new Size("25","25",UNIT_PIXEL)
     dice = new Dice(diceSize)
-    
-    # dice.isGameWon()
+
     $("body").keyup (e) ->
         switch e.keyCode
             when 68 then dice.moveRight()

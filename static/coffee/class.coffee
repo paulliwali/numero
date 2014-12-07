@@ -110,9 +110,6 @@ class Dice extends Block
         console.log "CREATING DICE"
         @assignHTMLElement(@createBlock())
 
-        @gridIndex_X = randomNum(Grid::.getGridWidth(),0)
-        @gridIndex_Y = randomNum(Grid::getGridHeight(),0)
-
         @moveToGrid()
         console.log @gridIndex_X,@gridIndex_Y
 
@@ -327,6 +324,9 @@ class Orientation
             console.log "MISSING RIGHT" unless @right?
         
         @faceup = randomNum(6,1)
+        while @isGameWon
+            @faceup = randomNum(6,1)
+
         @bottom = 7 - @faceup
 
         @left = randomNum(6,1)

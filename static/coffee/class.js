@@ -141,8 +141,6 @@ Dice = (function(_super) {
   Dice.prototype.createDice = function() {
     console.log("CREATING DICE");
     this.assignHTMLElement(this.createBlock());
-    this.gridIndex_X = randomNum(Grid.prototype.getGridWidth(), 0);
-    this.gridIndex_Y = randomNum(Grid.prototype.getGridHeight(), 0);
     this.moveToGrid();
     console.log(this.gridIndex_X, this.gridIndex_Y);
     return this.htmlElement;
@@ -161,7 +159,7 @@ Dice = (function(_super) {
     faceUp = this.getFaceUp();
     console.log(faceUp);
     winningConditions = Game.prototype.getWinningConditions();
-    return console.log(winningConditions);
+    return winningConditions.checkConditions(faceUp, this.gridIndex_X, this.gridIndex_Y);
   };
 
   Dice.prototype.createBlock = function() {
@@ -436,6 +434,9 @@ Orientation = (function() {
       }
     }
     this.faceup = randomNum(6, 1);
+    while (this.isGameWon) {
+      this.faceup = randomNum(6, 1);
+    }
     this.bottom = 7 - this.faceup;
     this.left = randomNum(6, 1);
     while (this.left === this.faceup || this.left === this.bottom) {
@@ -477,14 +478,15 @@ WinningConditions = (function() {
   };
 
   WinningConditions.prototype.checkConditions = function(number, x, y) {
-    var condition, _i, _len, _ref, _results;
+    var condition, _i, _len, _ref;
     _ref = this.conditions;
-    _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       condition = _ref[_i];
-      _results.push(condition.checkIfSatisfied(number, x, y));
+      if (!condition.checkIfSatisfied(number, x, y)) {
+        return false;
+      }
     }
-    return _results;
+    return showGameWin();
   };
 
   return WinningConditions;
@@ -498,6 +500,8 @@ Condition = (function() {
 
   Condition.blockPositionX = null;
 
+  Condition.isMet = false;
+
   function Condition(number, blockPositionX, blockPositionY) {
     this.number = number;
     this.blockPositionX = blockPositionX;
@@ -508,6 +512,7 @@ Condition = (function() {
 
   Condition.prototype.checkIfSatisfied = function(number, x, y) {
     if (number === this.number && this.blockPositionX === x && this.blockPositionY === y) {
+      this.isMet = true;
       return true;
     } else {
       return false;
@@ -535,8 +540,8 @@ Game = (function() {
     console.log("New Game has been created.");
   }
 
-  Game.prototype.setWinningConditions = function(winningConditions) {
-    return Game.prototype.winningConditions = winningConditions;
+  Game.prototype.setWinningConditions = function(win) {
+    return Game.prototype.winningConditions = win;
   };
 
   Game.prototype.getWinningConditions = function() {

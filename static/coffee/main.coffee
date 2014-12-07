@@ -7,8 +7,6 @@ $ ->
 
     ),200
 
-
-
     $("#gameOptions .number-players button").click ->
         ELEMENT_GAME_OPTIONS_NUM_PLAYERS.find("."+CLASS_ACTIVE)
                                                                              .removeClass(CLASS_ACTIVE)
@@ -22,7 +20,6 @@ $ ->
         boardSize = $(".board-size .active").val()
         numberPlayers = $(".number-players .active").val()
         $("#gameOptions").modal("hide")
-
 
         # Reset the game if it's an active game
         if Game::isActiveGame is true

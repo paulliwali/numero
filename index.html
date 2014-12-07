@@ -8,25 +8,52 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
 		<!-- Site Properities -->
-		<title>Site Title</title>
-		                  
+		<title>Numero Game</title>
+
 		<!-- LESS -->
 		<link rel="stylesheet" type="text/less" href="static/css/main/style.less"/>
+		<!-- CSS -->
+		<link rel="stylesheet" type="text/css" href="static/css/main/style.css"/>
+		<!-- Custom Fonts -->
+		<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+		<link href="http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
 		<!-- Normalize -->
 		<link rel="stylesheet" type="text/css" href="static/css/vendor/normalize.css"/>
             <!-- Sweet Alert -->
             <link rel="stylesheet" type="text/css" href="static/css/vendor/sweet-alert.css"/>
-		<!-- Latest compiled and minified CSS -->
+
+		<!-- Don't need, have custom local ref
+		<! Latest compiled and minified CSS
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-      	
-		<!-- Optional theme -->
+
+		<! Optional theme
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
-	   
+		-->
+
 	</head>
 	<body >
-             <header>
-                <h2 class="jumbotron">GAME TITILE</h2>
-             </header>
+
+		<!-- Header Info
+		================================================= -->
+		<div class="intro-header">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-7 col-lg-12">
+						<div class="intro-message">
+							<h1>Numero</h1>
+							<h3>By: #BitsPlease</h3>
+
+							<p class="lead">Roll your way to victory</p>
+							<p class="bs-component">
+								<a href="#game" class="btn btn-default"> Leggo </a>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
 		<!--Game Content -->
 		<main class="col-xs-12">
 			<div class="game-container row">
@@ -38,11 +65,11 @@
                          </div>
                          <br><br>
                          <div class="winning-conditions">
-                        
+
                          </div>
 
 		            <div class="board-container col-xs-10 col-xs-offset-1">
-                        </div> 
+                        </div>
 			</div>
 		</main>
             <!-- End of Game content -->
@@ -81,24 +108,53 @@
               </div>
             </div>
 
-		<!-- Footer Content -->
-		<footer>
-			<!-- JQuery -->
-			<script src="static/js/vendor/jquery-2.1.1.min.js"></script>
-			<!-- FastClick -->
-			<script type="text/javascript" src="static/js/vendor/fastclick.js"></script>
-			<!-- Modernizr -->
-			<script type="text/javascript" src="static/js/vendor/modernizr.js"></script>
-			
-			<!-- LESS -->
-			<script type="text/javascript" src="static/js/vendor/less-1.7.3.min.js"></script>
-			<!-- Latest compiled and minified JavaScript -->
-			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-                  <script type="text/javascript" src="static/js/vendor/sweet-alert.min.js"></script>
-                  <!-- Own JS File-->
-                  <script src="static/js/main/main.js"></script>
-			
-		</footer>
+<!-- Information Container
+=================================================== -->
+<div class="content-section-a">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-5 col-sm-6">
+				<div class="clearfix"></div>
+				<h2 class="section-heading">How to <b>Play</b></h2>
+				<p class="lead">Simply use the Arrow Keys as Player 1 and WASD Keys as Player 2 to
+					control your respective dice.</p>
+				</div>
+
+				<div class="col-lg-5 col-lg-offset-2 col-sm-6">
+					<img class="img-responsive" src="./static/icons/keyboard.png" alt="controls">
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<!-- Footer Info
+	=================================================== -->
+	<div class="banner">
+		<div class="container">
+
+		</div>
+	</div>
+	<footer>
+		<div class="container">
+			<p class="copyright text-muted small">Copyright &copy; Your Company 2014. All Rights Reserved</p>
+		</div>
+		<!-- JQuery -->
+		<script src="static/js/vendor/jquery-2.1.1.min.js"></script>
+		<!-- FastClick -->
+		<script type="text/javascript" src="static/js/vendor/fastclick.js"></script>
+		<!-- Modernizr -->
+		<script type="text/javascript" src="static/js/vendor/modernizr.js"></script>
+
+		<!-- LESS -->
+		<script type="text/javascript" src="static/js/vendor/less-1.7.3.min.js"></script>
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="static/js/vendor/sweet-alert.min.js"></script>
+		<!-- Own JS File-->
+		<script src="static/js/main/main.js"></script>
+	</footer>
+
 	</body>
 
 

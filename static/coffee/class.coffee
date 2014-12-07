@@ -119,19 +119,16 @@ class Dice extends Block
     # METHODS
     constructor: () ->
         diceSize = new Size("25","25",UNIT_PIXEL)
-        super(diceSize)
+        @gridIndex_X = randomNum(Grid::getGridWidth(),0)
+        @gridIndex_Y = randomNum(Grid::getGridHeight(),0)  
         @orientation = new Orientation
-        console.log "New Dice created"
         @createDice()
+        console.log "New Dice created"
+        
     createDice: () =>
         @assignHTMLElement(@createBlock())
-
-        @gridIndex_X = randomNum(Grid::.getGridWidth(),0)
-        @gridIndex_Y = randomNum(Grid::getGridHeight(),0)
-
         @moveToGrid()
         console.log @gridIndex_X,@gridIndex_Y
-
         return @htmlElement
 
     moveToGrid: ()=>
@@ -141,7 +138,6 @@ class Dice extends Block
         Grid::getBlockElement(
             @gridIndex_X, @gridIndex_Y
             ).getBlockElement().append(@htmlElement)
-
         @isGameWon()
 
     reset: =>
@@ -151,6 +147,7 @@ class Dice extends Block
         @gridIndex_Y = null
         @orientation = null
         @htmlElement = null
+
     isGameWon: =>
         faceUp = @getFaceUp()
         console.log faceUp
@@ -370,6 +367,7 @@ class Orientation
             console.log "MISSING LEFT" unless @left?
             console.log "MISSING RIGHT" unless @right?
         
+
         @faceup = randomNum(6,1)
         @bottom = 7 - @faceup
 
@@ -405,6 +403,7 @@ class WinningConditions
     @conditions = null
     constructor: () ->
         @conditions = []
+
     addCondition: () =>
         condition = new Condition()
         @conditions.push(condition)
@@ -421,7 +420,6 @@ class WinningConditions
         for condition in @conditions
             condition.reset()
         @conditions = null
-
 
 class Condition
     @number = null
@@ -471,15 +469,11 @@ class Condition
         @isMet = false
         @htmlElement = null
 
-
 class Game
     dice = null
     players = null
     grid = null
     winningConditions = null
-    boardSize = null
-    isActiveGame = false
-    score = null
 
     setWinningConditions: (win) =>
         Game::winningConditions = win

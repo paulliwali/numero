@@ -168,16 +168,15 @@
       this.createDice = __bind(this.createDice, this);
       var diceSize;
       diceSize = new Size("25", "25", UNIT_PIXEL);
-      Dice.__super__.constructor.call(this, diceSize);
+      this.gridIndex_X = randomNum(Grid.prototype.getGridWidth(), 0);
+      this.gridIndex_Y = randomNum(Grid.prototype.getGridHeight(), 0);
       this.orientation = new Orientation;
-      console.log("New Dice created");
       this.createDice();
+      console.log("New Dice created");
     }
 
     Dice.prototype.createDice = function() {
       this.assignHTMLElement(this.createBlock());
-      this.gridIndex_X = randomNum(Grid.prototype.getGridWidth(), 0);
-      this.gridIndex_Y = randomNum(Grid.prototype.getGridHeight(), 0);
       this.moveToGrid();
       console.log(this.gridIndex_X, this.gridIndex_Y);
       return this.htmlElement;
@@ -657,7 +656,7 @@
   })();
 
   Game = (function() {
-    var boardSize, dice, grid, isActiveGame, players, score, winningConditions;
+    var dice, grid, players, winningConditions;
 
     function Game() {
       this.getWinningConditions = __bind(this.getWinningConditions, this);
@@ -671,12 +670,6 @@
     grid = null;
 
     winningConditions = null;
-
-    boardSize = null;
-
-    isActiveGame = false;
-
-    score = null;
 
     Game.prototype.setWinningConditions = function(win) {
       return Game.prototype.winningConditions = win;

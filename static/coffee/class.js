@@ -328,24 +328,40 @@ Player = (function() {
     if (this.id === 1) {
       switch (e.keyCode) {
         case 68:
-          return this.dice.moveRight();
+          this.dice.setAnimationLock();
+          this.dice.moveRight();
+          return this.dice.setAnimationUnlock();
         case 83:
-          return this.dice.moveDown();
+          this.dice.setAnimationLock();
+          this.dice.moveDown();
+          return this.dice.setAnimationUnlock();
         case 65:
-          return this.dice.moveLeft();
+          this.dice.setAnimationLock();
+          this.dice.moveLeft();
+          return this.dice.setAnimationUnlock();
         case 87:
-          return this.dice.moveUp();
+          this.dice.setAnimationLock();
+          this.dice.moveUp();
+          return this.dice.setAnimationUnlock();
       }
     } else if (this.id === 2) {
       switch (e.keyCode) {
         case 39:
-          return this.dice.moveRight();
+          this.dice.setAnimationLock();
+          this.dice.moveRight();
+          return this.dice.setAnimationUnlock();
         case 40:
-          return this.dice.moveDown();
+          this.dice.setAnimationLock();
+          this.dice.moveDown();
+          return this.dice.setAnimationUnlock();
         case 37:
-          return this.dice.moveLeft();
+          this.dice.setAnimationLock();
+          this.dice.moveLeft();
+          return this.dice.setAnimationUnlock();
         case 38:
-          return this.dice.moveUp();
+          this.dice.setAnimationLock();
+          this.dice.moveUp();
+          return this.dice.setAnimationUnlock();
       }
     }
   };
@@ -588,7 +604,12 @@ Dice = (function(_super) {
 
   Dice.htmlElement = null;
 
+  Dice.animationLock = null;
+
   function Dice() {
+    this.getAnimationLock = __bind(this.getAnimationLock, this);
+    this.setAnimationUnlock = __bind(this.setAnimationUnlock, this);
+    this.setAnimationLock = __bind(this.setAnimationLock, this);
     this.getToLeftAnimation = __bind(this.getToLeftAnimation, this);
     this.rotateAnimation = __bind(this.rotateAnimation, this);
     this.animateDice = __bind(this.animateDice, this);
@@ -608,6 +629,7 @@ Dice = (function(_super) {
     this.moveToGrid = __bind(this.moveToGrid, this);
     this.createDice = __bind(this.createDice, this);
     this.size = new Size("25", "25", UNIT_PIXEL);
+    this.animationLock = false;
     this.gridIndex_X = randomNum(Grid.prototype.getGridWidth(), 0);
     this.gridIndex_Y = randomNum(Grid.prototype.getGridHeight(), 0);
     this.orientation = new Orientation;
@@ -721,6 +743,8 @@ Dice = (function(_super) {
       console.log("Dice moving out of bounds");
     } else if (Grid.prototype.isLocked(this.gridIndex_X, this.gridIndex_Y - 1)) {
       console.log("Space blocked");
+    } else if (this.getAnimationLock()) {
+      return console.log("Animation lock in place");
     } else {
       CurrentY = this.gridIndex_Y;
       CurrentX = this.gridIndex_X;
@@ -734,6 +758,7 @@ Dice = (function(_super) {
       this.orientation.up = oldFaceUp;
       this.orientation.down = 7 - this.orientation.up;
       this.gridIndex_Y = this.gridIndex_Y - 1;
+      this.animateDice(oldFaceUp, this.orientation.faceup, "UP");
       console.log("Dice moved up");
       console.log("New orientation is:");
       console.log("FACEUP: " + this.orientation.faceup);
@@ -753,6 +778,8 @@ Dice = (function(_super) {
       console.log("Dice moving out of bounds");
     } else if (Grid.prototype.isLocked(this.gridIndex_X, this.gridIndex_Y + 1)) {
       console.log("Space blocked");
+    } else if (this.getAnimationLock()) {
+      return console.log("Animation lock in place");
     } else {
       CurrentY = this.gridIndex_Y;
       CurrentX = this.gridIndex_X;
@@ -766,6 +793,7 @@ Dice = (function(_super) {
       this.orientation.down = oldFaceUp;
       this.orientation.up = 7 - this.orientation.down;
       this.gridIndex_Y = this.gridIndex_Y + 1;
+      this.animateDice(oldFaceUp, this.orientation.faceup, "DOWN");
       console.log("Dice moved down");
       console.log("New orientation is:");
       console.log("FACEUP: " + this.orientation.faceup);
@@ -798,6 +826,7 @@ Dice = (function(_super) {
       this.orientation.left = oldFaceUp;
       this.orientation.right = 7 - oldFaceUp;
       this.gridIndex_X = this.gridIndex_X - 1;
+      this.animateDice(oldFaceUp, this.orientation.faceup, "LEFT");
       console.log("Dice moved left");
       console.log("New orientation is:");
       console.log("FACEUP: " + this.orientation.faceup);
@@ -830,6 +859,7 @@ Dice = (function(_super) {
       this.orientation.right = oldFaceUp;
       this.orientation.left = 7 - oldFaceUp;
       this.gridIndex_X = this.gridIndex_X + 1;
+      this.animateDice(oldFaceUp, this.orientation.faceup, "RIGHT");
       console.log("Dice moved right");
       console.log("New orientation is:");
       console.log("FACEUP: " + this.orientation.faceup);
@@ -936,6 +966,18 @@ Dice = (function(_super) {
             return console.log("Returning animation going to the left");
         }
     }
+  };
+
+  Dice.prototype.setAnimationLock = function() {
+    return this.animationLock = true;
+  };
+
+  Dice.prototype.setAnimationUnlock = function() {
+    return this.animationLock = false;
+  };
+
+  Dice.prototype.getAnimationLock = function() {
+    return this.animationLock;
   };
 
   return Dice;

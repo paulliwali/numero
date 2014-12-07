@@ -25,6 +25,7 @@ BLOCK_DEFAULT_HEIGHT_PIXEL = "100"
 # CLASSES
 # ==========
 CLASS_ACTIVE = "active"
+CLASS_GRID_BORDER = "grid-border"
 
 # VALUES
 # ==========

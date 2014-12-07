@@ -2,10 +2,9 @@ $ ->
     FastClick.attach(document.body)
 
 $ ->
-    setTimeout ( ->
-        startGameMessage()
 
-    ),200
+    $(".go-to-game").click ->
+        startGameMessage()
 
     $("#gameOptions .number-players button").click ->
         ELEMENT_GAME_OPTIONS_NUM_PLAYERS.find("."+CLASS_ACTIVE)

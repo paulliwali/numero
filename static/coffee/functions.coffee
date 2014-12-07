@@ -33,7 +33,14 @@ showGameWin = () ->
       if isConfirm
         Game::newGame()
         Game::addNewPlayers("Pua","Brian")
-        
+      else 
+        swal({   
+          title: "You mean you want to play again?!",
+          text: "Let's play!",  
+          timer: 2000 
+          })
+        Game::newGame()
+        Game::addNewPlayers(window.player1.name)
     )
 
 showMessage = (message) ->

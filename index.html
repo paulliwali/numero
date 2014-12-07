@@ -23,9 +23,6 @@
 						<link rel="stylesheet" type="text/css" href="static/css/vendor/sweet-alert.css"/>
 						<!-- Odometer -->
 						<link rel="stylesheet" type="text/css" href="static/css/vendor/odometer.css"/>
-
-
-
 	</head>
 	<body >
 
@@ -45,6 +42,7 @@
 							<h5>Roll your way to victory</h5>
 							<p class="bs-component">
 								<a href="#game" class="btn btn-default go-to-game"> Leggo </a>
+								<input type="button" id="login" class="btn btn-success" value="Connect to SoundCloud" />
 							</p>
 						</div>
 					</div>
@@ -57,13 +55,15 @@
 		<main class="col-xs-12">
 			<div class="game-container">
 				<div class="row" id="game">
-					<div class="">
+					<div class="col-sm-12">
 						<!-- Button trigger modal -->
 						<button type="button" class="btn btn-primary btn-lg"
 						data-toggle="modal" data-target="#gameOptions">
 						New Game
 						</button>
 					</div>
+
+
 					<br><br>
 
 					<div class="winning-conditions">
@@ -163,6 +163,11 @@
 
 		<!-- Footer Info
 		=================================================== -->
+	<div class="row">
+		<div class="col-sm-12">
+			<div id="player"></div>
+		</div>
+	</div>
 	<div class="banner">
 		<div class="container">
 			<div class="row">
@@ -174,9 +179,6 @@
 							<li>
 								<a href="https://github.com/koding/global.hackathon"
 								class="btn btn-default btn-success"><i class="icon-github-alt"></i> Koding</a>
-							</li>
-							<li>
-								<input type="button" href="#" id="stream" class="big button" value="Stream It Again, Sam" />
 							</li>
 						</ul>
 					</div>
@@ -226,6 +228,9 @@
 		<script src="static/js/main/script.js"></script>
 
 		<!-- Own JS File-->
+		<!-- SoundCloud API -->
+		<script src="//connect.soundcloud.com/sdk.js"></script>
+		<script src="static/js/main/script.js"></script>
 		<script src="static/js/main/main.js"></script>
 	</footer>
 

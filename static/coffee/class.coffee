@@ -255,7 +255,6 @@ class Grid
     size = null
     blockArray = null
 
-
     # METHODS
     createGridStarter: (size) ->
         if (size is null)
@@ -330,12 +329,25 @@ class Grid
 
     getGridWidth: () ->
         return Grid::size.width
+
+    isLocked: (y,x) =>
+        return Grid::blockArray[x][y].locked
+
+    setLocked: (y,x) =>
+        Grid::blockArray[x][y].locked = true
+        console.log "LOCKING #{y} #{x}"
+
+    unsetLocked: (y,x) =>
+        Grid::blockArray[x][y].locked = false
+        console.log "UNLOCKING #{x} #{y}"
 # ====================== END GRID ===========================
+
 # ====================== START BLOCK =========================
 class Block
     # PROPERTIES
     @size = null
     @htmlElement = null
+    @locked = null
     # METHODS
     constructor: (@size) ->
         # console.log "New Block Created: (#{@size.height},#{@size.width})"
@@ -349,6 +361,7 @@ class Block
             block.width( @size.getWidthWithUnit() )
             block.height( @size.getWidthWithUnit() )
             @assignHTMLElement(block)
+            @locked = false
             return block
     reset: =>
         @size.reset()
@@ -406,11 +419,14 @@ class Dice extends Block
     createDice: () =>
         alreadyWon = true if @isGameWonSetup()
 
+        @assignHTMLElement(@createBlock())
+
         if alreadyWon
             @reset()
             @constructor()
 
-        @assignHTMLElement(@createBlock())
+        Grid::setLocked(@gridIndex_X, @gridIndex_Y)
+
         @moveToGrid()
         console.log @gridIndex_X,@gridIndex_Y
         return @htmlElement
@@ -480,109 +496,161 @@ class Dice extends Block
         
     moveUp: () =>
         # Error checking
-        outOfBounds = true if @gridIndex_Y - 1 < 0 
-        console.log "Dice is moving out of bounds" if outOfBounds
-        return if outOfBounds
+        if @gridIndex_Y - 1 < 0
+            console.log "Dice moving out of bounds"
+            return
+        else if Grid::isLocked(@gridIndex_X,@gridIndex_Y - 1)
+            console.log "Space blocked"
+            return
+        else
+            # Unlock current and lock next block
+            CurrentY = @gridIndex_Y
+            CurrentX = @gridIndex_X
+            NextY = @gridIndex_Y - 1
+            NextX = @gridIndex_X
 
-        # Change orientation
-        oldFaceUp = @orientation.faceup
-        @orientation.faceup = @orientation.down
-        @orientation.bottom = 7 - @orientation.faceup
-        @orientation.up = oldFaceUp
-        @orientation.down = 7 - @orientation.up
+            Grid::setLocked(NextX, NextY)
+            Grid::unsetLocked(CurrentX, CurrentY)
 
-        # Change grid index
-        @gridIndex_Y = @gridIndex_Y - 1
+            # Change orientation
+            oldFaceUp = @orientation.faceup
+            @orientation.faceup = @orientation.down
+            @orientation.bottom = 7 - @orientation.faceup
+            @orientation.up = oldFaceUp
+            @orientation.down = 7 - @orientation.up
 
-        console.log "Dice moved up"
-        console.log "New orientation is:"
-        console.log "FACEUP: #{@orientation.faceup}"
-        console.log "BOTTOM: #{@orientation.bottom}"
-        console.log "LEFT: #{@orientation.left}"
-        console.log "RIGHT: #{@orientation.right}"
-        console.log "UP: #{@orientation.up}"
-        console.log "DOWN: #{@orientation.down}"
-        console.log @gridIndex_X,@gridIndex_Y
-        @moveToGrid()
+            # Change grid index
+            @gridIndex_Y = @gridIndex_Y - 1
+
+            console.log "Dice moved up"
+            console.log "New orientation is:"
+            console.log "FACEUP: #{@orientation.faceup}"
+            console.log "BOTTOM: #{@orientation.bottom}"
+            console.log "LEFT: #{@orientation.left}"
+            console.log "RIGHT: #{@orientation.right}"
+            console.log "UP: #{@orientation.up}"
+            console.log "DOWN: #{@orientation.down}"
+            console.log @gridIndex_X,@gridIndex_Y
+            @moveToGrid()
 
     moveDown: () => 
         # Error checking
-        outOfBounds = true if @gridIndex_Y + 1 >= Grid::getGridHeight()
-        console.log "Dice is moving out of bounds" if outOfBounds
-        return if outOfBounds
+        if @gridIndex_Y + 1 >= Grid::getGridHeight()
+            console.log "Dice moving out of bounds"
+            return
+        else if Grid::isLocked(@gridIndex_X,@gridIndex_Y + 1)
+            console.log "Space blocked"
+            return
+        else
+            # Unlock current and lock next block
+            CurrentY = @gridIndex_Y
+            CurrentX = @gridIndex_X
+            NextY = @gridIndex_Y + 1
+            NextX = @gridIndex_X
 
-        oldFaceUp = @orientation.faceup
-        @orientation.faceup = @orientation.up
-        @orientation.bottom = 7 - @orientation.faceup
-        @orientation.down = oldFaceUp
-        @orientation.up = 7 - @orientation.down
+            Grid::setLocked(NextX, NextY)
+            Grid::unsetLocked(CurrentX, CurrentY)
 
-        # Change grid index
-        @gridIndex_Y = @gridIndex_Y + 1
-        console.log "Dice moved down"
-        console.log "New orientation is:"
-        console.log "FACEUP: #{@orientation.faceup}"
-        console.log "BOTTOM: #{@orientation.bottom}"
-        console.log "LEFT: #{@orientation.left}"
-        console.log "RIGHT: #{@orientation.right}"
-        console.log "UP: #{@orientation.up}"
-        console.log "DOWN: #{@orientation.down}"
-        console.log @gridIndex_X,@gridIndex_Y
-        @moveToGrid()
+            oldFaceUp = @orientation.faceup
+            @orientation.faceup = @orientation.up
+            @orientation.bottom = 7 - @orientation.faceup
+            @orientation.down = oldFaceUp
+            @orientation.up = 7 - @orientation.down
+
+            # Change grid index
+            @gridIndex_Y = @gridIndex_Y + 1
+
+            console.log "Dice moved down"
+            console.log "New orientation is:"
+            console.log "FACEUP: #{@orientation.faceup}"
+            console.log "BOTTOM: #{@orientation.bottom}"
+            console.log "LEFT: #{@orientation.left}"
+            console.log "RIGHT: #{@orientation.right}"
+            console.log "UP: #{@orientation.up}"
+            console.log "DOWN: #{@orientation.down}"
+            console.log @gridIndex_X,@gridIndex_Y
+            @moveToGrid()
 
     moveLeft: () =>
         # Error checking
-        outOfBounds = true if @gridIndex_X - 1 < 0 
-        console.log "Dice is moving out of bounds" if outOfBounds
-        return if outOfBounds
+        if @gridIndex_X - 1 < 0
+            console.log "Dice moving out of bounds"
+            return
+        else if Grid::isLocked(@gridIndex_X - 1,@gridIndex_Y)
+            console.log "Space blocked"
+            return
+        else
+            # Unlock current and lock next block
+            CurrentY = @gridIndex_Y
+            CurrentX = @gridIndex_X
+            NextY = @gridIndex_Y
+            NextX = @gridIndex_X - 1
 
-        # Change orientation
-        oldFaceUp = @orientation.faceup
-        @orientation.faceup = @orientation.right
-        @orientation.bottom = 7 - @orientation.faceup
-        @orientation.left = oldFaceUp
-        @orientation.right = 7 - oldFaceUp
+            Grid::setLocked(NextX, NextY)
+            Grid::unsetLocked(CurrentX, CurrentY)
 
-        # Change grid index
-        @gridIndex_X = @gridIndex_X - 1
-        console.log "Dice moved left"
-        console.log "New orientation is:"
-        console.log "FACEUP: #{@orientation.faceup}"
-        console.log "BOTTOM: #{@orientation.bottom}"
-        console.log "LEFT: #{@orientation.left}"
-        console.log "RIGHT: #{@orientation.right}"
-        console.log "UP: #{@orientation.up}"
-        console.log "DOWN: #{@orientation.down}"
-        console.log @gridIndex_X,@gridIndex_Y
-        @moveToGrid()
+            # Change orientation
+            oldFaceUp = @orientation.faceup
+            @orientation.faceup = @orientation.right
+            @orientation.bottom = 7 - @orientation.faceup
+            @orientation.left = oldFaceUp
+            @orientation.right = 7 - oldFaceUp
+
+            # Change grid index
+            @gridIndex_X = @gridIndex_X - 1
+
+            console.log "Dice moved left"
+            console.log "New orientation is:"
+            console.log "FACEUP: #{@orientation.faceup}"
+            console.log "BOTTOM: #{@orientation.bottom}"
+            console.log "LEFT: #{@orientation.left}"
+            console.log "RIGHT: #{@orientation.right}"
+            console.log "UP: #{@orientation.up}"
+            console.log "DOWN: #{@orientation.down}"
+            console.log @gridIndex_X,@gridIndex_Y
+            @moveToGrid()
+
 
     moveRight: () =>
         # Error checking
-        outOfBounds = true if @gridIndex_X + 1 >= Grid::getGridWidth()
-        console.log "Dice is moving out of bounds" if outOfBounds
-        return if outOfBounds
+        if @gridIndex_X + 1 >= Grid::getGridWidth()
+            console.log "Dice moving out of bounds"
+            return
+        else if Grid::isLocked(@gridIndex_X + 1,@gridIndex_Y)
+            console.log "Space blocked"
+            return
+        else
+            # Unlock current and lock next block
+            CurrentY = @gridIndex_Y
+            CurrentX = @gridIndex_X
+            NextY = @gridIndex_Y
+            NextX = @gridIndex_X + 1
 
-        # Change orientation
-        oldFaceUp = @orientation.faceup
-        @orientation.faceup = @orientation.left
-        @orientation.bottom = 7 - @orientation.faceup
-        @orientation.right = oldFaceUp
-        @orientation.left = 7 - oldFaceUp
+            Grid::setLocked(NextX, NextY)
+            Grid::unsetLocked(CurrentX, CurrentY)
 
-        # Change grid index
-        @gridIndex_X = @gridIndex_X + 1
-        console.log "Dice moved right"
-        console.log "New orientation is:"
-        console.log "FACEUP: #{@orientation.faceup}"
-        console.log "BOTTOM: #{@orientation.bottom}"
-        console.log "LEFT: #{@orientation.left}"
-        console.log "RIGHT: #{@orientation.right}"
-        console.log "UP: #{@orientation.up}"
-        console.log "DOWN: #{@orientation.down}"
-        console.log @gridIndex_X,@gridIndex_Y
-        @moveToGrid()
+            # Change orientation
+            oldFaceUp = @orientation.faceup
+            @orientation.faceup = @orientation.left
+            @orientation.bottom = 7 - @orientation.faceup
+            @orientation.right = oldFaceUp
+            @orientation.left = 7 - oldFaceUp
+
+            # Change grid index
+            @gridIndex_X = @gridIndex_X + 1 
+
+            console.log "Dice moved right"
+            console.log "New orientation is:"
+            console.log "FACEUP: #{@orientation.faceup}"
+            console.log "BOTTOM: #{@orientation.bottom}"
+            console.log "LEFT: #{@orientation.left}"
+            console.log "RIGHT: #{@orientation.right}"
+            console.log "UP: #{@orientation.up}"
+            console.log "DOWN: #{@orientation.down}"
+            console.log @gridIndex_X,@gridIndex_Y
+            @moveToGrid()
+
 # ======================== END DICE ==================
-
 # class Position
 #     # PROPERTIES
 #     @x = null
@@ -595,7 +663,6 @@ class Dice extends Block
 #             console.log "MISSING Y VARIABLE" unless @y?
 #             return
 #         console.log "New Position created: (#{@x},#{@y})"
-
 
 # ==================== START ORIENTATION ========================
 class Orientation

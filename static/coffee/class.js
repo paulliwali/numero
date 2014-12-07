@@ -743,8 +743,8 @@ Dice = (function(_super) {
       console.log("Dice moving out of bounds");
     } else if (Grid.prototype.isLocked(this.gridIndex_X, this.gridIndex_Y - 1)) {
       console.log("Space blocked");
-    } else if (this.getAnimationLock()) {
-      return console.log("Animation lock in place");
+    } else if (!this.getAnimationLock()) {
+      console.log("Not holding animation lock");
     } else {
       CurrentY = this.gridIndex_Y;
       CurrentX = this.gridIndex_X;
@@ -778,8 +778,8 @@ Dice = (function(_super) {
       console.log("Dice moving out of bounds");
     } else if (Grid.prototype.isLocked(this.gridIndex_X, this.gridIndex_Y + 1)) {
       console.log("Space blocked");
-    } else if (this.getAnimationLock()) {
-      return console.log("Animation lock in place");
+    } else if (!this.getAnimationLock()) {
+      console.log("Not holding animation lock");
     } else {
       CurrentY = this.gridIndex_Y;
       CurrentX = this.gridIndex_X;
@@ -813,6 +813,8 @@ Dice = (function(_super) {
       console.log("Dice moving out of bounds");
     } else if (Grid.prototype.isLocked(this.gridIndex_X - 1, this.gridIndex_Y)) {
       console.log("Space blocked");
+    } else if (!this.getAnimationLock()) {
+      console.log("Not holding animation lock");
     } else {
       CurrentY = this.gridIndex_Y;
       CurrentX = this.gridIndex_X;
@@ -846,6 +848,8 @@ Dice = (function(_super) {
       console.log("Dice moving out of bounds");
     } else if (Grid.prototype.isLocked(this.gridIndex_X + 1, this.gridIndex_Y)) {
       console.log("Space blocked");
+    } else if (!this.getAnimationLock()) {
+      console.log("Not holding animation lock");
     } else {
       CurrentY = this.gridIndex_Y;
       CurrentX = this.gridIndex_X;
@@ -875,19 +879,19 @@ Dice = (function(_super) {
 
   Dice.prototype.animateDice = function(currentFaceup, nextFaceup, direction) {
     var animation, finalAnimation;
-    animation = getToLeftAnimation(currentFaceup, nextFaceup);
-    return finalAnimation = rotateAnimation(animation, direction);
+    animation = this.getToLeftAnimation(currentFaceup, nextFaceup);
+    return finalAnimation = this.rotateAnimation(animation, direction);
   };
 
   Dice.prototype.rotateAnimation = function(animation, direction) {
     switch (direction) {
-      case up:
+      case "UP":
         return console.log("Rotate 90 degrees clockwise");
-      case down:
+      case "DOWN":
         return console.log("Rotate 270 degrees clockwise");
-      case left:
+      case "LEFT":
         return console.log("Rotate 0 degrees clockwise");
-      case right:
+      case "RIGHT":
         return console.log("Rotate 180 degrees");
     }
   };

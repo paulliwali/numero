@@ -533,8 +533,9 @@ class Dice extends Block
         else if Grid::isLocked(@gridIndex_X,@gridIndex_Y - 1)
             console.log "Space blocked"
             return
-        else if @getAnimationLock()
-            console.log "Animation lock in place"
+        else if not @getAnimationLock()
+            console.log "Not holding animation lock"
+            return
         else
             # Unlock current and lock next block
             CurrentY = @gridIndex_Y
@@ -576,8 +577,9 @@ class Dice extends Block
         else if Grid::isLocked(@gridIndex_X,@gridIndex_Y + 1)
             console.log "Space blocked"
             return
-        else if @getAnimationLock()
-            console.log "Animation lock in place"
+        else if not @getAnimationLock()
+            console.log "Not holding animation lock"
+            return
         else
             # Unlock current and lock next block
             CurrentY = @gridIndex_Y
@@ -617,6 +619,9 @@ class Dice extends Block
             return
         else if Grid::isLocked(@gridIndex_X - 1,@gridIndex_Y)
             console.log "Space blocked"
+            return
+        else if not @getAnimationLock()
+            console.log "Not holding animation lock"
             return
         else
             # Unlock current and lock next block
@@ -660,6 +665,9 @@ class Dice extends Block
         else if Grid::isLocked(@gridIndex_X + 1,@gridIndex_Y)
             console.log "Space blocked"
             return
+        else if not @getAnimationLock()
+            console.log "Not holding animation lock"
+            return
         else
             # Unlock current and lock next block
             CurrentY = @gridIndex_Y
@@ -694,15 +702,15 @@ class Dice extends Block
             @moveToGrid()
 
     animateDice: (currentFaceup, nextFaceup, direction) =>
-        animation = getToLeftAnimation(currentFaceup, nextFaceup)
-        finalAnimation = rotateAnimation(animation, direction)
+        animation = @getToLeftAnimation(currentFaceup, nextFaceup)
+        finalAnimation = @rotateAnimation(animation, direction)
 
     rotateAnimation: (animation, direction) =>
         switch direction
-            when up then console.log "Rotate 90 degrees clockwise"
-            when down then  console.log "Rotate 270 degrees clockwise"
-            when left then console.log "Rotate 0 degrees clockwise"
-            when right then console.log "Rotate 180 degrees"
+            when "UP" then console.log "Rotate 90 degrees clockwise"
+            when "DOWN" then  console.log "Rotate 270 degrees clockwise"
+            when "LEFT" then console.log "Rotate 0 degrees clockwise"
+            when "RIGHT" then console.log "Rotate 180 degrees"
 
     getToLeftAnimation: (currentFaceup, nextFaceup) =>
         switch currentFaceup

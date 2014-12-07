@@ -53,3 +53,7 @@ URL_FOR_DICE_3 = "#{URL_FOR_SPRITES}/Dice-face/Dice-3.png)"
 URL_FOR_DICE_4 = "#{URL_FOR_SPRITES}/Dice-face/Dice-4.png)"
 URL_FOR_DICE_5 = "#{URL_FOR_SPRITES}/Dice-face/Dice-5.png)"
 URL_FOR_DICE_6 = "#{URL_FOR_SPRITES}/Dice-face/Dice-6.png)"
+
+# REMOVE FACES
+# ===============
+DICE_FACE_ALL = "face-1  face-2 face-3 face-4 face-5 face-6 active-face"

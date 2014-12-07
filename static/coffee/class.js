@@ -64,10 +64,17 @@ Grid = (function() {
           block = new Block(new Size(BLOCK_DEFAULT_WIDTH_PIXEL, BLOCK_DEFAULT_HEIGHT_PIXEL, UNIT_PIXEL));
           blockElement = block.createBlock();
           blockElement.text("[" + widthBlock + "," + heightBlock + "]");
-          if (heightBlock === 0 || heightBlock === Grid.prototype.size.height - 1) {
-            blockElement.addClass(CLASS_GRID_BORDER);
-          } else if (widthBlock === 0 || widthBlock === Grid.prototype.size.width - 1) {
-            blockElement.addClass(CLASS_GRID_BORDER);
+          if (heightBlock === 0) {
+            blockElement.addClass(CLASS_GRID_BORDER_TOP);
+          }
+          if (heightBlock === Grid.prototype.size.height - 1) {
+            blockElement.addClass(CLASS_GRID_BORDER_BOTTOM);
+          }
+          if (widthBlock === 0) {
+            blockElement.addClass(CLASS_GRID_BORDER_LEFT);
+          }
+          if (widthBlock === Grid.prototype.size.width - 1) {
+            blockElement.addClass(CLASS_GRID_BORDER_RIGHT);
           }
           row.append(blockElement);
           Grid.prototype.blockArray[heightBlock][widthBlock] = block;
@@ -452,14 +459,21 @@ Position = (function() {
 })();
 
 Player = (function() {
+  var playerNumber;
+
   Player.score = 0;
 
   Player.name = null;
 
   Player.dice = null;
 
+  playerNumber = 0;
+
+  Player.id = 0;
+
   function Player(name) {
     this.name = name;
+    this.getID = __bind(this.getID, this);
     this.setDice = __bind(this.setDice, this);
     this.getName = __bind(this.getName, this);
     this.addPoint = __bind(this.addPoint, this);
@@ -468,7 +482,8 @@ Player = (function() {
       console.log("MISSING PLAYER NAME");
       return;
     }
-    console.log("New Player created: " + this.name);
+    this.id = ++playerNumber;
+    console.log("New Player created: " + this.name + " ID: " + this.id);
   }
 
   Player.prototype.getScore = function() {
@@ -485,6 +500,10 @@ Player = (function() {
 
   Player.prototype.setDice = function(dice) {
     return this.dice = dice;
+  };
+
+  Player.prototype.getID = function() {
+    return this.id;
   };
 
   return Player;

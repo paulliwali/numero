@@ -90,7 +90,6 @@ class Grid
     getGridWidth: () ->
         return Grid::size.width
 
-
 class Block
     # PROPERTIES
     @size = null

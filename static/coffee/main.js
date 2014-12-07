@@ -4,6 +4,16 @@ $(function() {
 });
 
 $(function() {
+  $(document).keydown(function(e) {
+    var ar, key;
+    ar = new Array(33, 34, 35, 36, 37, 38, 39, 40);
+    key = e.which;
+    if ($.inArray(key, ar) > -1) {
+      e.preventDefault();
+      return false;
+    }
+    return true;
+  });
   $(".go-to-game").click(function(e) {
     e.preventDefault();
     return startGameMessage();
@@ -51,16 +61,7 @@ $(function() {
     console.log(Grid.prototype);
     console.log(player1);
     return $("body").keyup(function(e) {
-      switch (e.keyCode) {
-        case 68:
-          return Game.prototype.dice.moveRight();
-        case 83:
-          return Game.prototype.dice.moveDown();
-        case 65:
-          return Game.prototype.dice.moveLeft();
-        case 87:
-          return Game.prototype.dice.moveUp();
-      }
+      return bindPlayerControls(player1.getID(), e);
     });
   });
 });

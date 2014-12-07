@@ -17,8 +17,6 @@ $ ->
     $(".go-to-game").click (e)->
         e.preventDefault()
         startGameMessage()
-    
-
 
     $("#gameOptions .number-players button").click ->
         ELEMENT_GAME_OPTIONS_NUM_PLAYERS.find("."+CLASS_ACTIVE)

@@ -163,7 +163,6 @@ class Condition
         number = $("<div class='col-xs-4'>").text("Face Up Number: " + @number)
         div.append(xPos).append(yPos).append(number)
 
-
         @htmlElement = div
         return div
 

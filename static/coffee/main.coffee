@@ -56,7 +56,7 @@ $ ->
             blockSize = new Size(sizeX,sizeY,UNIT_BLOCK)
 
         Game::boardSize = blockSize
-
+        Game::players = []
         # Draw the Grid for the board
         Grid::createGridStarter(blockSize)
 
@@ -65,17 +65,15 @@ $ ->
         winningConditions.addCondition()
 
         Game::setWinningConditions(winningConditions)
-
         window.player1 = new Player("Pua")
         dice = new Dice()
+
         player1.setDice(dice)
-
-        Game::dice = dice
-
+        Game::addPlayer(player1)
         console.log Game::
         console.log Grid::
         console.log player1
 
-        $("body").keyup (e) ->
-            bindPlayerControls(player1.getID(),e)
+        $("body").on "keyup", (e) ->
+            bindPlayerControls(player1,e)
 

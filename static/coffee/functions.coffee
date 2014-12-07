@@ -69,17 +69,17 @@ startGameMessage = () ->
 addConditionInViewableBox = (condition) ->
       ELEMENT_CONDITIONS_CONTAINER.append(condition)
 
-bindPlayerControls = (playerNumber,e) ->
-      if playerNumber == 1
+bindPlayerControls = (player,e) ->
+      if player.getID() == 1
           switch e.keyCode
-              when 68 then Game::dice.moveRight()
-              when 83 then Game::dice.moveDown()
-              when 65 then Game::dice.moveLeft()
-              when 87 then Game::dice.moveUp()
-      else if playerNumber == 2
+              when 68 then player.getDice().moveRight()
+              when 83 then player.getDice().moveDown()
+              when 65 then player.getDice().moveLeft()
+              when 87 then player.getDice().moveUp()
+      else if player.getID()== 2
           switch e.keyCode
-              when 39 then Game::dice.moveRight()
-              when 40 then Game::dice.moveDown()
-              when 37 then Game::dice.moveLeft()
-              when 38 then Game::dice.moveUp()
+              when 39 then player.getDice().moveRight()
+              when 40 then player.getDice().moveDown()
+              when 37 then player.getDice().moveLeft()
+              when 38 then player.getDice().moveUp()
 

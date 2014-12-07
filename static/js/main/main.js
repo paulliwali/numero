@@ -457,6 +457,8 @@
 
     function Player(name) {
       this.name = name;
+      this.reset = __bind(this.reset, this);
+      this.getDice = __bind(this.getDice, this);
       this.getID = __bind(this.getID, this);
       this.setDice = __bind(this.setDice, this);
       this.getName = __bind(this.getName, this);
@@ -488,6 +490,15 @@
 
     Player.prototype.getID = function() {
       return this.id;
+    };
+
+    Player.prototype.getDice = function() {
+      return this.dice;
+    };
+
+    Player.prototype.reset = function() {
+      this.dice.reset();
+      return this.dice = null;
     };
 
     return Player;
@@ -679,16 +690,15 @@
   })();
 
   Game = (function() {
-    var dice, grid, players, winningConditions;
+    var grid, players, winningConditions;
 
     function Game() {
+      this.addPlayer = __bind(this.addPlayer, this);
       this.getWinningConditions = __bind(this.getWinningConditions, this);
       this.setWinningConditions = __bind(this.setWinningConditions, this);
     }
 
-    dice = null;
-
-    players = null;
+    players = [];
 
     grid = null;
 
@@ -702,18 +712,27 @@
       return Game.prototype.winningConditions;
     };
 
+    Game.prototype.addPlayer = function(player) {
+      return Game.prototype.players.push(player);
+    };
+
     Game.prototype.resetGame = function() {
+      var player, _i, _len, _ref;
       console.log("RESETTING GAME");
-      Game.prototype.dice.reset();
       Game.prototype.grid.reset();
       Game.prototype.winningConditions.reset();
       Game.prototype.boardSize.reset();
+      _ref = Game.prototype.players;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        player = _ref[_i];
+        player.reset();
+        player = null;
+      }
       Game.prototype.isActiveGame = false;
       Game.prototype.boardSize = null;
       Game.prototype.winningConditions = null;
       Game.prototype.grid = null;
-      Game.prototype.players = null;
-      return Game.prototype.dice = null;
+      return Game.prototype.players = null;
     };
 
     return Game;
@@ -826,28 +845,28 @@
     return ELEMENT_CONDITIONS_CONTAINER.append(condition);
   };
 
-  bindPlayerControls = function(playerNumber, e) {
-    if (playerNumber === 1) {
+  bindPlayerControls = function(player, e) {
+    if (player.getID() === 1) {
       switch (e.keyCode) {
         case 68:
-          return Game.prototype.dice.moveRight();
+          return player.getDice().moveRight();
         case 83:
-          return Game.prototype.dice.moveDown();
+          return player.getDice().moveDown();
         case 65:
-          return Game.prototype.dice.moveLeft();
+          return player.getDice().moveLeft();
         case 87:
-          return Game.prototype.dice.moveUp();
+          return player.getDice().moveUp();
       }
-    } else if (playerNumber === 2) {
+    } else if (player.getID() === 2) {
       switch (e.keyCode) {
         case 39:
-          return Game.prototype.dice.moveRight();
+          return player.getDice().moveRight();
         case 40:
-          return Game.prototype.dice.moveDown();
+          return player.getDice().moveDown();
         case 37:
-          return Game.prototype.dice.moveLeft();
+          return player.getDice().moveLeft();
         case 38:
-          return Game.prototype.dice.moveUp();
+          return player.getDice().moveUp();
       }
     }
   };
@@ -902,6 +921,7 @@
         blockSize = new Size(sizeX, sizeY, UNIT_BLOCK);
       }
       Game.prototype.boardSize = blockSize;
+      Game.prototype.players = [];
       Grid.prototype.createGridStarter(blockSize);
       winningConditions = new WinningConditions();
       winningConditions.addCondition();
@@ -909,12 +929,12 @@
       window.player1 = new Player("Pua");
       dice = new Dice();
       player1.setDice(dice);
-      Game.prototype.dice = dice;
+      Game.prototype.addPlayer(player1);
       console.log(Game.prototype);
       console.log(Grid.prototype);
       console.log(player1);
-      return $("body").keyup(function(e) {
-        return bindPlayerControls(player1.getID(), e);
+      return $("body").on("keyup", function(e) {
+        return bindPlayerControls(player1, e);
       });
     });
   });

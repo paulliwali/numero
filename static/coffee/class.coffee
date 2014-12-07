@@ -364,6 +364,13 @@ class Player
     getID: =>
         return @id
 
+    getDice: =>
+        return @dice
+
+    reset: =>
+        @dice.reset()
+        @dice = null
+
 
 class Orientation
     # PROPERTIES
@@ -487,8 +494,7 @@ class Condition
         @htmlElement = null
 
 class Game
-    dice = null
-    players = null
+    players = []
     grid = null
     winningConditions = null
 
@@ -498,17 +504,20 @@ class Game
     getWinningConditions: () =>
         return Game::winningConditions
 
+    addPlayer: (player) =>
+        Game::players.push(player)
+
     resetGame: ->
         console.log "RESETTING GAME"
-        Game::dice.reset()
         Game::grid.reset()
         Game::winningConditions.reset()
         Game::boardSize.reset()
-
+        for player in Game::players
+            player.reset()
+            player = null
 
         Game::isActiveGame = false
         Game::boardSize = null
         Game::winningConditions = null
         Game::grid = null
         Game::players = null
-        Game::dice = null

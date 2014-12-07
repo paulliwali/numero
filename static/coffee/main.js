@@ -4,17 +4,15 @@ $(function() {
 });
 
 $(function() {
-  var blockSize, dice, diceElement, diceSize, game, grid, winningConditions;
+  var blockSize, dice, diceSize, game, grid, winningConditions;
   game = new Game();
   winningConditions = new WinningConditions();
   winningConditions.addCondition(5, 0, 2);
   game.setWinningConditions(winningConditions);
   blockSize = new Size(3, 3, UNIT_BLOCK);
   grid = new Grid(blockSize);
-  grid.createGrid();
   diceSize = new Size("25", "25", UNIT_PIXEL);
   dice = new Dice(diceSize);
-  diceElement = dice.createDice();
   return $("body").keyup(function(e) {
     switch (e.keyCode) {
       case 68:

@@ -22,6 +22,7 @@ Grid = (function() {
     Grid.prototype.size = size;
     Grid.prototype.blockArray = [[]];
     console.log("New Grid created: (" + Grid.prototype.size.height + "," + Grid.prototype.size.width + ")");
+    this.createGrid();
   }
 
   Grid.prototype.createGrid = function() {
@@ -37,7 +38,7 @@ Grid = (function() {
       for (heightBlock = _i = 0, _ref = Grid.prototype.size.height; 0 <= _ref ? _i < _ref : _i > _ref; heightBlock = 0 <= _ref ? ++_i : --_i) {
         row = $("<div class='block-row'>");
         Grid.prototype.blockArray[heightBlock] = [];
-        for (widthBlock = _j = 0, _ref1 = Grid.prototype.size.width; 0 <= _ref1 ? _j <= _ref1 : _j >= _ref1; widthBlock = 0 <= _ref1 ? ++_j : --_j) {
+        for (widthBlock = _j = 0, _ref1 = Grid.prototype.size.width; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; widthBlock = 0 <= _ref1 ? ++_j : --_j) {
           block = new Block(new Size(BLOCK_DEFAULT_WIDTH_PIXEL, BLOCK_DEFAULT_HEIGHT_PIXEL, UNIT_PIXEL));
           blockElement = block.createBlock();
           blockElement.text("[" + heightBlock + "," + widthBlock + "]");
@@ -134,12 +135,14 @@ Dice = (function(_super) {
     this.moveToGrid = __bind(this.moveToGrid, this);
     this.createDice = __bind(this.createDice, this);
     Dice.__super__.constructor.call(this, size);
+    this.gridIndex_X = randomNum(Grid.prototype.getGridWidth(), 0);
+    this.gridIndex_Y = randomNum(Grid.prototype.getGridHeight(), 0);
     this.orientation = new Orientation;
+    this.createDice();
     console.log("New Dice created");
   }
 
   Dice.prototype.createDice = function() {
-    console.log("CREATING DICE");
     this.assignHTMLElement(this.createBlock());
     this.moveToGrid();
     console.log(this.gridIndex_X, this.gridIndex_Y);
@@ -287,7 +290,7 @@ Dice = (function(_super) {
 
   Dice.prototype.moveRight = function() {
     var oldFaceUp, outOfBounds;
-    if (this.gridIndex_X + 1 > Grid.prototype.getGridWidth()) {
+    if (this.gridIndex_X + 1 >= Grid.prototype.getGridWidth()) {
       outOfBounds = true;
     }
     if (outOfBounds) {
@@ -434,9 +437,6 @@ Orientation = (function() {
       }
     }
     this.faceup = randomNum(6, 1);
-    while (this.isGameWon) {
-      this.faceup = randomNum(6, 1);
-    }
     this.bottom = 7 - this.faceup;
     this.left = randomNum(6, 1);
     while (this.left === this.faceup || this.left === this.bottom) {

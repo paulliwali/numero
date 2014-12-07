@@ -26,7 +26,7 @@ class Grid
             []
         ]
         console.log "New Grid created: (#{Grid::size.height},#{Grid::size.width})"
-
+        @createGrid()
     # Creates a Grid of @size.height x @size.width
     # Stores the grid in @blockArray 
     createGrid: () =>
@@ -43,7 +43,7 @@ class Grid
                 row = $("<div class='block-row'>") 
                 # Instantiate a new array for each row
                 Grid::blockArray[heightBlock] = []
-                for widthBlock in [0..Grid::size.width]
+                for widthBlock in [0...Grid::size.width]
                     # Create new block
                     block = new Block(
                         new Size(BLOCK_DEFAULT_WIDTH_PIXEL,BLOCK_DEFAULT_HEIGHT_PIXEL,UNIT_PIXEL)
@@ -103,16 +103,16 @@ class Dice extends Block
     # METHODS
     constructor: (size) ->
         super(size)
+        @gridIndex_X = randomNum(Grid::getGridWidth(),0)
+        @gridIndex_Y = randomNum(Grid::getGridHeight(),0)  
         @orientation = new Orientation
+        @createDice()
         console.log "New Dice created"
-
+        
     createDice: () =>
-        console.log "CREATING DICE"
         @assignHTMLElement(@createBlock())
-
         @moveToGrid()
         console.log @gridIndex_X,@gridIndex_Y
-
         return @htmlElement
 
     moveToGrid: ()=>
@@ -238,7 +238,7 @@ class Dice extends Block
 
     moveRight: () =>
         # Error checking
-        outOfBounds = true if @gridIndex_X + 1 > Grid::getGridWidth()
+        outOfBounds = true if @gridIndex_X + 1 >= Grid::getGridWidth()
         console.log "Dice is moving out of bounds" if outOfBounds
         return if outOfBounds
 
@@ -323,10 +323,8 @@ class Orientation
             console.log "MISSING LEFT" unless @left?
             console.log "MISSING RIGHT" unless @right?
         
-        @faceup = randomNum(6,1)
-        while @isGameWon
-            @faceup = randomNum(6,1)
 
+        @faceup = randomNum(6,1)
         @bottom = 7 - @faceup
 
         @left = randomNum(6,1)
@@ -353,6 +351,7 @@ class WinningConditions
     @conditions = null
     constructor: () ->
         @conditions = []
+
     addCondition: (number,x,y) =>
         condition = new Condition(number,x,y)
         @conditions.push(condition)
@@ -365,7 +364,6 @@ class WinningConditions
         # all conditions met
         showGameWin()
         
-
 class Condition
     @number = null
     @blockPositionY = null

@@ -13,11 +13,10 @@ $ ->
 
     blockSize = new Size(3,3,UNIT_BLOCK)
     
+
     grid = new Grid(blockSize)
-    grid.createGrid()
     diceSize = new Size("25","25",UNIT_PIXEL)
     dice = new Dice(diceSize)
-    diceElement = dice.createDice()
     
     # dice.isGameWon()
     $("body").keyup (e) ->

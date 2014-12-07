@@ -50,7 +50,7 @@ class Grid
                     )
                     # Create the HTML block
                     blockElement = block.createBlock()   
-                    blockElement.text("[#{heightBlock},#{widthBlock}]")
+                    blockElement.text("[#{widthBlock},#{heightBlock}]")
                     # Add the block to the Page
                     row.append(blockElement)
                     # assign the block to the grid array
@@ -374,8 +374,8 @@ class Condition
     constructor: () ->
         @number = randomNum(6,1)
 
-        @blockPositionX = randomNum(Grid::getGridHeight(),0)
-        @blockPositionY = randomNum(Grid::getGridWidth(),0)
+        @blockPositionX = randomNum(Grid::getGridWidth(),0)
+        @blockPositionY = randomNum(Grid::getGridHeight(),0)
         console.log "A condition has been made for #{@number} at [#{@blockPositionX},#{@blockPositionY}] "
         @createHTMLElement()
         addConditionInViewableBox(@htmlElement)

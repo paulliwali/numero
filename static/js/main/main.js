@@ -42,7 +42,7 @@
           for (widthBlock = _j = 0, _ref1 = Grid.prototype.size.width; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; widthBlock = 0 <= _ref1 ? ++_j : --_j) {
             block = new Block(new Size(BLOCK_DEFAULT_WIDTH_PIXEL, BLOCK_DEFAULT_HEIGHT_PIXEL, UNIT_PIXEL));
             blockElement = block.createBlock();
-            blockElement.text("[" + heightBlock + "," + widthBlock + "]");
+            blockElement.text("[" + widthBlock + "," + heightBlock + "]");
             row.append(blockElement);
             Grid.prototype.blockArray[heightBlock][widthBlock] = block;
           }
@@ -511,8 +511,8 @@
       this.createHTMLElement = __bind(this.createHTMLElement, this);
       this.checkIfSatisfied = __bind(this.checkIfSatisfied, this);
       this.number = randomNum(6, 1);
-      this.blockPositionX = randomNum(Grid.prototype.getGridHeight(), 0);
-      this.blockPositionY = randomNum(Grid.prototype.getGridWidth(), 0);
+      this.blockPositionX = randomNum(Grid.prototype.getGridWidth(), 0);
+      this.blockPositionY = randomNum(Grid.prototype.getGridHeight(), 0);
       console.log("A condition has been made for " + this.number + " at [" + this.blockPositionX + "," + this.blockPositionY + "] ");
       this.createHTMLElement();
       addConditionInViewableBox(this.htmlElement);

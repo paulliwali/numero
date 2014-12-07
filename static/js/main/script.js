@@ -5,7 +5,7 @@ SC.initialize({
   client_id: 'e70a2323a96fbe32617ccb56d8df6d85',
 
   // change this uri to actual hosted callback.html
-  redirect_uri: 'http://run2walkaway.github.io/callback.html',
+  redirect_uri: 'http://numero.phantastik.koding.io/callback.html',
 });
 
 // initiate auth popup

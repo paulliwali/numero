@@ -109,11 +109,13 @@ Grid = (function() {
   };
 
   Grid.prototype.setLocked = function(y, x) {
-    return Grid.prototype.blockArray[x][y].locked = true;
+    Grid.prototype.blockArray[x][y].locked = true;
+    return console.log("LOCKING " + y + " " + x);
   };
 
   Grid.prototype.unsetLocked = function(y, x) {
-    return Grid.prototype.blockArray[x][y] = false;
+    Grid.prototype.blockArray[x][y].locked = false;
+    return console.log("UNLOCKING " + x + " " + y);
   };
 
   return Grid;
@@ -131,7 +133,7 @@ Block = (function() {
     this.size = size;
     this.reset = __bind(this.reset, this);
     this.createBlock = __bind(this.createBlock, this);
-    this.getBlockElement = __bind(this.getBlockElement, this);
+    this.getHTMLElement = __bind(this.getHTMLElement, this);
     this.assignHTMLElement = __bind(this.assignHTMLElement, this);
   }
 
@@ -139,7 +141,7 @@ Block = (function() {
     return this.htmlElement = block;
   };
 
-  Block.prototype.getBlockElement = function() {
+  Block.prototype.getHTMLElement = function() {
     return this.htmlElement;
   };
 
@@ -191,6 +193,7 @@ Dice = (function(_super) {
     this.getHTMLElement = __bind(this.getHTMLElement, this);
     this.assignHTMLElement = __bind(this.assignHTMLElement, this);
     this.createBlock = __bind(this.createBlock, this);
+    this.getPlayer = __bind(this.getPlayer, this);
     this.isGameWonSetup = __bind(this.isGameWonSetup, this);
     this.isGameWon = __bind(this.isGameWon, this);
     this.reset = __bind(this.reset, this);
@@ -224,12 +227,14 @@ Dice = (function(_super) {
     var faceUp;
     faceUp = this.getFaceUp();
     this.htmlElement.text(faceUp);
-    Grid.prototype.getBlockElement(this.gridIndex_X, this.gridIndex_Y).getBlockElement().append(this.htmlElement);
+    Grid.prototype.getBlockElement(this.gridIndex_X, this.gridIndex_Y).getHTMLElement().append(this.htmlElement);
     return this.isGameWon();
   };
 
   Dice.prototype.reset = function() {
-    this.htmlElement.remove();
+    if (this.htmlElement !== null) {
+      this.htmlElement.remove();
+    }
     this.bottomPosition = null;
     this.gridIndex_X = null;
     this.gridIndex_Y = null;
@@ -242,7 +247,9 @@ Dice = (function(_super) {
     faceUp = this.getFaceUp();
     console.log(faceUp);
     winningConditions = Game.prototype.getWinningConditions();
-    return winningConditions.checkConditions(faceUp, this.gridIndex_X, this.gridIndex_Y);
+    if (winningConditions.checkConditions(faceUp, this.gridIndex_X, this.gridIndex_Y)) {
+      return this.getPlayer().addPoint();
+    }
   };
 
   Dice.prototype.isGameWonSetup = function() {
@@ -251,6 +258,17 @@ Dice = (function(_super) {
     console.log("Checking if already won. FACEUP: " + faceUp);
     winningConditions = Game.prototype.getWinningConditions();
     return winningConditions.checkConditionsSetup(faceUp, this.gridIndex_X, this.gridIndex_Y);
+  };
+
+  Dice.prototype.getPlayer = function() {
+    var player, _i, _len, _ref;
+    _ref = Game.prototype.players;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      player = _ref[_i];
+      if (player.getDice() === this) {
+        return player;
+      }
+    }
   };
 
   Dice.prototype.createBlock = function() {
@@ -492,7 +510,7 @@ Position = (function() {
 Player = (function() {
   var playerNumber;
 
-  Player.score = 0;
+  Player.score = null;
 
   Player.name = null;
 
@@ -501,6 +519,8 @@ Player = (function() {
   playerNumber = 0;
 
   Player.id = 0;
+
+  Player.htmlElement = null;
 
   function Player(name) {
     this.name = name;
@@ -511,8 +531,11 @@ Player = (function() {
     this.getID = __bind(this.getID, this);
     this.setDice = __bind(this.setDice, this);
     this.getName = __bind(this.getName, this);
+    this.getHTMLElement = __bind(this.getHTMLElement, this);
+    this.assignHTMLElement = __bind(this.assignHTMLElement, this);
     this.addPoint = __bind(this.addPoint, this);
     this.getScore = __bind(this.getScore, this);
+    this.score = 0;
     if (this.name === null || this.name === "") {
       console.log("MISSING PLAYER NAME");
       return;
@@ -526,7 +549,16 @@ Player = (function() {
   };
 
   Player.prototype.addPoint = function() {
-    return this.score = this.score + 1;
+    this.score++;
+    return this.htmlElement.find("." + CLASS_PLAYER_SCORE).text("" + this.score);
+  };
+
+  Player.prototype.assignHTMLElement = function(element) {
+    return this.htmlElement = element;
+  };
+
+  Player.prototype.getHTMLElement = function() {
+    return this.htmlElement;
   };
 
   Player.prototype.getName = function() {
@@ -678,7 +710,7 @@ WinningConditions = (function() {
   };
 
   WinningConditions.prototype.checkConditions = function(number, x, y) {
-    var condition, player, _i, _j, _len, _len1, _ref, _ref1, _results;
+    var condition, player, _i, _j, _len, _len1, _ref, _ref1;
     _ref = this.conditions;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       condition = _ref[_i];
@@ -688,12 +720,11 @@ WinningConditions = (function() {
     }
     showGameWin();
     _ref1 = Game.prototype.players;
-    _results = [];
     for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
       player = _ref1[_j];
-      _results.push(player.unbindControls());
+      player.unbindControls();
     }
-    return _results;
+    return true;
   };
 
   WinningConditions.prototype.checkConditionsSetup = function(number, x, y) {
@@ -743,6 +774,7 @@ Condition = (function() {
     this.blockPositionX = randomNum(Grid.prototype.getGridWidth(), 0);
     this.blockPositionY = randomNum(Grid.prototype.getGridHeight(), 0);
     console.log("A condition has been made for " + this.number + " at [" + this.blockPositionX + "," + this.blockPositionY + "] ");
+    Grid.prototype.getBlockElement(this.blockPositionX, this.blockPositionY).getHTMLElement().addClass(CLASS_BLOCK_WINNING_CONDITION);
     this.createHTMLElement();
     addConditionInViewableBox(this.htmlElement);
   }
@@ -789,19 +821,49 @@ Condition = (function() {
 })();
 
 Game = (function() {
-  var grid, players, winningConditions;
-
   function Game() {
+    this.addNewPlayers = __bind(this.addNewPlayers, this);
     this.addPlayer = __bind(this.addPlayer, this);
     this.getWinningConditions = __bind(this.getWinningConditions, this);
     this.setWinningConditions = __bind(this.setWinningConditions, this);
+    this.newGame = __bind(this.newGame, this);
   }
 
-  players = [];
+  Game.prototype.players = [];
 
-  grid = null;
+  Game.prototype.grid = null;
 
-  winningConditions = null;
+  Game.prototype.winningConditions = null;
+
+  Game.prototype.isActiveGame = false;
+
+  Game.prototype.numberOfPlayers = 0;
+
+  Game.prototype.newGame = function() {
+    var blockSize, sizeX, sizeY, winningConditions;
+    if (Game.prototype.isActiveGame === true) {
+      $("body").unbind("keyup");
+      Game.prototype.resetGame();
+    }
+    Game.prototype.isActiveGame = true;
+    if (Game.prototype.boardSize === BOARD_SIZE_MEDIUM) {
+      blockSize = new Size(4, 4, UNIT_BLOCK);
+    } else if (Game.prototype.boardSize === BOARD_SIZE_SMALL) {
+      blockSize = new Size(3, 3, UNIT_BLOCK);
+    } else if (Game.prototype.boardSize === BOARD_SIZE_LARGE) {
+      blockSize = new Size(5, 5, UNIT_BLOCK);
+    } else {
+      sizeX = randomNum(6, 3);
+      sizeY = randomNum(6, 3);
+      blockSize = new Size(sizeX, sizeY, UNIT_BLOCK);
+    }
+    Game.prototype.blockSize = blockSize;
+    Game.prototype.players = [];
+    Grid.prototype.createGridStarter(Game.prototype.blockSize);
+    winningConditions = new WinningConditions();
+    winningConditions.addCondition();
+    return Game.prototype.setWinningConditions(winningConditions);
+  };
 
   Game.prototype.setWinningConditions = function(win) {
     return Game.prototype.winningConditions = win;
@@ -815,23 +877,48 @@ Game = (function() {
     return Game.prototype.players.push(player);
   };
 
-  Game.prototype.resetGame = function() {
-    var player, _i, _len, _ref;
-    console.log("RESETTING GAME");
-    Game.prototype.grid.reset();
-    Game.prototype.winningConditions.reset();
-    Game.prototype.boardSize.reset();
-    _ref = Game.prototype.players;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      player = _ref[_i];
-      player.reset();
-      player = null;
+  Game.prototype.addNewPlayers = function(name1, name2) {
+    var dice, dice2;
+    if (name2 == null) {
+      name2 = "";
     }
+    window.player1 = new Player(name1);
+    dice = new Dice();
+    player1.setDice(dice);
+    Game.prototype.addPlayer(player1);
+    player1.assignHTMLElement($(".player-one"));
+    if (Game.prototype.numberOfPlayers === 2) {
+      window.player2 = new Player(name2);
+      dice2 = new Dice();
+      player2.setDice(dice2);
+      Game.prototype.addPlayer(player2);
+      player2.assignHTMLElement($(".player-two"));
+      $(".player-two").show();
+    }
+    return $("body").on("keyup", function(e) {
+      player1.bindControls(e);
+      if (Game.prototype.numberOfPlayers === 2) {
+        return player2.bindControls(e);
+      }
+    });
+  };
+
+  Game.prototype.resetGame = function() {
+    console.log("RESETTING GAME");
+    if (Game.prototype.grid !== null) {
+      Game.prototype.grid.reset();
+    }
+    if (Game.prototype.winningConditions !== null) {
+      Game.prototype.winningConditions.reset();
+    }
+    if (Game.prototype.blockSize !== null) {
+      Game.prototype.blockSize.reset();
+    }
+    Game.prototype.boardSize = null;
     Game.prototype.isActiveGame = false;
     Game.prototype.boardSize = null;
     Game.prototype.winningConditions = null;
-    Game.prototype.grid = null;
-    return Game.prototype.players = null;
+    return Game.prototype.grid = null;
   };
 
   return Game;

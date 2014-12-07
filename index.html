@@ -8,7 +8,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
 		<!-- Site Properities -->
-		<title>Numero Game</title>
+		<title>Numero! Game</title>
 
 		<!-- LESS -->
 		<link rel="stylesheet" type="text/less" href="static/css/main/style.less"/>
@@ -21,6 +21,8 @@
 		<link rel="stylesheet" type="text/css" href="static/css/vendor/normalize.css"/>
             <!-- Sweet Alert -->
             <link rel="stylesheet" type="text/css" href="static/css/vendor/sweet-alert.css"/>
+            <!-- Odometer -->
+            <link rel="stylesheet" type="text/css" href="static/css/vendor/odometer.css"/>
 
 		<!-- Don't need, have custom local ref
 		<! Latest compiled and minified CSS
@@ -41,7 +43,10 @@
 					<div class="col-sm-7 col-lg-12">
 						<div class="intro-message">
 							<h1>Numero</h1>
-							<h3>By: #BitsPlease</h3>
+							<h4>Brought to you by: <a href="https://github.com/koding/
+								global.hackathon/blob/master/Teams/BitsPlease/ABOUT.md">
+								#BitsPlease
+								</a></h4>
 
 							<p class="lead">Roll your way to victory</p>
 							<p class="bs-component">
@@ -67,11 +72,13 @@
                          <div class="winning-conditions">
 
                          </div>
-                         <div class="player-score player-one col-xs-6">
-
+                         <div class="scores" style="display:none;">
+                           <div class="player-score player-one col-xs-6">
+                            <h3>Player 1 Score: <span class="score odometer">0</span></h3>
+                           </div>
+                           <div class="player-score player-two col-xs-6" style="display:none;">
+                            <h3>Player 2 Score: <span class="score odometer">0</span></h3>
                          </div>
-                         <div class="player-score player-two col-xs-6">
-                           
                          </div>
 		            <div class="board-container col-xs-12">
 
@@ -93,7 +100,7 @@
                     <label> Number of Players </label>
                     <br>
                     <div class="btn-group number-players" role="group" aria-label="...">
-                      <button type="button" class="btn btn-primary" value="1">1</button>
+                      <button type="button" class="btn btn-primary active" value="1">1</button>
                       <button type="button" class="btn btn-primary" value="2">2</button>
                     </div>
                     <br><br>
@@ -101,7 +108,7 @@
                     <br>
                     <div class="btn-group board-size" role="group" aria-label="...">
                       <button type="button" class="btn btn-primary" value="small">Small</button>
-                      <button type="button" class="btn btn-primary" value="medium">Medium</button>
+                      <button type="button" class="btn btn-primary active" value="medium">Medium</button>
                       <button type="button" class="btn btn-primary" value="large">Big</button>
                       <button type="button" class="btn btn-primary" value="random">Surprise Me</button>
                     </div>
@@ -132,6 +139,22 @@
 				</div>
 
 			</div>
+
+			<div class="row">
+				<div class="col-sm-12">
+					<h2 class="section-heading"> The <b>Goal</b> of Numero!</h2>
+					<p class="lead">Numero! is designed to provoke the player's ability in
+						spatial judegement and teach the concept of pattern recognition and
+						strategic planning. To learn more about spatial judegement and the
+						nine modalities of inteligence, please refer to <a href="http:
+						//en.wikipedia.org/wiki/Theory_of_multiple_intelligences">Howard
+						Garnder's</a> book <a href="http://www.amazon.ca/Frames-Mind-
+						Theory-Multiple-Intelligences/dp/0465024335">Frames of Mind</a>.
+						<br>
+
+					</p>
+				</div>
+			</div>
 		</div>
 	</div>
 
@@ -141,23 +164,42 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-4 col-sm-offset-2">
-					<h3>Source Code</h3>
-					<p>Want to contribute?</p>
-					<ul class="list-inline banner-social-buttons">
-						<li>
-							<a href="https://github.com/koding/global.hackathon" class="btn btn-default btn-lg"><i class="icon-github-alt icon-2x"></i> Koding</a>
-						</li>
-					</ul>
+					<div class="banner-message">
+						<h3>Source Code</h3>
+						<p>Want to contribute?</p>
+						<ul class="list-inline banner-social-buttons">
+							<li>
+								<a href="https://github.com/koding/global.hackathon"
+								class="btn btn-default btn-success"><i class="icon-github-alt"></i> Koding</a>
+							</li>
+						</ul>
+					</div>
 				</div>
-				<div class="col-sm-4">
-
+				<div class="col-sm-4 col-sm-offset-2">
+					<div class="banner-message">
+						<h3>Who Are We</h3>
+						<p>#hashtag and say hi!</p>
+						<div class="btn-group open">
+							<a class="btn btn-primary" href="#"><i class="icon-user"></i> Team</a>
+							<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
+								<span class="icon-caret-down"></span></a>
+								<ul class="dropdown-menu">
+									<li><a href="#"><i class="icon-fixed-width icon-twitter"></i> BP</a></li>
+									<li><a href="#"><i class="icon-fixed-width icon-twitter"></i> MP</a></li>
+									<li><a href="#"><i class="icon-fixed-width icon-twitter"></i> AL</a></li>
+									<li><a href="#"><i class="icon-fixed-width icon-twitter"></i> BW</a></li>
+									<li><a href="#"><i class="icon-fixed-width icon-twitter"></i> PD</a></li>
+								</ul>
+							</div>
+						</div>
 				</div>
 			</div>
 		</div>
 	</div>
+
 	<footer>
 		<div class="container">
-			<p class="copyright text-muted small">Copyright &copy; Your Company 2014. All Rights Reserved</p>
+			<p class="copyright text-muted small">MIT Copyright Licence</p>
 		</div>
 		<!-- JQuery -->
 		<script src="static/js/vendor/jquery-2.1.1.min.js"></script>
@@ -171,6 +213,7 @@
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="static/js/vendor/sweet-alert.min.js"></script>
+            <script src="static/js/vendor/odometer.min.js" type="text/javascript"></script>
 		<!-- Own JS File-->
 		<script src="static/js/main/main.js"></script>
 	</footer>

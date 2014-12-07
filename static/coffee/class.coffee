@@ -94,9 +94,11 @@ class Grid
 
     setLocked: (y,x) =>
         Grid::blockArray[x][y].locked = true
+        console.log "LOCKING #{y} #{x}"
 
     unsetLocked: (y,x) =>
-        Grid::blockArray[x][y] = false
+        Grid::blockArray[x][y].locked = false
+        console.log "UNLOCKING #{x} #{y}"
 
 class Block
     # PROPERTIES
@@ -108,7 +110,7 @@ class Block
         # console.log "New Block Created: (#{@size.height},#{@size.width})"
     assignHTMLElement: (block) =>
         @htmlElement = block
-    getBlockElement: =>
+    getHTMLElement: =>
         return @htmlElement
     createBlock: () =>
         if @size.unit is UNIT_PIXEL
@@ -166,11 +168,12 @@ class Dice extends Block
 
         Grid::getBlockElement(
             @gridIndex_X, @gridIndex_Y
-            ).getBlockElement().append(@htmlElement)
+            ).getHTMLElement().append(@htmlElement)
         @isGameWon()
 
     reset: =>
-        @htmlElement.remove()
+        if @htmlElement isnt null
+            @htmlElement.remove()
         @bottomPosition = null
         @gridIndex_X = null
         @gridIndex_Y = null
@@ -181,14 +184,19 @@ class Dice extends Block
         faceUp = @getFaceUp()
         console.log faceUp
         winningConditions = Game::getWinningConditions()
-        winningConditions.checkConditions(faceUp,@gridIndex_X,@gridIndex_Y)
-
+        if winningConditions.checkConditions(faceUp,@gridIndex_X,@gridIndex_Y)
+            @getPlayer().addPoint()
 
     isGameWonSetup: =>
         faceUp = @getFaceUp()
         console.log "Checking if already won. FACEUP: #{faceUp}"
         winningConditions = Game::getWinningConditions()
         winningConditions.checkConditionsSetup(faceUp,@gridIndex_X,@gridIndex_Y)
+
+    getPlayer: =>
+        for player in Game::players
+            if player.getDice() == this
+                return player
 
     createBlock: =>
         super()
@@ -255,9 +263,6 @@ class Dice extends Block
             console.log "DOWN: #{@orientation.down}"
             console.log @gridIndex_X,@gridIndex_Y
             @moveToGrid()
-
- 
-            
 
     moveDown: () => 
         # Error checking
@@ -416,14 +421,16 @@ class Position
         console.log "New Position created: (#{@x},#{@y})"
 
 class Player
-    @score = 0
+    @score = null
     @name = null
     @dice = null
     playerNumber = 0
     @id = 0
+    @htmlElement = null
     # PROPERTIES
     # METHODS
     constructor: (@name) ->
+        @score = 0
         if @name is null or @name is ""
             console.log "MISSING PLAYER NAME"
             return
@@ -434,7 +441,14 @@ class Player
         return @score
 
     addPoint: =>
-        @score = @score + 1
+        @score++
+        @htmlElement.find("."+CLASS_PLAYER_SCORE).text("#{@score}")
+
+    assignHTMLElement: (element)=>
+        @htmlElement = element
+
+    getHTMLElement: =>
+        return @htmlElement
 
     getName: =>
         return @name
@@ -537,6 +551,7 @@ class WinningConditions
         showGameWin()
         for player in Game::players
             player.unbindControls()
+        return true
 
     checkConditionsSetup: (number,x,y) =>
         for condition in @conditions
@@ -561,9 +576,9 @@ class Condition
         @blockPositionX = randomNum(Grid::getGridWidth(),0)
         @blockPositionY = randomNum(Grid::getGridHeight(),0)
         console.log "A condition has been made for #{@number} at [#{@blockPositionX},#{@blockPositionY}] "
+        Grid::getBlockElement(@blockPositionX,@blockPositionY).getHTMLElement().addClass(CLASS_BLOCK_WINNING_CONDITION)
         @createHTMLElement()
         addConditionInViewableBox(@htmlElement)
-
 
     checkIfSatisfied: (number,x,y) =>
         if number == @number and @blockPositionX == x  and @blockPositionY == y
@@ -598,9 +613,36 @@ class Condition
         @htmlElement = null
 
 class Game
-    players = []
-    grid = null
-    winningConditions = null
+    Game::players = []
+    Game::grid = null
+    Game::winningConditions = null
+    Game::isActiveGame = false
+    Game::numberOfPlayers = 0
+    newGame: =>
+        if Game::isActiveGame is true
+            $("body").unbind("keyup")
+            Game::resetGame()
+        Game::isActiveGame = true
+
+        if Game::boardSize is BOARD_SIZE_MEDIUM
+            blockSize = new Size(4,4,UNIT_BLOCK)
+        else if Game::boardSize is BOARD_SIZE_SMALL
+            blockSize = new Size(3,3,UNIT_BLOCK)
+        else if Game::boardSize is BOARD_SIZE_LARGE
+            blockSize = new Size(5,5,UNIT_BLOCK)
+        else
+            sizeX = randomNum(6,3)
+            sizeY = randomNum(6,3)
+            blockSize = new Size(sizeX,sizeY,UNIT_BLOCK)
+        Game::blockSize = blockSize
+        Game::players = []
+        Grid::createGridStarter(Game::blockSize)
+
+        # Set the victory conditions
+        winningConditions = new WinningConditions()
+        winningConditions.addCondition()
+
+        Game::setWinningConditions(winningConditions)
 
     setWinningConditions: (win) =>
         Game::winningConditions = win
@@ -611,17 +653,44 @@ class Game
     addPlayer: (player) =>
         Game::players.push(player)
 
+    addNewPlayers: (name1,name2 = "") =>
+        window.player1 = new Player(name1)
+        dice = new Dice()
+        player1.setDice(dice)
+        Game::addPlayer(player1)
+        player1.assignHTMLElement($(".player-one"))
+
+
+        if Game::numberOfPlayers == 2
+            window.player2 = new Player(name2)
+            dice2 = new Dice()
+            player2.setDice(dice2)
+            Game::addPlayer(player2)
+            player2.assignHTMLElement($(".player-two"))
+            $(".player-two").show()
+
+        $("body").on "keyup", (e) ->
+            player1.bindControls(e)
+            if Game::numberOfPlayers == 2
+                player2.bindControls(e)
+
+
     resetGame: ->
         console.log "RESETTING GAME"
-        Game::grid.reset()
-        Game::winningConditions.reset()
-        Game::boardSize.reset()
-        for player in Game::players
-            player.reset()
-            player = null
+        if Game::grid isnt null
+            Game::grid.reset()
+        if Game::winningConditions isnt null
+            Game::winningConditions.reset()
+        if Game::blockSize isnt null
+            Game::blockSize.reset()
+        # if Game::players isnt null
+        #     for player in Game::players
+        #         player.reset()
+        #         player = null
 
+        Game::boardSize = null
         Game::isActiveGame = false
         Game::boardSize = null
         Game::winningConditions = null
         Game::grid = null
-        Game::players = null
+        # Game::players = null

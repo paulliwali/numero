@@ -12,6 +12,7 @@ $ ->
       true
 
 
+
     $(".go-to-game").click (e)->
         e.preventDefault()
         startGameMessage()
@@ -26,56 +27,19 @@ $ ->
         $(this).addClass(CLASS_ACTIVE)
 
     $(".start-game").click ->
-        boardSize = $(".board-size .active").val()
-        numberPlayers = $(".number-players .active").val()
+        boardSize = if $(".board-size .active").val() is "" then "small" else $(".board-size .active").val()
+        numberPlayers = if $(".number-players .active").val() is "" then "1" else $(".number-players .active").val()
+
+
         $("#gameOptions").modal("hide")
-
-        # Reset the game if it's an active game
-        if Game::isActiveGame is true
-            $("body").unbind("keyup")
-            Game::resetGame()
-
-        # TODO: Move to Grid class
-        # Create the new Game board
-        Game::isActiveGame = true
+        
         Game::boardSize = boardSize
-        if boardSize is BOARD_SIZE_MEDIUM
-            blockSize = new Size(4,4,UNIT_BLOCK)
-        else if boardSize is BOARD_SIZE_SMALL
-            blockSize = new Size(3,3,UNIT_BLOCK)
-        else if boardSize is BOARD_SIZE_LARGE
-            blockSize = new Size(5,5,UNIT_BLOCK)
-        else
-            sizeX = randomNum(6,3)
-            sizeY = randomNum(6,3)
-            blockSize = new Size(sizeX,sizeY,UNIT_BLOCK)
+        Game::numberOfPlayers = parseInt(numberPlayers)
 
-        Game::boardSize = blockSize
-        Game::players = []
-        # Draw the Grid for the board
-        Grid::createGridStarter(blockSize)
+        Game::newGame()
 
-        # Set the victory conditions
-        winningConditions = new WinningConditions()
-        winningConditions.addCondition()
-
-        Game::setWinningConditions(winningConditions)
-        window.player1 = new Player("Pua")
-        window.player2 = new Player("Brian")
-
-        dice = new Dice()
-        dice2 = new Dice()
-        player1.setDice(dice)
-        player2.setDice(dice2)
-        Game::addPlayer(player1)
-        Game::addPlayer(player2)
-
+        Game::addNewPlayers("Pua","Brian")
         console.log Game::
         console.log Grid::
-        console.log player1
-
-        $("body").on "keyup", (e) ->
-            player1.bindControls(e)
-            player2.bindControls(e)
-
+        $(".scores").show()
 

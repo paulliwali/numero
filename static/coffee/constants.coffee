@@ -25,13 +25,13 @@ BLOCK_DEFAULT_HEIGHT_PIXEL = "100"
 # CLASSES
 # ==========
 CLASS_ACTIVE = "active"
+CLASS_BLOCK_WINNING_CONDITION = "winning-condition-block"
 CLASS_GRID_BORDER = "grid-border"
 CLASS_GRID_BORDER_TOP = "grid-border grid-border-top"
 CLASS_GRID_BORDER_BOTTOM= "grid-border grid-border-bottom"
 CLASS_GRID_BORDER_LEFT= "grid-border grid-border-left"
 CLASS_GRID_BORDER_RIGHT= "grid-border grid-border-right"
-
-
+CLASS_PLAYER_SCORE	= "score";
 
 
 # VALUES

@@ -759,19 +759,49 @@
   })();
 
   Game = (function() {
-    var grid, players, winningConditions;
-
     function Game() {
+      this.addNewPlayers = __bind(this.addNewPlayers, this);
       this.addPlayer = __bind(this.addPlayer, this);
       this.getWinningConditions = __bind(this.getWinningConditions, this);
       this.setWinningConditions = __bind(this.setWinningConditions, this);
+      this.newGame = __bind(this.newGame, this);
     }
 
-    players = [];
+    Game.prototype.players = [];
 
-    grid = null;
+    Game.prototype.grid = null;
 
-    winningConditions = null;
+    Game.prototype.winningConditions = null;
+
+    Game.prototype.isActiveGame = false;
+
+    Game.prototype.numberOfPlayers = 0;
+
+    Game.prototype.newGame = function() {
+      var blockSize, sizeX, sizeY, winningConditions;
+      if (Game.prototype.isActiveGame === true) {
+        $("body").unbind("keyup");
+        Game.prototype.resetGame();
+      }
+      Game.prototype.isActiveGame = true;
+      if (Game.prototype.boardSize === BOARD_SIZE_MEDIUM) {
+        blockSize = new Size(4, 4, UNIT_BLOCK);
+      } else if (Game.prototype.boardSize === BOARD_SIZE_SMALL) {
+        blockSize = new Size(3, 3, UNIT_BLOCK);
+      } else if (Game.prototype.boardSize === BOARD_SIZE_LARGE) {
+        blockSize = new Size(5, 5, UNIT_BLOCK);
+      } else {
+        sizeX = randomNum(6, 3);
+        sizeY = randomNum(6, 3);
+        blockSize = new Size(sizeX, sizeY, UNIT_BLOCK);
+      }
+      Game.prototype.blockSize = blockSize;
+      Game.prototype.players = [];
+      Grid.prototype.createGridStarter(Game.prototype.blockSize);
+      winningConditions = new WinningConditions();
+      winningConditions.addCondition();
+      return Game.prototype.setWinningConditions(winningConditions);
+    };
 
     Game.prototype.setWinningConditions = function(win) {
       return Game.prototype.winningConditions = win;
@@ -785,23 +815,45 @@
       return Game.prototype.players.push(player);
     };
 
-    Game.prototype.resetGame = function() {
-      var player, _i, _len, _ref;
-      console.log("RESETTING GAME");
-      Game.prototype.grid.reset();
-      Game.prototype.winningConditions.reset();
-      Game.prototype.boardSize.reset();
-      _ref = Game.prototype.players;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        player = _ref[_i];
-        player.reset();
-        player = null;
+    Game.prototype.addNewPlayers = function(name1, name2) {
+      var dice, dice2;
+      if (name2 == null) {
+        name2 = "";
       }
+      window.player1 = new Player(name1);
+      dice = new Dice();
+      player1.setDice(dice);
+      Game.prototype.addPlayer(player1);
+      if (Game.prototype.numberOfPlayers === 2) {
+        window.player2 = new Player(name2);
+        dice2 = new Dice();
+        player2.setDice(dice2);
+        Game.prototype.addPlayer(player2);
+      }
+      return $("body").on("keyup", function(e) {
+        player1.bindControls(e);
+        if (Game.prototype.numberOfPlayers === 2) {
+          return player2.bindControls(e);
+        }
+      });
+    };
+
+    Game.prototype.resetGame = function() {
+      console.log("RESETTING GAME");
+      if (Game.prototype.grid !== null) {
+        Game.prototype.grid.reset();
+      }
+      if (Game.prototype.winningConditions !== null) {
+        Game.prototype.winningConditions.reset();
+      }
+      if (Game.prototype.blockSize !== null) {
+        Game.prototype.blockSize.reset();
+      }
+      Game.prototype.boardSize = null;
       Game.prototype.isActiveGame = false;
       Game.prototype.boardSize = null;
       Game.prototype.winningConditions = null;
-      Game.prototype.grid = null;
-      return Game.prototype.players = null;
+      return Game.prototype.grid = null;
     };
 
     return Game;
@@ -939,48 +991,16 @@
       return $(this).addClass(CLASS_ACTIVE);
     });
     return $(".start-game").click(function() {
-      var blockSize, boardSize, dice, dice2, numberPlayers, sizeX, sizeY, winningConditions;
-      boardSize = $(".board-size .active").val();
-      numberPlayers = $(".number-players .active").val();
+      var boardSize, numberPlayers;
+      boardSize = $(".board-size .active").val() === "" ? "small" : $(".board-size .active").val();
+      numberPlayers = $(".number-players .active").val() === "" ? "1" : $(".number-players .active").val();
       $("#gameOptions").modal("hide");
-      if (Game.prototype.isActiveGame === true) {
-        $("body").unbind("keyup");
-        Game.prototype.resetGame();
-      }
-      Game.prototype.isActiveGame = true;
       Game.prototype.boardSize = boardSize;
-      if (boardSize === BOARD_SIZE_MEDIUM) {
-        blockSize = new Size(4, 4, UNIT_BLOCK);
-      } else if (boardSize === BOARD_SIZE_SMALL) {
-        blockSize = new Size(3, 3, UNIT_BLOCK);
-      } else if (boardSize === BOARD_SIZE_LARGE) {
-        blockSize = new Size(5, 5, UNIT_BLOCK);
-      } else {
-        sizeX = randomNum(6, 3);
-        sizeY = randomNum(6, 3);
-        blockSize = new Size(sizeX, sizeY, UNIT_BLOCK);
-      }
-      Game.prototype.boardSize = blockSize;
-      Game.prototype.players = [];
-      Grid.prototype.createGridStarter(blockSize);
-      winningConditions = new WinningConditions();
-      winningConditions.addCondition();
-      Game.prototype.setWinningConditions(winningConditions);
-      window.player1 = new Player("Pua");
-      window.player2 = new Player("Brian");
-      dice = new Dice();
-      dice2 = new Dice();
-      player1.setDice(dice);
-      player2.setDice(dice2);
-      Game.prototype.addPlayer(player1);
-      Game.prototype.addPlayer(player2);
+      Game.prototype.numberOfPlayers = parseInt(numberPlayers);
+      Game.prototype.newGame();
+      Game.prototype.addNewPlayers("Pua", "Brian");
       console.log(Game.prototype);
-      console.log(Grid.prototype);
-      console.log(player1);
-      return $("body").on("keyup", function(e) {
-        player1.bindControls(e);
-        return player2.bindControls(e);
-      });
+      return console.log(Grid.prototype);
     });
   });
 

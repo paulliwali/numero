@@ -235,20 +235,43 @@ class Player
     bindControls: (e)=>
         if @id == 1
             switch e.keyCode
-                when 68 then @dice.moveRight()
-                when 83 then @dice.moveDown()
-                when 65 then @dice.moveLeft()
-                when 87 then @dice.moveUp()
+                when 68
+                    @dice.setAnimationLock() 
+                    @dice.moveRight()
+                    @dice.setAnimationUnlock()
+                when 83
+                    @dice.setAnimationLock() 
+                    @dice.moveDown()
+                    @dice.setAnimationUnlock()
+                when 65
+                    @dice.setAnimationLock() 
+                    @dice.moveLeft()
+                    @dice.setAnimationUnlock()
+                when 87
+                    @dice.setAnimationLock() 
+                    @dice.moveUp()
+                    @dice.setAnimationUnlock()
         else if @id == 2
             switch e.keyCode
-                when 39 then @dice.moveRight()
-                when 40 then @dice.moveDown()
-                when 37 then @dice.moveLeft()
-                when 38 then @dice.moveUp()
+                when 39
+                    @dice.setAnimationLock() 
+                    @dice.moveRight()
+                    @dice.setAnimationUnlock()
+                when 40
+                    @dice.setAnimationLock() 
+                    @dice.moveDown()
+                    @dice.setAnimationUnlock()
+                when 37
+                    @dice.setAnimationLock() 
+                    @dice.moveLeft()
+                    @dice.setAnimationUnlock()
+                when 38
+                    @dice.setAnimationLock() 
+                    @dice.moveUp()
+                    @dice.setAnimationUnlock()
     unbindControls: =>
         $("body").unbind("keyup")
 # ==================== END PLAYER =============================
-
 
 # =================== START GRID ===============
 class Grid 
@@ -341,6 +364,11 @@ class Grid
     unsetLocked: (y,x) =>
         Grid::blockArray[x][y].locked = false
         console.log "UNLOCKING #{x} #{y}"
+
+    isObstacle: =>
+        return Grid::blockArray[x][y].isObstacle
+
+
 # ====================== END GRID ===========================
 
 # ====================== START BLOCK =========================
@@ -349,6 +377,7 @@ class Block
     @size = null
     @htmlElement = null
     @locked = null
+    @isObstacle = null
     # METHODS
     constructor: (@size) ->
         # console.log "New Block Created: (#{@size.height},#{@size.width})"
@@ -363,6 +392,7 @@ class Block
             block.height( @size.getWidthWithUnit() )
             @assignHTMLElement(block)
             @locked = false
+            @isObstacle = false
             return block
     reset: =>
         @size.reset()
@@ -407,10 +437,11 @@ class Dice extends Block
     @gridIndex_Y = null
     @orientation = null
     @htmlElement = null
+    @animationLock = null
     # METHODS
     constructor: () ->
         @size = new Size("25","25",UNIT_PIXEL)
-        
+        @animationLock = false
         @gridIndex_X = randomNum(Grid::getGridWidth(),0)
         @gridIndex_Y = randomNum(Grid::getGridHeight(),0)  
         @orientation = new Orientation
@@ -503,6 +534,9 @@ class Dice extends Block
         else if Grid::isLocked(@gridIndex_X,@gridIndex_Y - 1)
             console.log "Space blocked"
             return
+        else if not @getAnimationLock()
+            console.log "Not holding animation lock"
+            return
         else
             # Unlock current and lock next block
             CurrentY = @gridIndex_Y
@@ -522,6 +556,8 @@ class Dice extends Block
 
             # Change grid index
             @gridIndex_Y = @gridIndex_Y - 1
+
+            @animateDice(oldFaceUp, @orientation.faceup, "UP")
 
             console.log "Dice moved up"
             console.log "New orientation is:"
@@ -545,6 +581,9 @@ class Dice extends Block
         else if Grid::isLocked(@gridIndex_X,@gridIndex_Y + 1)
             console.log "Space blocked"
             return
+        else if not @getAnimationLock()
+            console.log "Not holding animation lock"
+            return
         else
             # Unlock current and lock next block
             CurrentY = @gridIndex_Y
@@ -563,6 +602,8 @@ class Dice extends Block
 
             # Change grid index
             @gridIndex_Y = @gridIndex_Y + 1
+
+            @animateDice(oldFaceUp, @orientation.faceup, "DOWN")
 
             console.log "Dice moved down"
             console.log "New orientation is:"
@@ -585,6 +626,9 @@ class Dice extends Block
         else if Grid::isLocked(@gridIndex_X - 1,@gridIndex_Y)
             console.log "Space blocked"
             return
+        else if not @getAnimationLock()
+            console.log "Not holding animation lock"
+            return
         else
             # Unlock current and lock next block
             CurrentY = @gridIndex_Y
@@ -604,6 +648,8 @@ class Dice extends Block
 
             # Change grid index
             @gridIndex_X = @gridIndex_X - 1
+
+            @animateDice(oldFaceUp, @orientation.faceup, "LEFT")
 
             console.log "Dice moved left"
             console.log "New orientation is:"
@@ -626,6 +672,9 @@ class Dice extends Block
         else if Grid::isLocked(@gridIndex_X + 1,@gridIndex_Y)
             console.log "Space blocked"
             return
+        else if not @getAnimationLock()
+            console.log "Not holding animation lock"
+            return
         else
             # Unlock current and lock next block
             CurrentY = @gridIndex_Y
@@ -646,6 +695,8 @@ class Dice extends Block
             # Change grid index
             @gridIndex_X = @gridIndex_X + 1 
 
+            @animateDice(oldFaceUp, @orientation.faceup, "RIGHT")
+
             console.log "Dice moved right"
             console.log "New orientation is:"
             console.log "FACEUP: #{@orientation.faceup}"
@@ -657,7 +708,67 @@ class Dice extends Block
             console.log @gridIndex_X,@gridIndex_Y
             @htmlElement.addClass("block-move-right")
             @moveToGrid()
-            @htmlElement.removeClass("block-move-right")
+
+    animateDice: (currentFaceup, nextFaceup, direction) =>
+        animation = @getToLeftAnimation(currentFaceup, nextFaceup)
+        finalAnimation = @rotateAnimation(animation, direction)
+
+    rotateAnimation: (animation, direction) =>
+        switch direction
+            when "UP" then console.log "Rotate 90 degrees clockwise"
+            when "DOWN" then  console.log "Rotate 270 degrees clockwise"
+            when "LEFT" then console.log "Rotate 0 degrees clockwise"
+            when "RIGHT" then console.log "Rotate 180 degrees"
+
+    getToLeftAnimation: (currentFaceup, nextFaceup) =>
+        switch currentFaceup
+            when 1
+                switch nextFaceup
+                    when 2 then console.log "Returning animation going to the left"
+                    when 3 then console.log "Returning animation going to the left"
+                    when 4 then console.log "Returning animation going to the left"
+                    when 5 then console.log "Returning animation going to the left"
+            when 2
+                switch nextFaceup
+                    when 1 then console.log "Returning animation going to the left"
+                    when 3 then console.log "Returning animation going to the left"
+                    when 4 then console.log "Returning animation going to the left"
+                    when 6 then console.log "Returning animation going to the left"
+            when 3
+                switch nextFaceup
+                    when 1 then console.log "Returning animation going to the left"
+                    when 2 then console.log "Returning animation going to the left"
+                    when 5 then console.log "Returning animation going to the left"
+                    when 6 then console.log "Returning animation going to the left"
+            when 4
+                switch nextFaceup
+                    when 1 then console.log "Returning animation going to the left"
+                    when 2 then console.log "Returning animation going to the left"
+                    when 5 then console.log "Returning animation going to the left"
+                    when 6 then console.log "Returning animation going to the left"
+            when 5
+                switch nextFaceup
+                    when 1 then console.log "Returning animation going to the left"
+                    when 3 then console.log "Returning animation going to the left"
+                    when 4 then console.log "Returning animation going to the left"
+                    when 6 then console.log "Returning animation going to the left"
+            when 6
+                switch nextFaceup
+                    when 2 then console.log "Returning animation going to the left"
+                    when 3 then console.log "Returning animation going to the left"
+                    when 4 then console.log "Returning animation going to the left"
+                    when 5 then console.log "Returning animation going to the left"
+
+    setAnimationLock: () =>
+        @animationLock = true
+
+    setAnimationUnlock: () => 
+        @animationLock = false
+
+    getAnimationLock: () =>
+        return @animationLock
+
+
 # ======================== END DICE ==================
 # class Position
 #     # PROPERTIES

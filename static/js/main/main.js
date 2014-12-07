@@ -167,15 +167,15 @@
       this.moveToGrid = __bind(this.moveToGrid, this);
       this.createDice = __bind(this.createDice, this);
       Dice.__super__.constructor.call(this, size);
+      this.gridIndex_X = randomNum(Grid.prototype.getGridWidth(), 0);
+      this.gridIndex_Y = randomNum(Grid.prototype.getGridHeight(), 0);
       this.orientation = new Orientation;
-      console.log("New Dice created");
       this.createDice();
+      console.log("New Dice created");
     }
 
     Dice.prototype.createDice = function() {
       this.assignHTMLElement(this.createBlock());
-      this.gridIndex_X = randomNum(Grid.prototype.getGridWidth(), 0);
-      this.gridIndex_Y = randomNum(Grid.prototype.getGridHeight(), 0);
       this.moveToGrid();
       console.log(this.gridIndex_X, this.gridIndex_Y);
       return this.htmlElement;
@@ -331,7 +331,7 @@
 
     Dice.prototype.moveRight = function() {
       var oldFaceUp, outOfBounds;
-      if (this.gridIndex_X + 1 > Grid.prototype.getGridWidth()) {
+      if (this.gridIndex_X + 1 >= Grid.prototype.getGridWidth()) {
         outOfBounds = true;
       }
       if (outOfBounds) {
@@ -629,7 +629,7 @@
   })();
 
   Game = (function() {
-    var boardSize, dice, grid, isActiveGame, players, score, winningConditions;
+    var dice, grid, players, winningConditions;
 
     function Game() {
       this.getWinningConditions = __bind(this.getWinningConditions, this);
@@ -643,12 +643,6 @@
     grid = null;
 
     winningConditions = null;
-
-    boardSize = null;
-
-    isActiveGame = false;
-
-    score = null;
 
     Game.prototype.setWinningConditions = function(win) {
       return Game.prototype.winningConditions = win;
@@ -772,18 +766,6 @@
     setTimeout((function() {
       return startGameMessage();
     }), 200);
-    $("body").keyup(function(e) {
-      switch (e.keyCode) {
-        case 68:
-          return Game.prototype.dice.moveRight();
-        case 83:
-          return Game.prototype.dice.moveDown();
-        case 65:
-          return Game.prototype.dice.moveLeft();
-        case 87:
-          return Game.prototype.dice.moveUp();
-      }
-    });
     $("#gameOptions .number-players button").click(function() {
       ELEMENT_GAME_OPTIONS_NUM_PLAYERS.find("." + CLASS_ACTIVE).removeClass(CLASS_ACTIVE);
       return $(this).addClass(CLASS_ACTIVE);
@@ -822,7 +804,19 @@
       dice = new Dice(diceSize);
       Game.prototype.dice = dice;
       console.log(Game.prototype);
-      return console.log(Grid.prototype);
+      console.log(Grid.prototype);
+      return $("body").keyup(function(e) {
+        switch (e.keyCode) {
+          case 68:
+            return Game.prototype.dice.moveRight();
+          case 83:
+            return Game.prototype.dice.moveDown();
+          case 65:
+            return Game.prototype.dice.moveLeft();
+          case 87:
+            return Game.prototype.dice.moveUp();
+        }
+      });
     });
   });
 

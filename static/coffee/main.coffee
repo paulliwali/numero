@@ -6,19 +6,6 @@ $ ->
         startGameMessage()
 
     ),200
-    # Global
-    # < ========== >
-
-    
-
-
-
-    $("body").keyup (e) ->
-        switch e.keyCode
-            when 68 then Game::dice.moveRight()
-            when 83 then Game::dice.moveDown()
-            when 65 then Game::dice.moveLeft()
-            when 87 then Game::dice.moveUp()
 
     $("#gameOptions .number-players button").click ->
         ELEMENT_GAME_OPTIONS_NUM_PLAYERS.find("."+CLASS_ACTIVE)
@@ -34,7 +21,7 @@ $ ->
         numberPlayers = $(".number-players .active").val()
         $("#gameOptions").modal("hide")
 
-
+        # Reset the game if it's an active game
         if Game::isActiveGame is true
             Game::resetGame()
 
@@ -70,3 +57,10 @@ $ ->
 
         console.log Game::
         console.log Grid::
+
+        $("body").keyup (e) ->
+            switch e.keyCode
+                when 68 then Game::dice.moveRight()
+                when 83 then Game::dice.moveDown()
+                when 65 then Game::dice.moveLeft()
+                when 87 then Game::dice.moveUp()

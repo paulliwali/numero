@@ -1,4 +1,4 @@
-.animation (@name, @duration: 2.5s, @delay: 0, @ease: ease) {
+.animation (@name, @duration: 1s, @delay: 0, @ease: ease) {
     -webkit-animation: @name @duration @delay @ease;
     -moz-animation:    @name @duration @delay @ease;
     -ms-animation:     @name @duration @delay @ease;
@@ -6,25 +6,98 @@
 
 
 
+
+//  Rolling 1-2
+//  -----------------------------------
 /* Chrome, Safari, Opera */
-@-webkit-keyframes rollDice1To2 {
-    to{
+// Right
+@-webkit-keyframes rollDice1To2-right {
+    from{
         background: url(../../icons/Sprite/1-2.png) 0;
         left: 0;
     }
-    from{
-        background: url(../../icons/Sprite/1-2.png) -300px;
+    to{
+        background: url(../../icons/Sprite/1-2.png) -150px;
         left: 100px;
     }
 }
 
-@keyframes rollDice1To2 {
-        to{
-        background: url(../../icons/Sprite/1-2.png) 0;
-
-    }
+@keyframes rollDice1To2-right {
     from{
-        background: url(../../icons/Sprite/1-2.png) -300px;
+        background: url(../../icons/Sprite/1-2.png) 0;
+        left: 0;
+    }
+    to{
+        background: url(../../icons/Sprite/1-2.png) -150px;
+        left: 100px;
+    }
+}
+// LEFT 
+/* Chrome, Safari, Opera */
+@-webkit-keyframes rollDice1To2-left {
+    from{
+        background: url(../../icons/Sprite/1-2.png) 0;
+        left: 0;
+    }
+    to{
+        background: url(../../icons/Sprite/1-2.png) -150px;
+        left: -100px;
+    }
+}
 
+@keyframes rollDice1To2-left {
+    from{
+        background: url(../../icons/Sprite/1-2.png) 0;
+        left: 0;
+    }
+    to{
+        background: url(../../icons/Sprite/1-2.png) -150px;
+        left: -100px;
+    }
+}
+// UP
+/* Chrome, Safari, Opera */
+@-webkit-keyframes rollDice1To2-up {
+    from{
+        background: url(../../icons/Sprite/1-2.png) 0;
+        top: 0;
+    }
+    to{
+        background: url(../../icons/Sprite/1-2.png) -150px;
+        top: -100px;
+    }
+}
+
+@keyframes rollDice1To2-up {
+    from{
+        background: url(../../icons/Sprite/1-2.png) 0;
+        top: 0;
+    }
+    to{
+        background: url(../../icons/Sprite/1-2.png) -150px;
+        top: -100px;
+    }
+}
+// down
+/* Chrome, Safari, Opera */
+@-webkit-keyframes rollDice1To2-down {
+    from{
+        background: url(../../icons/Sprite/1-2.png) 0;
+        top: 0;
+    }
+    to{
+        background: url(../../icons/Sprite/1-2.png) -150px;
+        top: 100px;
+    }
+}
+
+@keyframes rollDice1To2-down {
+    from{
+        background: url(../../icons/Sprite/1-2.png) 0;
+        top: 0;
+    }
+    to{
+        background: url(../../icons/Sprite/1-2.png) -150px;
+        top: 100px;
     }
 }

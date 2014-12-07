@@ -609,7 +609,6 @@
       this.getAnimationLock = __bind(this.getAnimationLock, this);
       this.setAnimationUnlock = __bind(this.setAnimationUnlock, this);
       this.setAnimationLock = __bind(this.setAnimationLock, this);
-      this.getToLeftAnimation = __bind(this.getToLeftAnimation, this);
       this.rotateAnimation = __bind(this.rotateAnimation, this);
       this.animateDice = __bind(this.animateDice, this);
       this.moveRight = __bind(this.moveRight, this);
@@ -656,6 +655,8 @@
     Dice.prototype.bindAnimation = function(Dice) {
       return this.getHTMLElement().on("animationend webkitAnimationEnd oAnimationEnd MSAnimationEnd", function(e) {
         Dice.setAnimationUnlock();
+        Dice.getHTMLElement().removeClass().addClass("block-dice block");
+        Dice.moveToGrid();
         return console.log("finished animation");
       });
     };
@@ -769,8 +770,7 @@
         this.orientation.up = oldFaceUp;
         this.orientation.down = 7 - this.orientation.up;
         this.gridIndex_Y = this.gridIndex_Y - 1;
-        this.animateDice(oldFaceUp, this.orientation.faceup, "UP");
-        return this.moveToGrid();
+        return this.animateDice(oldFaceUp, this.orientation.faceup, "up");
       }
     };
 
@@ -796,8 +796,7 @@
         this.orientation.down = oldFaceUp;
         this.orientation.up = 7 - this.orientation.down;
         this.gridIndex_Y = this.gridIndex_Y + 1;
-        this.animateDice(oldFaceUp, this.orientation.faceup, "DOWN");
-        return this.moveToGrid();
+        return this.animateDice(oldFaceUp, this.orientation.faceup, "down");
       }
     };
 
@@ -823,8 +822,7 @@
         this.orientation.left = oldFaceUp;
         this.orientation.right = 7 - oldFaceUp;
         this.gridIndex_X = this.gridIndex_X - 1;
-        this.animateDice(oldFaceUp, this.orientation.faceup, "LEFT");
-        return this.moveToGrid();
+        return this.animateDice(oldFaceUp, this.orientation.faceup, "left");
       }
     };
 
@@ -850,109 +848,30 @@
         this.orientation.right = oldFaceUp;
         this.orientation.left = 7 - oldFaceUp;
         this.gridIndex_X = this.gridIndex_X + 1;
-        this.animateDice(oldFaceUp, this.orientation.faceup, "RIGHT");
-        return this.moveToGrid();
+        return this.animateDice(oldFaceUp, this.orientation.faceup, "right");
       }
     };
 
     Dice.prototype.animateDice = function(currentFaceup, nextFaceup, direction) {
-      var animation, finalAnimation;
-      animation = this.getToLeftAnimation(currentFaceup, nextFaceup);
+      var finalAnimation;
       return finalAnimation = this.rotateAnimation(currentFaceup, nextFaceup, direction);
     };
 
     Dice.prototype.rotateAnimation = function(currentFaceup, nextFaceup, direction) {
       switch (direction) {
-        case "UP":
+        case "up":
           console.log("Rotate 90 degrees clockwise");
           break;
-        case "DOWN":
+        case "down":
           console.log("Rotate 270 degrees clockwise");
           break;
-        case "LEFT":
+        case "left":
           console.log("Rotate 0 degrees clockwise");
           break;
-        case "RIGHT":
+        case "right":
           console.log("Rotate 180 degrees");
       }
-      return this.htmlElement.addClass("rollDice1To2");
-    };
-
-    Dice.prototype.getToLeftAnimation = function(currentFaceup, nextFaceup) {
-      switch (currentFaceup) {
-        case 1:
-          switch (nextFaceup) {
-            case 2:
-              console.log("Returning animation going to the left");
-              return this.animation = "rollDice1To2";
-            case 3:
-              return console.log("Returning animation going to the left");
-            case 4:
-              return console.log("Returning animation going to the left");
-            case 5:
-              return console.log("Returning animation going to the left");
-          }
-          break;
-        case 2:
-          switch (nextFaceup) {
-            case 1:
-              return console.log("Returning animation going to the left");
-            case 3:
-              return console.log("Returning animation going to the left");
-            case 4:
-              return console.log("Returning animation going to the left");
-            case 6:
-              return console.log("Returning animation going to the left");
-          }
-          break;
-        case 3:
-          switch (nextFaceup) {
-            case 1:
-              return console.log("Returning animation going to the left");
-            case 2:
-              return console.log("Returning animation going to the left");
-            case 5:
-              return console.log("Returning animation going to the left");
-            case 6:
-              return console.log("Returning animation going to the left");
-          }
-          break;
-        case 4:
-          switch (nextFaceup) {
-            case 1:
-              return console.log("Returning animation going to the left");
-            case 2:
-              return console.log("Returning animation going to the left");
-            case 5:
-              return console.log("Returning animation going to the left");
-            case 6:
-              return console.log("Returning animation going to the left");
-          }
-          break;
-        case 5:
-          switch (nextFaceup) {
-            case 1:
-              return console.log("Returning animation going to the left");
-            case 3:
-              return console.log("Returning animation going to the left");
-            case 4:
-              return console.log("Returning animation going to the left");
-            case 6:
-              return console.log("Returning animation going to the left");
-          }
-          break;
-        case 6:
-          switch (nextFaceup) {
-            case 2:
-              return console.log("Returning animation going to the left");
-            case 3:
-              return console.log("Returning animation going to the left");
-            case 4:
-              return console.log("Returning animation going to the left");
-            case 5:
-              return console.log("Returning animation going to the left");
-          }
-      }
+      return this.htmlElement.addClass("rollDice1To2 " + direction);
     };
 
     Dice.prototype.setAnimationLock = function() {

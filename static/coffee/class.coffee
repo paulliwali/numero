@@ -461,6 +461,8 @@ class Dice extends Block
     bindAnimation:(Dice) =>
         @getHTMLElement().on "animationend webkitAnimationEnd oAnimationEnd MSAnimationEnd", (e) ->
             Dice.setAnimationUnlock()
+            Dice.getHTMLElement().removeClass().addClass("block-dice block")
+            Dice.moveToGrid()
             console.log "finished animation"
 
     moveToGrid: () =>
@@ -561,7 +563,7 @@ class Dice extends Block
             # Change grid index
             @gridIndex_Y = @gridIndex_Y - 1
 
-            @animateDice(oldFaceUp, @orientation.faceup, "UP")
+            @animateDice(oldFaceUp, @orientation.faceup, "up")
 
             # console.log "Dice moved up"
             # console.log "New orientation is:"
@@ -572,7 +574,7 @@ class Dice extends Block
             # console.log "UP: #{@orientation.up}"
             # console.log "DOWN: #{@orientation.down}"
             # console.log @gridIndex_X,@gridIndex_Y
-            @moveToGrid()
+            # @moveToGrid()
 
 
     moveDown: () => 
@@ -607,7 +609,7 @@ class Dice extends Block
             # Change grid index
             @gridIndex_Y = @gridIndex_Y + 1
 
-            @animateDice(oldFaceUp, @orientation.faceup, "DOWN")
+            @animateDice(oldFaceUp, @orientation.faceup, "down")
 
             # console.log "Dice moved down"
             # console.log "New orientation is:"
@@ -618,7 +620,7 @@ class Dice extends Block
             # console.log "UP: #{@orientation.up}"
             # console.log "DOWN: #{@orientation.down}"
             # console.log @gridIndex_X,@gridIndex_Y
-            @moveToGrid()
+            # @moveToGrid()
 
     moveLeft: () =>
         # Error checking
@@ -652,7 +654,7 @@ class Dice extends Block
             # Change grid index
             @gridIndex_X = @gridIndex_X - 1
 
-            @animateDice(oldFaceUp, @orientation.faceup, "LEFT")
+            @animateDice(oldFaceUp, @orientation.faceup, "left")
 
             # console.log "Dice moved left"
             # console.log "New orientation is:"
@@ -663,7 +665,7 @@ class Dice extends Block
             # console.log "UP: #{@orientation.up}"
             # console.log "DOWN: #{@orientation.down}"
             # console.log @gridIndex_X,@gridIndex_Y
-            @moveToGrid()
+            # @moveToGrid()
 
     moveRight: () =>
         # Error checking
@@ -697,7 +699,7 @@ class Dice extends Block
             # Change grid index
             @gridIndex_X = @gridIndex_X + 1 
 
-            @animateDice(oldFaceUp, @orientation.faceup, "RIGHT")
+            @animateDice(oldFaceUp, @orientation.faceup, "right")
 
             # console.log "Dice moved right"
             # console.log "New orientation is:"
@@ -708,61 +710,59 @@ class Dice extends Block
             # console.log "UP: #{@orientation.up}"
             # console.log "DOWN: #{@orientation.down}"
             # console.log @gridIndex_X,@gridIndex_Y
-            @moveToGrid()
+            # @moveToGrid()
 
     animateDice: (currentFaceup, nextFaceup, direction) =>
-        animation = @getToLeftAnimation(currentFaceup, nextFaceup)
+        # animation = @getToLeftAnimation(currentFaceup, nextFaceup)
         finalAnimation = @rotateAnimation(currentFaceup, nextFaceup, direction)
-
     rotateAnimation: (currentFaceup, nextFaceup, direction) =>
         switch direction
-            when "UP" then console.log "Rotate 90 degrees clockwise"
-            when "DOWN" then  console.log "Rotate 270 degrees clockwise"
-            when "LEFT" then console.log "Rotate 0 degrees clockwise"
-            when "RIGHT" then console.log "Rotate 180 degrees"
+            when "up" then console.log "Rotate 90 degrees clockwise"
+            when "down" then  console.log "Rotate 270 degrees clockwise"
+            when "left" then console.log "Rotate 0 degrees clockwise"
+            when "right" then console.log "Rotate 180 degrees"
         # @htmlElement.addClass("rollDice#{currentFaceup}To#{nextFaceup}")
-        @htmlElement.addClass("rollDice1To2")
+        @htmlElement.addClass("rollDice1To2 #{direction}")
         # 
-    getToLeftAnimation: (currentFaceup, nextFaceup) =>
-        switch currentFaceup
-            when 1
-                switch nextFaceup
-                    when 2  
-                        console.log "Returning animation going to the left"
-                        @animation = "rollDice1To2"
-                    when 3 then console.log "Returning animation going to the left"
-                    when 4 then console.log "Returning animation going to the left"
-                    when 5 then console.log "Returning animation going to the left"
-            when 2
-                switch nextFaceup
-                    when 1 then console.log "Returning animation going to the left"
-                    when 3 then console.log "Returning animation going to the left"
-                    when 4 then console.log "Returning animation going to the left"
-                    when 6 then console.log "Returning animation going to the left"
-            when 3
-                switch nextFaceup
-                    when 1 then console.log "Returning animation going to the left"
-                    when 2 then console.log "Returning animation going to the left"
-                    when 5 then console.log "Returning animation going to the left"
-                    when 6 then console.log "Returning animation going to the left"
-            when 4
-                switch nextFaceup
-                    when 1 then console.log "Returning animation going to the left"
-                    when 2 then console.log "Returning animation going to the left"
-                    when 5 then console.log "Returning animation going to the left"
-                    when 6 then console.log "Returning animation going to the left"
-            when 5
-                switch nextFaceup
-                    when 1 then console.log "Returning animation going to the left"
-                    when 3 then console.log "Returning animation going to the left"
-                    when 4 then console.log "Returning animation going to the left"
-                    when 6 then console.log "Returning animation going to the left"
-            when 6
-                switch nextFaceup
-                    when 2 then console.log "Returning animation going to the left"
-                    when 3 then console.log "Returning animation going to the left"
-                    when 4 then console.log "Returning animation going to the left"
-                    when 5 then console.log "Returning animation going to the left"
+    # getToLeftAnimation: (currentFaceup, nextFaceup) =>
+    #     switch currentFaceup
+    #         when 1
+    #             switch nextFaceup
+    #                 when 2  
+    #                     console.log "Returning animation going to the left"
+    #                 when 3 then console.log "Returning animation going to the left"
+    #                 when 4 then console.log "Returning animation going to the left"
+    #                 when 5 then console.log "Returning animation going to the left"
+    #         when 2
+    #             switch nextFaceup
+    #                 when 1 then console.log "Returning animation going to the left"
+    #                 when 3 then console.log "Returning animation going to the left"
+    #                 when 4 then console.log "Returning animation going to the left"
+    #                 when 6 then console.log "Returning animation going to the left"
+    #         when 3
+    #             switch nextFaceup
+    #                 when 1 then console.log "Returning animation going to the left"
+    #                 when 2 then console.log "Returning animation going to the left"
+    #                 when 5 then console.log "Returning animation going to the left"
+    #                 when 6 then console.log "Returning animation going to the left"
+    #         when 4
+    #             switch nextFaceup
+    #                 when 1 then console.log "Returning animation going to the left"
+    #                 when 2 then console.log "Returning animation going to the left"
+    #                 when 5 then console.log "Returning animation going to the left"
+    #                 when 6 then console.log "Returning animation going to the left"
+    #         when 5
+    #             switch nextFaceup
+    #                 when 1 then console.log "Returning animation going to the left"
+    #                 when 3 then console.log "Returning animation going to the left"
+    #                 when 4 then console.log "Returning animation going to the left"
+    #                 when 6 then console.log "Returning animation going to the left"
+    #         when 6
+    #             switch nextFaceup
+    #                 when 2 then console.log "Returning animation going to the left"
+    #                 when 3 then console.log "Returning animation going to the left"
+    #                 when 4 then console.log "Returning animation going to the left"
+    #                 when 5 then console.log "Returning animation going to the left"
 
     setAnimationLock: () =>
         @animationLock = true

@@ -147,14 +147,12 @@ class Dice extends Block
         @gridIndex_Y = null
         @orientation = null
         @htmlElement = null
+
     isGameWon: =>
         faceUp = @getFaceUp()
         console.log faceUp
         winningConditions = Game::getWinningConditions()
         winningConditions.checkConditions(faceUp,@gridIndex_X,@gridIndex_Y)
-
-    isGameWonSetup: (faceUp) =>
-        console.log faceUp
 
     createBlock: =>
         super()
@@ -355,7 +353,6 @@ class Orientation
         
 
         @faceup = randomNum(6,1)
-        Dice::isGameWonSetup(@faceup)
         @bottom = 7 - @faceup
 
         @left = randomNum(6,1)

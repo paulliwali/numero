@@ -161,7 +161,6 @@ Dice = (function(_super) {
     this.getHTMLElement = __bind(this.getHTMLElement, this);
     this.assignHTMLElement = __bind(this.assignHTMLElement, this);
     this.createBlock = __bind(this.createBlock, this);
-    this.isGameWonSetup = __bind(this.isGameWonSetup, this);
     this.isGameWon = __bind(this.isGameWon, this);
     this.reset = __bind(this.reset, this);
     this.moveToGrid = __bind(this.moveToGrid, this);
@@ -204,10 +203,6 @@ Dice = (function(_super) {
     console.log(faceUp);
     winningConditions = Game.prototype.getWinningConditions();
     return winningConditions.checkConditions(faceUp, this.gridIndex_X, this.gridIndex_Y);
-  };
-
-  Dice.prototype.isGameWonSetup = function(faceUp) {
-    return console.log(faceUp);
   };
 
   Dice.prototype.createBlock = function() {
@@ -490,7 +485,6 @@ Orientation = (function() {
       }
     }
     this.faceup = randomNum(6, 1);
-    Dice.prototype.isGameWonSetup(this.faceup);
     this.bottom = 7 - this.faceup;
     this.left = randomNum(6, 1);
     while (this.left === this.faceup || this.left === this.bottom) {

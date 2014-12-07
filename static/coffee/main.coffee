@@ -6,22 +6,6 @@ $ ->
         startGameMessage()
 
     ),200
-    # Global
-    # < ========== >
-
-    blockSize = new Size(4,4,UNIT_BLOCK)
-   
-    grid = new Grid(blockSize)
-
-    $("body").keyup (e) ->
-        switch e.keyCode
-            when 68 then Game::dice.moveRight()
-            when 83 then Game::dice.moveDown()
-            when 65 then Game::dice.moveLeft()
-            when 87 then Game::dice.moveUp()
-
-    diceSize = new Size("25","25",UNIT_PIXEL)
-    dice = new Dice(diceSize)
 
     $("#gameOptions .number-players button").click ->
         ELEMENT_GAME_OPTIONS_NUM_PLAYERS.find("."+CLASS_ACTIVE)
@@ -37,6 +21,7 @@ $ ->
         numberPlayers = $(".number-players .active").val()
         $("#gameOptions").modal("hide")
 
+        # Reset the game if it's an active game
         if Game::isActiveGame is true
             Game::resetGame()
 
@@ -72,3 +57,10 @@ $ ->
 
         console.log Game::
         console.log Grid::
+
+        $("body").keyup (e) ->
+            switch e.keyCode
+                when 68 then Game::dice.moveRight()
+                when 83 then Game::dice.moveDown()
+                when 65 then Game::dice.moveLeft()
+                when 87 then Game::dice.moveUp()

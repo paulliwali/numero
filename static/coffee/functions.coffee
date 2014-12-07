@@ -40,12 +40,12 @@ startGameMessage = () ->
     showCancelButton: true,   
     confirmButtonColor: "#5CB85C",   
     confirmButtonText: "Let's Play!",   
-    cancelButtonText: "I don't want to play ):",   
+    cancelButtonText: "I don't want to play QQ",   
     closeOnConfirm: true,   
     closeOnCancel: false 
     }, (isConfirm) ->
       if isConfirm
-        console.log 'test'
+        $("#gameOptions").modal("show")
     )
 
 addConditionInViewableBox = (condition) ->

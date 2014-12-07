@@ -27,6 +27,17 @@ class Grid
         ]
         console.log "New Grid created: (#{Grid::size.height},#{Grid::size.width})"
         @createGrid()
+        Game::grid = this
+
+    reset: =>
+        Grid::size.reset()
+        Grid::size = null
+        for blockRow in Grid::blockArray
+            for block in blockRow
+                block.reset()
+                block = null
+            blockRow = null
+        Grid::blockArray = null
     # Creates a Grid of @size.height x @size.width
     # Stores the grid in @blockArray 
     createGrid: () =>
@@ -88,6 +99,11 @@ class Block
             block.height( @size.getWidthWithUnit() )
             @assignHTMLElement(block)
             return block
+    reset: =>
+        @size.reset()
+        @size = null
+        @htmlElement.remove()
+        @htmlElement = null
 
 
 class Dice extends Block
@@ -127,6 +143,13 @@ class Dice extends Block
 
         @isGameWon()
 
+    reset: =>
+        @htmlElement.remove()
+        @bottomPosition = null
+        @gridIndex_X = null
+        @gridIndex_Y = null
+        @orientation = null
+        @htmlElement = null
     isGameWon: =>
         faceUp = @getFaceUp()
         console.log faceUp
@@ -284,6 +307,11 @@ class Size
     getHeightWithUnit: =>
         return @height + @unit
 
+    reset: =>
+        @height = null
+        @width = null
+        @unit = null
+
 class Position
     # PROPERTIES
     @x = null
@@ -348,6 +376,14 @@ class Orientation
         console.log "UP: #{@up}"
         console.log "DOWN: #{@down}"
 
+    reset: =>
+        @faceup = null
+        @bottom = null
+        @down = null
+        @up = null
+        @left = null
+        @right = null
+
 class WinningConditions
     @conditions = null
     constructor: () ->
@@ -363,6 +399,11 @@ class WinningConditions
                 return false
         # all conditions met
         showGameWin()
+
+    reset: () =>
+        for condition in @conditions
+            condition.reset()
+        @conditions = null
 
 
 class Condition
@@ -405,6 +446,13 @@ class Condition
     getHTMLElement: =>
         return @htmlElement
 
+    reset: =>
+        @htmlElement.remove()
+        @number = null
+        @blockPositionY = null
+        @blockPositionX = null
+        @isMet = false
+        @htmlElement = null
 
 
 class Game
@@ -412,6 +460,8 @@ class Game
     players = null
     grid = null
     winningConditions = null
+    boardSize = null
+    isActiveGame = false
     constructor: () ->
         console.log "New Game has been created."
 
@@ -421,3 +471,17 @@ class Game
     getWinningConditions: () =>
         return Game::winningConditions
 
+    resetGame: ->
+        console.log "RESETTING GAME"
+        Game::dice.reset()
+        Game::grid.reset()
+        Game::winningConditions.reset()
+        Game::boardSize.reset()
+
+
+        Game::isActiveGame = false
+        Game::boardSize = null
+        Game::winningConditions = null
+        Game::grid = null
+        Game::players = null
+        Game::dice = null

@@ -42,7 +42,8 @@ class Game
         winningConditions.addCondition()
 
         Game::setWinningConditions(winningConditions)
-
+        player1 = if window.player1? then window.player1.name else null
+        player2 = if window.player2? then window.player2.name else null
     setWinningConditions: (win) =>
         Game::winningConditions = win
 
@@ -451,7 +452,7 @@ class Dice extends Block
         alreadyWon = true if @isGameWonSetup()
 
         @assignHTMLElement(@createBlock())
-
+        @htmlElement.addClass("block-dice")
         if alreadyWon
             @reset()
             @constructor()
@@ -567,7 +568,10 @@ class Dice extends Block
             console.log "UP: #{@orientation.up}"
             console.log "DOWN: #{@orientation.down}"
             console.log @gridIndex_X,@gridIndex_Y
+            @htmlElement.addClass("block-move-up")
             @moveToGrid()
+            @htmlElement.removeClass("block-move-up")
+
 
     moveDown: () => 
         # Error checking
@@ -610,7 +614,9 @@ class Dice extends Block
             console.log "UP: #{@orientation.up}"
             console.log "DOWN: #{@orientation.down}"
             console.log @gridIndex_X,@gridIndex_Y
+            @htmlElement.addClass("block-move-down")
             @moveToGrid()
+            @htmlElement.removeClass("block-move-down")
 
     moveLeft: () =>
         # Error checking
@@ -654,8 +660,9 @@ class Dice extends Block
             console.log "UP: #{@orientation.up}"
             console.log "DOWN: #{@orientation.down}"
             console.log @gridIndex_X,@gridIndex_Y
+            @htmlElement.addClass("block-move-left")
             @moveToGrid()
-
+            @htmlElement.removeClass("block-move-left")
 
     moveRight: () =>
         # Error checking
@@ -699,6 +706,7 @@ class Dice extends Block
             console.log "UP: #{@orientation.up}"
             console.log "DOWN: #{@orientation.down}"
             console.log @gridIndex_X,@gridIndex_Y
+            @htmlElement.addClass("block-move-right")
             @moveToGrid()
 
     animateDice: (currentFaceup, nextFaceup, direction) =>

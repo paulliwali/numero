@@ -64,6 +64,11 @@ Grid = (function() {
           block = new Block(new Size(BLOCK_DEFAULT_WIDTH_PIXEL, BLOCK_DEFAULT_HEIGHT_PIXEL, UNIT_PIXEL));
           blockElement = block.createBlock();
           blockElement.text("[" + widthBlock + "," + heightBlock + "]");
+          if (heightBlock === 0 || heightBlock === Grid.prototype.size.height - 1) {
+            blockElement.addClass(CLASS_GRID_BORDER);
+          } else if (widthBlock === 0 || widthBlock === Grid.prototype.size.width - 1) {
+            blockElement.addClass(CLASS_GRID_BORDER);
+          }
           row.append(blockElement);
           Grid.prototype.blockArray[heightBlock][widthBlock] = block;
         }
@@ -151,7 +156,7 @@ Dice = (function(_super) {
 
   Dice.htmlElement = null;
 
-  function Dice(size) {
+  function Dice() {
     this.moveRight = __bind(this.moveRight, this);
     this.moveLeft = __bind(this.moveLeft, this);
     this.moveDown = __bind(this.moveDown, this);
@@ -161,11 +166,12 @@ Dice = (function(_super) {
     this.getHTMLElement = __bind(this.getHTMLElement, this);
     this.assignHTMLElement = __bind(this.assignHTMLElement, this);
     this.createBlock = __bind(this.createBlock, this);
+    this.isGameWonSetup = __bind(this.isGameWonSetup, this);
     this.isGameWon = __bind(this.isGameWon, this);
     this.reset = __bind(this.reset, this);
     this.moveToGrid = __bind(this.moveToGrid, this);
     this.createDice = __bind(this.createDice, this);
-    Dice.__super__.constructor.call(this, size);
+    this.size = new Size("25", "25", UNIT_PIXEL);
     this.gridIndex_X = randomNum(Grid.prototype.getGridWidth(), 0);
     this.gridIndex_Y = randomNum(Grid.prototype.getGridHeight(), 0);
     this.orientation = new Orientation;
@@ -174,6 +180,14 @@ Dice = (function(_super) {
   }
 
   Dice.prototype.createDice = function() {
+    var alreadyWon;
+    if (this.isGameWonSetup()) {
+      alreadyWon = true;
+    }
+    if (alreadyWon) {
+      this.reset();
+      this.constructor();
+    }
     this.assignHTMLElement(this.createBlock());
     this.moveToGrid();
     console.log(this.gridIndex_X, this.gridIndex_Y);
@@ -203,6 +217,14 @@ Dice = (function(_super) {
     console.log(faceUp);
     winningConditions = Game.prototype.getWinningConditions();
     return winningConditions.checkConditions(faceUp, this.gridIndex_X, this.gridIndex_Y);
+  };
+
+  Dice.prototype.isGameWonSetup = function() {
+    var faceUp, winningConditions;
+    faceUp = this.getFaceUp();
+    console.log("Checking if already won. FACEUP: " + faceUp);
+    winningConditions = Game.prototype.getWinningConditions();
+    return winningConditions.checkConditionsSetup(faceUp, this.gridIndex_X, this.gridIndex_Y);
   };
 
   Dice.prototype.createBlock = function() {
@@ -430,14 +452,40 @@ Position = (function() {
 })();
 
 Player = (function() {
+  Player.score = 0;
+
+  Player.name = null;
+
+  Player.dice = null;
+
   function Player(name) {
     this.name = name;
+    this.setDice = __bind(this.setDice, this);
+    this.getName = __bind(this.getName, this);
+    this.addPoint = __bind(this.addPoint, this);
+    this.getScore = __bind(this.getScore, this);
     if (this.name === null || this.name === "") {
       console.log("MISSING PLAYER NAME");
       return;
     }
     console.log("New Player created: " + this.name);
   }
+
+  Player.prototype.getScore = function() {
+    return this.score;
+  };
+
+  Player.prototype.addPoint = function() {
+    return this.score = this.score + 1;
+  };
+
+  Player.prototype.getName = function() {
+    return this.name;
+  };
+
+  Player.prototype.setDice = function(dice) {
+    return this.dice = dice;
+  };
 
   return Player;
 
@@ -523,6 +571,7 @@ WinningConditions = (function() {
 
   function WinningConditions() {
     this.reset = __bind(this.reset, this);
+    this.checkConditionsSetup = __bind(this.checkConditionsSetup, this);
     this.checkConditions = __bind(this.checkConditions, this);
     this.addCondition = __bind(this.addCondition, this);
     this.conditions = [];
@@ -545,6 +594,18 @@ WinningConditions = (function() {
       }
     }
     return showGameWin();
+  };
+
+  WinningConditions.prototype.checkConditionsSetup = function(number, x, y) {
+    var condition, _i, _len, _ref;
+    _ref = this.conditions;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      condition = _ref[_i];
+      if (!condition.checkIfSatisfied(number, x, y)) {
+        return false;
+      }
+    }
+    return true;
   };
 
   WinningConditions.prototype.reset = function() {

@@ -45,8 +45,17 @@ startGameMessage = () ->
     closeOnCancel: false 
     }, (isConfirm) ->
       if isConfirm
+        $("#game").goto()
         $("#gameOptions").modal("show")
     )
 
 addConditionInViewableBox = (condition) ->
       ELEMENT_CONDITIONS_CONTAINER.append(condition)
+
+
+$.fn.goto = ->
+      $("html, body").animate
+        scrollTop: $(this).offset().top + "px"
+      , "slow"
+      this
+      return 

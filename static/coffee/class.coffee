@@ -171,6 +171,7 @@ class Dice extends Block
         winningConditions = Game::getWinningConditions()
         winningConditions.checkConditions(faceUp,@gridIndex_X,@gridIndex_Y)
 
+
     isGameWonSetup: =>
         faceUp = @getFaceUp()
         console.log "Checking if already won. FACEUP: #{faceUp}"
@@ -383,6 +384,22 @@ class Player
         @dice.reset()
         @dice = null
 
+    bindControls: (e)=>
+        if @id == 1
+            switch e.keyCode
+                when 68 then @dice.moveRight()
+                when 83 then @dice.moveDown()
+                when 65 then @dice.moveLeft()
+                when 87 then @dice.moveUp()
+        else if @id == 2
+            switch e.keyCode
+                when 39 then @dice.moveRight()
+                when 40 then @dice.moveDown()
+                when 37 then @dice.moveLeft()
+                when 38 then @dice.moveUp()
+    unbindControls: =>
+        $("body").unbind("keyup")
+
 
 class Orientation
     # PROPERTIES
@@ -450,6 +467,8 @@ class WinningConditions
                 return false
         # all conditions met
         showGameWin()
+        for player in Game::players
+            player.unbindControls()
 
     checkConditionsSetup: (number,x,y) =>
         for condition in @conditions

@@ -1,8 +1,6 @@
 $ ->
     FastClick.attach(document.body)
 
-$ ->
-
     # stop page scrolling for now with arrow keys
     $(document).keydown (e) ->
       ar = new Array(33, 34, 35, 36, 37, 38, 39, 40)
@@ -65,14 +63,21 @@ $ ->
 
         Game::setWinningConditions(winningConditions)
         window.player1 = new Player("Pua")
-        dice = new Dice()
+        window.player2 = new Player("Brian")
 
+        dice = new Dice()
+        dice2 = new Dice()
         player1.setDice(dice)
+        player2.setDice(dice2)
         Game::addPlayer(player1)
+        Game::addPlayer(player2)
+
         console.log Game::
         console.log Grid::
         console.log player1
 
         $("body").on "keyup", (e) ->
-            bindPlayerControls(player1,e)
+            player1.bindControls(e)
+            player2.bindControls(e)
+
 

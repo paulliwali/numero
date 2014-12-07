@@ -331,7 +331,7 @@
 
     Dice.prototype.moveRight = function() {
       var oldFaceUp, outOfBounds;
-      if (this.gridIndex_X + 1 > Grid.prototype.getGridWidth()) {
+      if (this.gridIndex_X + 1 >= Grid.prototype.getGridWidth()) {
         outOfBounds = true;
       }
       if (outOfBounds) {
@@ -772,18 +772,6 @@
     setTimeout((function() {
       return startGameMessage();
     }), 200);
-    $("body").keyup(function(e) {
-      switch (e.keyCode) {
-        case 68:
-          return Game.prototype.dice.moveRight();
-        case 83:
-          return Game.prototype.dice.moveDown();
-        case 65:
-          return Game.prototype.dice.moveLeft();
-        case 87:
-          return Game.prototype.dice.moveUp();
-      }
-    });
     $("#gameOptions .number-players button").click(function() {
       ELEMENT_GAME_OPTIONS_NUM_PLAYERS.find("." + CLASS_ACTIVE).removeClass(CLASS_ACTIVE);
       return $(this).addClass(CLASS_ACTIVE);
@@ -822,7 +810,19 @@
       dice = new Dice(diceSize);
       Game.prototype.dice = dice;
       console.log(Game.prototype);
-      return console.log(Grid.prototype);
+      console.log(Grid.prototype);
+      return $("body").keyup(function(e) {
+        switch (e.keyCode) {
+          case 68:
+            return Game.prototype.dice.moveRight();
+          case 83:
+            return Game.prototype.dice.moveDown();
+          case 65:
+            return Game.prototype.dice.moveLeft();
+          case 87:
+            return Game.prototype.dice.moveUp();
+        }
+      });
     });
   });
 

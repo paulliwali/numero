@@ -263,7 +263,7 @@ class Dice extends Block
 
     moveRight: () =>
         # Error checking
-        outOfBounds = true if @gridIndex_X + 1 > Grid::getGridWidth()
+        outOfBounds = true if @gridIndex_X + 1 >= Grid::getGridWidth()
         console.log "Dice is moving out of bounds" if outOfBounds
         return if outOfBounds
 

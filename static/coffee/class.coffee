@@ -62,10 +62,16 @@ class Grid
                     # Create the HTML block
                     blockElement = block.createBlock()   
                     blockElement.text("[#{widthBlock},#{heightBlock}]")
-                    if heightBlock is 0 or heightBlock is Grid::size.height - 1
-                        blockElement.addClass(CLASS_GRID_BORDER)
-                    else if widthBlock is 0 or widthBlock is Grid::size.width - 1
-                        blockElement.addClass(CLASS_GRID_BORDER)
+
+                    # add special Border classes for the borders
+                    if heightBlock is 0
+                        blockElement.addClass(CLASS_GRID_BORDER_TOP)
+                    if heightBlock is Grid::size.height - 1 
+                        blockElement.addClass(CLASS_GRID_BORDER_BOTTOM)
+                    if widthBlock is 0
+                        blockElement.addClass(CLASS_GRID_BORDER_LEFT)
+                    if widthBlock is Grid::size.width  - 1
+                        blockElement.addClass(CLASS_GRID_BORDER_RIGHT)
                     # Add the block to the Page
                     row.append(blockElement)
                     # assign the block to the grid array
@@ -344,14 +350,17 @@ class Player
     @score = 0
     @name = null
     @dice = null
+    playerNumber = 0
+    @id = 0
     # PROPERTIES
     # METHODS
     constructor: (@name) ->
         if @name is null or @name is ""
             console.log "MISSING PLAYER NAME"
             return
-        console.log "New Player created: #{@name}"
+        @id = ++playerNumber
 
+        console.log "New Player created: #{@name} ID: #{@id}"
     getScore: =>
         return @score
 
@@ -363,6 +372,9 @@ class Player
 
     setDice: (dice) =>
         @dice = dice
+
+    getID: =>
+        return @id
 
 
 class Orientation

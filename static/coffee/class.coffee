@@ -530,9 +530,36 @@ class Condition
         @htmlElement = null
 
 class Game
-    players = []
-    grid = null
-    winningConditions = null
+    Game::players = []
+    Game::grid = null
+    Game::winningConditions = null
+    Game::isActiveGame = false
+    Game::numberOfPlayers = 0
+    newGame: =>
+        if Game::isActiveGame is true
+            $("body").unbind("keyup")
+            Game::resetGame()
+        Game::isActiveGame = true
+
+        if Game::boardSize is BOARD_SIZE_MEDIUM
+            blockSize = new Size(4,4,UNIT_BLOCK)
+        else if Game::boardSize is BOARD_SIZE_SMALL
+            blockSize = new Size(3,3,UNIT_BLOCK)
+        else if Game::boardSize is BOARD_SIZE_LARGE
+            blockSize = new Size(5,5,UNIT_BLOCK)
+        else
+            sizeX = randomNum(6,3)
+            sizeY = randomNum(6,3)
+            blockSize = new Size(sizeX,sizeY,UNIT_BLOCK)
+        Game::blockSize = blockSize
+        Game::players = []
+        Grid::createGridStarter(Game::blockSize)
+
+        # Set the victory conditions
+        winningConditions = new WinningConditions()
+        winningConditions.addCondition()
+
+        Game::setWinningConditions(winningConditions)
 
     setWinningConditions: (win) =>
         Game::winningConditions = win
@@ -543,17 +570,40 @@ class Game
     addPlayer: (player) =>
         Game::players.push(player)
 
+    addNewPlayers: (name1,name2 = "") =>
+        window.player1 = new Player(name1)
+        dice = new Dice()
+        player1.setDice(dice)
+        Game::addPlayer(player1)
+
+        if Game::numberOfPlayers == 2
+            window.player2 = new Player(name2)
+            dice2 = new Dice()
+            player2.setDice(dice2)
+            Game::addPlayer(player2)
+
+        $("body").on "keyup", (e) ->
+            player1.bindControls(e)
+            if Game::numberOfPlayers == 2
+                player2.bindControls(e)
+
+
     resetGame: ->
         console.log "RESETTING GAME"
-        Game::grid.reset()
-        Game::winningConditions.reset()
-        Game::boardSize.reset()
-        for player in Game::players
-            player.reset()
-            player = null
+        if Game::grid isnt null
+            Game::grid.reset()
+        if Game::winningConditions isnt null
+            Game::winningConditions.reset()
+        if Game::blockSize isnt null
+            Game::blockSize.reset()
+        # if Game::players isnt null
+        #     for player in Game::players
+        #         player.reset()
+        #         player = null
 
+        Game::boardSize = null
         Game::isActiveGame = false
         Game::boardSize = null
         Game::winningConditions = null
         Game::grid = null
-        Game::players = null
+        # Game::players = null

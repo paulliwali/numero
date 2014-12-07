@@ -466,7 +466,9 @@ class Dice extends Block
     moveToGrid: () =>
         faceUp = @getFaceUp()
         @htmlElement.text(faceUp)
-
+        @htmlElement.css("background",URL_FOR_DICE + "/Dice-#{faceUp}.png)")
+        console.log "MOVING TO GRID"
+        console.log @htmlElement
         Grid::getBlockElement(
             @gridIndex_X, @gridIndex_Y
             ).getHTMLElement().append(@htmlElement)
@@ -568,9 +570,7 @@ class Dice extends Block
             console.log "UP: #{@orientation.up}"
             console.log "DOWN: #{@orientation.down}"
             console.log @gridIndex_X,@gridIndex_Y
-            @htmlElement.addClass("block-move-up")
             @moveToGrid()
-            @htmlElement.removeClass("block-move-up")
 
 
     moveDown: () => 
@@ -614,9 +614,7 @@ class Dice extends Block
             console.log "UP: #{@orientation.up}"
             console.log "DOWN: #{@orientation.down}"
             console.log @gridIndex_X,@gridIndex_Y
-            @htmlElement.addClass("block-move-down")
             @moveToGrid()
-            @htmlElement.removeClass("block-move-down")
 
     moveLeft: () =>
         # Error checking
@@ -660,9 +658,7 @@ class Dice extends Block
             console.log "UP: #{@orientation.up}"
             console.log "DOWN: #{@orientation.down}"
             console.log @gridIndex_X,@gridIndex_Y
-            @htmlElement.addClass("block-move-left")
             @moveToGrid()
-            @htmlElement.removeClass("block-move-left")
 
     moveRight: () =>
         # Error checking
@@ -706,7 +702,6 @@ class Dice extends Block
             console.log "UP: #{@orientation.up}"
             console.log "DOWN: #{@orientation.down}"
             console.log @gridIndex_X,@gridIndex_Y
-            @htmlElement.addClass("block-move-right")
             @moveToGrid()
 
     animateDice: (currentFaceup, nextFaceup, direction) =>

@@ -67,9 +67,8 @@
             blockElement.text("[" + widthBlock + "," + heightBlock + "]");
             if (heightBlock === 0 || heightBlock === Grid.prototype.size.height - 1) {
               blockElement.addClass(CLASS_GRID_BORDER);
-            }
-            if (widthBlock === 0 || widthBlock === Grid.prototype.size.width - 1) {
-              blockElement.addClass("grid-border");
+            } else if (widthBlock === 0 || widthBlock === Grid.prototype.size.width - 1) {
+              blockElement.addClass(CLASS_GRID_BORDER);
             }
             row.append(blockElement);
             Grid.prototype.blockArray[heightBlock][widthBlock] = block;
@@ -172,8 +171,7 @@
       this.reset = __bind(this.reset, this);
       this.moveToGrid = __bind(this.moveToGrid, this);
       this.createDice = __bind(this.createDice, this);
-      var diceSize;
-      diceSize = new Size("25", "25", UNIT_PIXEL);
+      this.size = new Size("25", "25", UNIT_PIXEL);
       this.gridIndex_X = randomNum(Grid.prototype.getGridWidth(), 0);
       this.gridIndex_Y = randomNum(Grid.prototype.getGridHeight(), 0);
       this.orientation = new Orientation;
@@ -784,6 +782,7 @@
       closeOnCancel: false
     }, function(isConfirm) {
       if (isConfirm) {
+        $("#game").goto();
         return $("#gameOptions").modal("show");
       }
     });
@@ -793,12 +792,20 @@
     return ELEMENT_CONDITIONS_CONTAINER.append(condition);
   };
 
+  $.fn.goto = function() {
+    $("html, body").animate({
+      scrollTop: $(this).offset().top + "px"
+    }, "slow");
+    this;
+  };
+
   $(function() {
     return FastClick.attach(document.body);
   });
 
   $(function() {
-    $(".go-to-game").click(function() {
+    $(".go-to-game").click(function(e) {
+      e.preventDefault();
       return startGameMessage();
     });
     $("#gameOptions .number-players button").click(function() {

@@ -65,7 +65,7 @@ class Grid
                     if heightBlock is 0 or heightBlock is Grid::size.height - 1
                         blockElement.addClass(CLASS_GRID_BORDER)
                     else if widthBlock is 0 or widthBlock is Grid::size.width - 1
-                        blockElement.addClass(CLASS_GRID_BORDER    
+                        blockElement.addClass(CLASS_GRID_BORDER)
                     # Add the block to the Page
                     row.append(blockElement)
                     # assign the block to the grid array
@@ -122,7 +122,7 @@ class Dice extends Block
     @htmlElement = null
     # METHODS
     constructor: () ->
-        diceSize = new Size("25","25",UNIT_PIXEL)
+        @size = new Size("25","25",UNIT_PIXEL)
         
         @gridIndex_X = randomNum(Grid::getGridWidth(),0)
         @gridIndex_Y = randomNum(Grid::getGridHeight(),0)  

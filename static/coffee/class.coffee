@@ -137,12 +137,18 @@ class Dice extends Block
         console.log "New Dice created"
         
     createDice: () =>
+        alreadyWon = true if @isGameWonSetup()
+
+        if alreadyWon
+            @reset()
+            @constructor()
+
         @assignHTMLElement(@createBlock())
         @moveToGrid()
         console.log @gridIndex_X,@gridIndex_Y
         return @htmlElement
 
-    moveToGrid: ()=>
+    moveToGrid: () =>
         faceUp = @getFaceUp()
         @htmlElement.text(faceUp)
 
@@ -164,6 +170,13 @@ class Dice extends Block
         console.log faceUp
         winningConditions = Game::getWinningConditions()
         winningConditions.checkConditions(faceUp,@gridIndex_X,@gridIndex_Y)
+
+
+    isGameWonSetup: =>
+        faceUp = @getFaceUp()
+        console.log "Checking if already won. FACEUP: #{faceUp}"
+        winningConditions = Game::getWinningConditions()
+        winningConditions.checkConditionsSetup(faceUp,@gridIndex_X,@gridIndex_Y)
 
     createBlock: =>
         super()
@@ -364,6 +377,29 @@ class Player
     getID: =>
         return @id
 
+    getDice: =>
+        return @dice
+
+    reset: =>
+        @dice.reset()
+        @dice = null
+
+    bindControls: (e)=>
+        if @id == 1
+            switch e.keyCode
+                when 68 then @dice.moveRight()
+                when 83 then @dice.moveDown()
+                when 65 then @dice.moveLeft()
+                when 87 then @dice.moveUp()
+        else if @id == 2
+            switch e.keyCode
+                when 39 then @dice.moveRight()
+                when 40 then @dice.moveDown()
+                when 37 then @dice.moveLeft()
+                when 38 then @dice.moveUp()
+    unbindControls: =>
+        $("body").unbind("keyup")
+
 
 class Orientation
     # PROPERTIES
@@ -384,7 +420,6 @@ class Orientation
             console.log "MISSING LEFT" unless @left?
             console.log "MISSING RIGHT" unless @right?
         
-
         @faceup = randomNum(6,1)
         @bottom = 7 - @faceup
 
@@ -432,6 +467,14 @@ class WinningConditions
                 return false
         # all conditions met
         showGameWin()
+        for player in Game::players
+            player.unbindControls()
+
+    checkConditionsSetup: (number,x,y) =>
+        for condition in @conditions
+            if not condition.checkIfSatisfied(number,x,y)
+                return false
+        return true
 
     reset: () =>
         for condition in @conditions
@@ -487,8 +530,7 @@ class Condition
         @htmlElement = null
 
 class Game
-    dice = null
-    players = null
+    players = []
     grid = null
     winningConditions = null
 
@@ -498,17 +540,20 @@ class Game
     getWinningConditions: () =>
         return Game::winningConditions
 
+    addPlayer: (player) =>
+        Game::players.push(player)
+
     resetGame: ->
         console.log "RESETTING GAME"
-        Game::dice.reset()
         Game::grid.reset()
         Game::winningConditions.reset()
         Game::boardSize.reset()
-
+        for player in Game::players
+            player.reset()
+            player = null
 
         Game::isActiveGame = false
         Game::boardSize = null
         Game::winningConditions = null
         Game::grid = null
         Game::players = null
-        Game::dice = null

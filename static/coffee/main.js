@@ -4,9 +4,10 @@ $(function() {
 });
 
 $(function() {
-  setTimeout((function() {
+  $(".go-to-game").click(function(e) {
+    e.preventDefault();
     return startGameMessage();
-  }), 200);
+  });
   $("#gameOptions .number-players button").click(function() {
     ELEMENT_GAME_OPTIONS_NUM_PLAYERS.find("." + CLASS_ACTIVE).removeClass(CLASS_ACTIVE);
     return $(this).addClass(CLASS_ACTIVE);
@@ -16,11 +17,12 @@ $(function() {
     return $(this).addClass(CLASS_ACTIVE);
   });
   return $(".start-game").click(function() {
-    var blockSize, boardSize, dice, diceSize, numberPlayers, sizeX, sizeY, winningConditions;
+    var blockSize, boardSize, dice, numberPlayers, sizeX, sizeY, winningConditions;
     boardSize = $(".board-size .active").val();
     numberPlayers = $(".number-players .active").val();
     $("#gameOptions").modal("hide");
     if (Game.prototype.isActiveGame === true) {
+      $("body").unbind("keyup");
       Game.prototype.resetGame();
     }
     Game.prototype.isActiveGame = true;
@@ -41,11 +43,13 @@ $(function() {
     winningConditions = new WinningConditions();
     winningConditions.addCondition();
     Game.prototype.setWinningConditions(winningConditions);
-    diceSize = new Size("25", "25", UNIT_PIXEL);
-    dice = new Dice(diceSize);
+    window.player1 = new Player("Pua");
+    dice = new Dice();
+    player1.setDice(dice);
     Game.prototype.dice = dice;
     console.log(Game.prototype);
     console.log(Grid.prototype);
+    console.log(player1);
     return $("body").keyup(function(e) {
       switch (e.keyCode) {
         case 68:

@@ -15,10 +15,10 @@ $ ->
 
     $("body").keyup (e) ->
         switch e.keyCode
-            when 68 then dice.moveRight()
-            when 83 then dice.moveDown()
-            when 65 then dice.moveLeft()
-            when 87 then dice.moveUp()
+            when 68 then Game::dice.moveRight()
+            when 83 then Game::dice.moveDown()
+            when 65 then Game::dice.moveLeft()
+            when 87 then Game::dice.moveUp()
 
     $("#gameOptions .number-players button").click ->
         ELEMENT_GAME_OPTIONS_NUM_PLAYERS.find("."+CLASS_ACTIVE)
@@ -39,7 +39,6 @@ $ ->
             Game::resetGame()
 
         # Create the new Game board
-        game = new Game()
         Game::isActiveGame = true
         Game::boardSize = boardSize
         if boardSize is BOARD_SIZE_MEDIUM
@@ -56,17 +55,18 @@ $ ->
         Game::boardSize = blockSize
 
         # Draw the Grid for the board
-        grid = new Grid(blockSize)
+        Grid::createGridStarter(blockSize)
 
         # Set the victory conditions
         winningConditions = new WinningConditions()
         winningConditions.addCondition()
 
-        game.setWinningConditions(winningConditions)
+        Game::setWinningConditions(winningConditions)
 
-        console.log game
 
         diceSize = new Size("25","25",UNIT_PIXEL)
         dice = new Dice(diceSize)
-
         Game::dice = dice
+
+        console.log Game::
+        console.log Grid::

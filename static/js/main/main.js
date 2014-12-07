@@ -8,15 +8,18 @@
   Grid = (function() {
     var blockArray, size;
 
-    size = null;
-
-    blockArray = null;
-
-    function Grid(size) {
+    function Grid() {
       this.getBlockElement = __bind(this.getBlockElement, this);
       this.getGrid = __bind(this.getGrid, this);
       this.createGrid = __bind(this.createGrid, this);
       this.reset = __bind(this.reset, this);
+    }
+
+    size = null;
+
+    blockArray = null;
+
+    Grid.prototype.createGridStarter = function(size) {
       if (size === null) {
         console.log("CANNOT CREATE GRID. MISSING SIZE OBJECT.");
         return;
@@ -25,8 +28,8 @@
       Grid.prototype.blockArray = [[]];
       console.log("New Grid created: (" + Grid.prototype.size.height + "," + Grid.prototype.size.width + ")");
       this.createGrid();
-      Game.prototype.grid = this;
-    }
+      return Game.prototype.grid = this;
+    };
 
     Grid.prototype.reset = function() {
       var block, blockRow, _i, _j, _len, _len1, _ref;
@@ -626,7 +629,12 @@
   })();
 
   Game = (function() {
-    var boardSize, dice, grid, isActiveGame, players, winningConditions;
+    var boardSize, dice, grid, isActiveGame, players, score, winningConditions;
+
+    function Game() {
+      this.getWinningConditions = __bind(this.getWinningConditions, this);
+      this.setWinningConditions = __bind(this.setWinningConditions, this);
+    }
 
     dice = null;
 
@@ -640,11 +648,7 @@
 
     isActiveGame = false;
 
-    function Game() {
-      this.getWinningConditions = __bind(this.getWinningConditions, this);
-      this.setWinningConditions = __bind(this.setWinningConditions, this);
-      console.log("New Game has been created.");
-    }
+    score = null;
 
     Game.prototype.setWinningConditions = function(win) {
       return Game.prototype.winningConditions = win;
@@ -771,13 +775,13 @@
     $("body").keyup(function(e) {
       switch (e.keyCode) {
         case 68:
-          return dice.moveRight();
+          return Game.prototype.dice.moveRight();
         case 83:
-          return dice.moveDown();
+          return Game.prototype.dice.moveDown();
         case 65:
-          return dice.moveLeft();
+          return Game.prototype.dice.moveLeft();
         case 87:
-          return dice.moveUp();
+          return Game.prototype.dice.moveUp();
       }
     });
     $("#gameOptions .number-players button").click(function() {
@@ -789,14 +793,13 @@
       return $(this).addClass(CLASS_ACTIVE);
     });
     return $(".start-game").click(function() {
-      var blockSize, boardSize, dice, diceSize, game, grid, numberPlayers, sizeX, sizeY, winningConditions;
+      var blockSize, boardSize, dice, diceSize, numberPlayers, sizeX, sizeY, winningConditions;
       boardSize = $(".board-size .active").val();
       numberPlayers = $(".number-players .active").val();
       $("#gameOptions").modal("hide");
       if (Game.prototype.isActiveGame === true) {
         Game.prototype.resetGame();
       }
-      game = new Game();
       Game.prototype.isActiveGame = true;
       Game.prototype.boardSize = boardSize;
       if (boardSize === BOARD_SIZE_MEDIUM) {
@@ -811,14 +814,15 @@
         blockSize = new Size(sizeX, sizeY, UNIT_BLOCK);
       }
       Game.prototype.boardSize = blockSize;
-      grid = new Grid(blockSize);
+      Grid.prototype.createGridStarter(blockSize);
       winningConditions = new WinningConditions();
       winningConditions.addCondition();
-      game.setWinningConditions(winningConditions);
-      console.log(game);
+      Game.prototype.setWinningConditions(winningConditions);
       diceSize = new Size("25", "25", UNIT_PIXEL);
       dice = new Dice(diceSize);
-      return Game.prototype.dice = dice;
+      Game.prototype.dice = dice;
+      console.log(Game.prototype);
+      return console.log(Grid.prototype);
     });
   });
 

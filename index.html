@@ -6,10 +6,16 @@
 
   </head>
 
-  <body>
+  <body onload="window.opener.setTimeout(windows.opener.SC.connectCallback, 1)">
+
+  	<b style="width: 100%; text-alight: center;"> This popup should automatically close in a few seconds</b>
+
     <ul id="results">
 
     </ul>
+
+    <div id="player">
+    </div>
 
   </body>
 

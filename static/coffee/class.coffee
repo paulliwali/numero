@@ -421,4 +421,3 @@ class Game
     getWinningConditions: () =>
         return Game::winningConditions
 
-# Game class?

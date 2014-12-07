@@ -2,7 +2,10 @@ $ ->
     FastClick.attach(document.body)
 
 $ ->
+    setTimeout ( ->
+        startGameMessage()
 
+    ),200
     # Global
     # < ========== >
     game = new Game()
@@ -17,7 +20,7 @@ $ ->
     winningConditions.addCondition()
 
     game.setWinningConditions(winningConditions)
-    
+
     diceSize = new Size("25","25",UNIT_PIXEL)
     dice = new Dice(diceSize)
     

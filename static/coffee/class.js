@@ -7,14 +7,18 @@ var Block, Condition, Dice, Game, Grid, Orientation, Player, Position, Size, Win
 Grid = (function() {
   var blockArray, size;
 
+  function Grid() {
+    this.getBlockElement = __bind(this.getBlockElement, this);
+    this.getGrid = __bind(this.getGrid, this);
+    this.createGrid = __bind(this.createGrid, this);
+    this.reset = __bind(this.reset, this);
+  }
+
   size = null;
 
   blockArray = null;
 
-  function Grid(size) {
-    this.getBlockElement = __bind(this.getBlockElement, this);
-    this.getGrid = __bind(this.getGrid, this);
-    this.createGrid = __bind(this.createGrid, this);
+  Grid.prototype.createGridStarter = function(size) {
     if (size === null) {
       console.log("CANNOT CREATE GRID. MISSING SIZE OBJECT.");
       return;
@@ -23,7 +27,25 @@ Grid = (function() {
     Grid.prototype.blockArray = [[]];
     console.log("New Grid created: (" + Grid.prototype.size.height + "," + Grid.prototype.size.width + ")");
     this.createGrid();
-  }
+    return Game.prototype.grid = this;
+  };
+
+  Grid.prototype.reset = function() {
+    var block, blockRow, _i, _j, _len, _len1, _ref;
+    Grid.prototype.size.reset();
+    Grid.prototype.size = null;
+    _ref = Grid.prototype.blockArray;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      blockRow = _ref[_i];
+      for (_j = 0, _len1 = blockRow.length; _j < _len1; _j++) {
+        block = blockRow[_j];
+        block.reset();
+        block = null;
+      }
+      blockRow = null;
+    }
+    return Grid.prototype.blockArray = null;
+  };
 
   Grid.prototype.createGrid = function() {
     var block, blockElement, grid, heightBlock, row, widthBlock, _i, _j, _ref, _ref1, _results;
@@ -78,6 +100,7 @@ Block = (function() {
 
   function Block(size) {
     this.size = size;
+    this.reset = __bind(this.reset, this);
     this.createBlock = __bind(this.createBlock, this);
     this.getBlockElement = __bind(this.getBlockElement, this);
     this.assignHTMLElement = __bind(this.assignHTMLElement, this);
@@ -100,6 +123,13 @@ Block = (function() {
       this.assignHTMLElement(block);
       return block;
     }
+  };
+
+  Block.prototype.reset = function() {
+    this.size.reset();
+    this.size = null;
+    this.htmlElement.remove();
+    return this.htmlElement = null;
   };
 
   return Block;
@@ -133,6 +163,7 @@ Dice = (function(_super) {
     this.createBlock = __bind(this.createBlock, this);
     this.isGameWonSetup = __bind(this.isGameWonSetup, this);
     this.isGameWon = __bind(this.isGameWon, this);
+    this.reset = __bind(this.reset, this);
     this.moveToGrid = __bind(this.moveToGrid, this);
     this.createDice = __bind(this.createDice, this);
     Dice.__super__.constructor.call(this, size);
@@ -156,6 +187,15 @@ Dice = (function(_super) {
     this.htmlElement.text(faceUp);
     Grid.prototype.getBlockElement(this.gridIndex_X, this.gridIndex_Y).getBlockElement().append(this.htmlElement);
     return this.isGameWon();
+  };
+
+  Dice.prototype.reset = function() {
+    this.htmlElement.remove();
+    this.bottomPosition = null;
+    this.gridIndex_X = null;
+    this.gridIndex_Y = null;
+    this.orientation = null;
+    return this.htmlElement = null;
   };
 
   Dice.prototype.isGameWon = function() {
@@ -337,6 +377,7 @@ Size = (function() {
     this.height = height;
     this.width = width;
     this.unit = unit;
+    this.reset = __bind(this.reset, this);
     this.getHeightWithUnit = __bind(this.getHeightWithUnit, this);
     this.getWidthWithUnit = __bind(this.getWidthWithUnit, this);
     if ((this.height == null) || (this.width == null)) {
@@ -357,6 +398,12 @@ Size = (function() {
 
   Size.prototype.getHeightWithUnit = function() {
     return this.height + this.unit;
+  };
+
+  Size.prototype.reset = function() {
+    this.height = null;
+    this.width = null;
+    return this.unit = null;
   };
 
   return Size;
@@ -421,6 +468,7 @@ Orientation = (function() {
     this.up = up;
     this.left = left;
     this.right = right;
+    this.reset = __bind(this.reset, this);
     if (this.faceup === null || this.bottom === null || this.down === null || this.up === null || this.left === null || this.right === null) {
       if (this.faceup == null) {
         console.log("MISSING FACEUP");
@@ -463,6 +511,15 @@ Orientation = (function() {
     console.log("DOWN: " + this.down);
   }
 
+  Orientation.prototype.reset = function() {
+    this.faceup = null;
+    this.bottom = null;
+    this.down = null;
+    this.up = null;
+    this.left = null;
+    return this.right = null;
+  };
+
   return Orientation;
 
 })();
@@ -471,6 +528,7 @@ WinningConditions = (function() {
   WinningConditions.conditions = null;
 
   function WinningConditions() {
+    this.reset = __bind(this.reset, this);
     this.checkConditions = __bind(this.checkConditions, this);
     this.addCondition = __bind(this.addCondition, this);
     this.conditions = [];
@@ -495,6 +553,16 @@ WinningConditions = (function() {
     return showGameWin();
   };
 
+  WinningConditions.prototype.reset = function() {
+    var condition, _i, _len, _ref;
+    _ref = this.conditions;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      condition = _ref[_i];
+      condition.reset();
+    }
+    return this.conditions = null;
+  };
+
   return WinningConditions;
 
 })();
@@ -511,6 +579,7 @@ Condition = (function() {
   Condition.htmlElement = null;
 
   function Condition() {
+    this.reset = __bind(this.reset, this);
     this.getHTMLElement = __bind(this.getHTMLElement, this);
     this.assignHTMLElement = __bind(this.assignHTMLElement, this);
     this.createHTMLElement = __bind(this.createHTMLElement, this);
@@ -551,12 +620,26 @@ Condition = (function() {
     return this.htmlElement;
   };
 
+  Condition.prototype.reset = function() {
+    this.htmlElement.remove();
+    this.number = null;
+    this.blockPositionY = null;
+    this.blockPositionX = null;
+    this.isMet = false;
+    return this.htmlElement = null;
+  };
+
   return Condition;
 
 })();
 
 Game = (function() {
   var dice, grid, players, winningConditions;
+
+  function Game() {
+    this.getWinningConditions = __bind(this.getWinningConditions, this);
+    this.setWinningConditions = __bind(this.setWinningConditions, this);
+  }
 
   dice = null;
 
@@ -566,18 +649,26 @@ Game = (function() {
 
   winningConditions = null;
 
-  function Game() {
-    this.getWinningConditions = __bind(this.getWinningConditions, this);
-    this.setWinningConditions = __bind(this.setWinningConditions, this);
-    console.log("New Game has been created.");
-  }
-
   Game.prototype.setWinningConditions = function(win) {
     return Game.prototype.winningConditions = win;
   };
 
   Game.prototype.getWinningConditions = function() {
     return Game.prototype.winningConditions;
+  };
+
+  Game.prototype.resetGame = function() {
+    console.log("RESETTING GAME");
+    Game.prototype.dice.reset();
+    Game.prototype.grid.reset();
+    Game.prototype.winningConditions.reset();
+    Game.prototype.boardSize.reset();
+    Game.prototype.isActiveGame = false;
+    Game.prototype.boardSize = null;
+    Game.prototype.winningConditions = null;
+    Game.prototype.grid = null;
+    Game.prototype.players = null;
+    return Game.prototype.dice = null;
   };
 
   return Game;

@@ -18,6 +18,10 @@ randomise = () ->
     randomNumAlt = @_randomNum(10,5)
     # returns a random integer betwen 5 and 10
 
+sleep = (ms) ->
+  start = new Date().getTime()
+  continue while new Date().getTime() - start < ms
+
 showGameWin = () ->
   swal({   
     title: "You've Won!",  

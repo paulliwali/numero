@@ -9,13 +9,13 @@ SC.initialize({
 });
 
 // initiate auth popup
-/*
-SC.connect(function() {
-  SC.get('/me', function(me) {
-    alert('Hello, ' + me.username);
+$("#login").on("click", function(){
+  SC.connect(function() {
+    SC.get('/me', function(me) {
+      alert('Hello, ' + me.username);
+    });
   });
-});
-*/
+})
 
 // Gives top track widget
 /*
@@ -33,5 +33,5 @@ $("#stream").on("click", function(){
   $SC.stream("/tracks/293", {autoPlay: true});
 });
 */
-
-// SC.oEmbed("http://soundcloud.com/forss/sets/soulhack", {color: "ff0066"}, document.getElementById("player"));
+var track_url = 'http://soundcloud.com/forss/flickermood';
+SC.oEmbed(track_url, {color: "ff0066", maxheight: "120"}, document.getElementById("player"));

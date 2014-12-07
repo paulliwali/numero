@@ -874,16 +874,16 @@
     Dice.prototype.rotateAnimation = function(currentFaceup, nextFaceup, direction) {
       switch (direction) {
         case "up":
-          console.log("Rotate 90 degrees clockwise");
+          this.htmlElement.addClass("rotate90");
           break;
         case "down":
-          console.log("Rotate 270 degrees clockwise");
+          this.htmlElement.addClass("rotate270");
           break;
         case "left":
-          console.log("Rotate 0 degrees clockwise");
+          this.htmlElement.addClass("rotate0");
           break;
         case "right":
-          console.log("Rotate 180 degrees");
+          this.htmlElement.addClass("rotate180");
       }
       return this.htmlElement.addClass("rollDice" + currentFaceup + "To" + nextFaceup + " " + direction);
     };

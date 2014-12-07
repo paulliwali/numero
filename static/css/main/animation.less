@@ -1,4 +1,4 @@
-.animation (@name, @duration: 2s, @delay: 0, @ease: ease) {
+.animation (@name, @duration: 2.5s, @delay: 0, @ease: ease) {
     -webkit-animation: @name @duration @delay @ease;
     -moz-animation:    @name @duration @delay @ease;
     -ms-animation:     @name @duration @delay @ease;
@@ -7,53 +7,24 @@
 
 
 /* Chrome, Safari, Opera */
-@-webkit-keyframes rollDice {
-    0% {
+@-webkit-keyframes rollDice1To2 {
+    to{
         background: url(../../icons/Sprite/1-2.png) 0;
-        left: 10px;
+        left: 0;
     }
-    25%{
-        background: url(../../icons/Sprite/1-2.png) -75px;
-        left: 30px;
-    
-    }
-    50%{
-        background: url(../../icons/Sprite/1-2.png) -150px;
-        left: 50px;
-
-    }
-    75%{
-        background: url(../../icons/Sprite/1-2.png) -225px;
-        left: 70px;
-
-    }
-    100%{
+    from{
         background: url(../../icons/Sprite/1-2.png) -300px;
-        left: 90px;
-
+        left: 100px;
     }
 }
 
-@keyframes rollDice {
-    0% {
+@keyframes rollDice1To2 {
+        to{
         background: url(../../icons/Sprite/1-2.png) 0;
-    }
-    20%{
-        background: url(../../icons/Sprite/1-2.png) -75px;
 
     }
-    40%{
-        background: url(../../icons/Sprite/1-2.png) -150px;
-
-    }
-    60%{
-        background: url(../../icons/Sprite/1-2.png) -225px;
-
-    }
-    80%{
+    from{
         background: url(../../icons/Sprite/1-2.png) -300px;
-    }
-    100%{
-        background: url(../../icons/Sprite/1-2.png) -375px;
+
     }
 }

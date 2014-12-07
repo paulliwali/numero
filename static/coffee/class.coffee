@@ -493,9 +493,9 @@ class Condition
         @blockPositionX = randomNum(Grid::getGridWidth(),0)
         @blockPositionY = randomNum(Grid::getGridHeight(),0)
         console.log "A condition has been made for #{@number} at [#{@blockPositionX},#{@blockPositionY}] "
+        Grid::getBlockElement(@blockPositionX,@blockPositionY).getBlockElement().addClass(CLASS_BLOCK_WINNING_CONDITION)
         @createHTMLElement()
         addConditionInViewableBox(@htmlElement)
-
 
     checkIfSatisfied: (number,x,y) =>
         if number == @number and @blockPositionX == x  and @blockPositionY == y

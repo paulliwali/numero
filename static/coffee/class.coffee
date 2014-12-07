@@ -100,7 +100,7 @@ class Block
         # console.log "New Block Created: (#{@size.height},#{@size.width})"
     assignHTMLElement: (block) =>
         @htmlElement = block
-    getBlockElement: =>
+    getHTMLElement: =>
         return @htmlElement
     createBlock: () =>
         if @size.unit is UNIT_PIXEL
@@ -154,7 +154,7 @@ class Dice extends Block
 
         Grid::getBlockElement(
             @gridIndex_X, @gridIndex_Y
-            ).getBlockElement().append(@htmlElement)
+            ).getHTMLElement().append(@htmlElement)
         @isGameWon()
 
     reset: =>
@@ -509,7 +509,7 @@ class Condition
         @blockPositionX = randomNum(Grid::getGridWidth(),0)
         @blockPositionY = randomNum(Grid::getGridHeight(),0)
         console.log "A condition has been made for #{@number} at [#{@blockPositionX},#{@blockPositionY}] "
-        Grid::getBlockElement(@blockPositionX,@blockPositionY).getBlockElement().addClass(CLASS_BLOCK_WINNING_CONDITION)
+        Grid::getBlockElement(@blockPositionX,@blockPositionY).getHTMLElement().addClass(CLASS_BLOCK_WINNING_CONDITION)
         @createHTMLElement()
         addConditionInViewableBox(@htmlElement)
 

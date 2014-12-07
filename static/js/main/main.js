@@ -115,7 +115,7 @@
       this.size = size;
       this.reset = __bind(this.reset, this);
       this.createBlock = __bind(this.createBlock, this);
-      this.getBlockElement = __bind(this.getBlockElement, this);
+      this.getHTMLElement = __bind(this.getHTMLElement, this);
       this.assignHTMLElement = __bind(this.assignHTMLElement, this);
     }
 
@@ -123,7 +123,7 @@
       return this.htmlElement = block;
     };
 
-    Block.prototype.getBlockElement = function() {
+    Block.prototype.getHTMLElement = function() {
       return this.htmlElement;
     };
 
@@ -207,7 +207,7 @@
       var faceUp;
       faceUp = this.getFaceUp();
       this.htmlElement.text(faceUp);
-      Grid.prototype.getBlockElement(this.gridIndex_X, this.gridIndex_Y).getBlockElement().append(this.htmlElement);
+      Grid.prototype.getBlockElement(this.gridIndex_X, this.gridIndex_Y).getHTMLElement().append(this.htmlElement);
       return this.isGameWon();
     };
 
@@ -742,7 +742,7 @@
       this.blockPositionX = randomNum(Grid.prototype.getGridWidth(), 0);
       this.blockPositionY = randomNum(Grid.prototype.getGridHeight(), 0);
       console.log("A condition has been made for " + this.number + " at [" + this.blockPositionX + "," + this.blockPositionY + "] ");
-      Grid.prototype.getBlockElement(this.blockPositionX, this.blockPositionY).getBlockElement().addClass(CLASS_BLOCK_WINNING_CONDITION);
+      Grid.prototype.getBlockElement(this.blockPositionX, this.blockPositionY).getHTMLElement().addClass(CLASS_BLOCK_WINNING_CONDITION);
       this.createHTMLElement();
       addConditionInViewableBox(this.htmlElement);
     }

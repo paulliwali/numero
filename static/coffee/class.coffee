@@ -16,7 +16,7 @@ class Grid
 
 
     # METHODS
-    constructor: (size) ->
+    createGridStarter: (size) ->
         if (size is null)
             console.log "CANNOT CREATE GRID. MISSING SIZE OBJECT."
             return
@@ -462,8 +462,7 @@ class Game
     winningConditions = null
     boardSize = null
     isActiveGame = false
-    constructor: () ->
-        console.log "New Game has been created."
+    score = null
 
     setWinningConditions: (win) =>
         Game::winningConditions = win

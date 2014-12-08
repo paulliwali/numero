@@ -980,11 +980,11 @@
     Orientation.prototype.updateDiceLayout = function() {
       if (this.htmlElement != null) {
         this.htmlElement.find(".dice-face").removeClass(DICE_FACE_ALL);
-        this.htmlElement.find(".front-face").addClass("face-" + this.up);
-        this.htmlElement.find(".left-face").addClass("face-" + this.left);
+        this.htmlElement.find(".front-face").addClass("face-" + this.down);
+        this.htmlElement.find(".left-face").addClass("face-" + this.right);
         this.htmlElement.find(".current-face").addClass("face-" + this.faceup).addClass("active-face");
-        this.htmlElement.find(".right-face").addClass("face-" + this.right);
-        return this.htmlElement.find(".back-face").addClass("face-" + this.down);
+        this.htmlElement.find(".right-face").addClass("face-" + this.left);
+        return this.htmlElement.find(".back-face").addClass("face-" + this.up);
       }
     };
 
@@ -1018,9 +1018,9 @@
 
   UNIT_BLOCK = "block";
 
-  BLOCK_DEFAULT_WIDTH_PIXEL = "100";
+  BLOCK_DEFAULT_WIDTH_PIXEL = "110";
 
-  BLOCK_DEFAULT_HEIGHT_PIXEL = "100";
+  BLOCK_DEFAULT_HEIGHT_PIXEL = "110";
 
   CLASS_ACTIVE = "active";
 

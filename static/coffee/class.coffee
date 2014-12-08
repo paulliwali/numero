@@ -758,11 +758,11 @@ class Orientation
     updateDiceLayout: () =>
         if @htmlElement?
             @htmlElement.find(".dice-face").removeClass(DICE_FACE_ALL)
-            @htmlElement.find(".front-face").addClass("face-#{@up}")
-            @htmlElement.find(".left-face").addClass("face-#{@left}")
+            @htmlElement.find(".front-face").addClass("face-#{@down}")
+            @htmlElement.find(".left-face").addClass("face-#{@right}")
             @htmlElement.find(".current-face").addClass("face-#{@faceup}").addClass("active-face")
-            @htmlElement.find(".right-face").addClass("face-#{@right}")
-            @htmlElement.find(".back-face").addClass("face-#{@down}")
+            @htmlElement.find(".right-face").addClass("face-#{@left}")
+            @htmlElement.find(".back-face").addClass("face-#{@up}")
 
     reset: =>
         @htmlElement = null

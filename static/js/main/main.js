@@ -1192,7 +1192,7 @@
       Game.prototype.boardSize = boardSize;
       Game.prototype.numberOfPlayers = parseInt(numberPlayers);
       Game.prototype.newGame();
-      Game.prototype.addNewPlayers("PlayerA", "PlayerB");
+      Game.prototype.addNewPlayers("Player 1", "Player 2");
       $(".scores").show();
       return $(".dice-layout").show();
     });

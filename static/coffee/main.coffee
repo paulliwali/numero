@@ -36,7 +36,7 @@ $ ->
 
         Game::newGame()
 
-        Game::addNewPlayers("PlayerA","PlayerB")
+        Game::addNewPlayers("Player 1","Player 2")
 
         $(".scores").show()
         $(".dice-layout").show()

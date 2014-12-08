@@ -222,12 +222,10 @@
     };
 
     Condition.prototype.createHTMLElement = function() {
-      var div, number, xPos, yPos;
+      var div, number;
       div = $("<div>");
-      xPos = $("<div class='col-xs-4'>").text("Grid X: " + this.blockPositionX);
-      yPos = $("<div class='col-xs-4'>").text("Grid Y: " + this.blockPositionY);
-      number = $("<div class='col-xs-4'>").text("Face Up Number: " + this.number);
-      div.append(xPos).append(yPos).append(number);
+      number = $("<div class='col-xs-12 winning-number-condition'>").text("Land with this Number Facing up on the circle to win: " + this.number);
+      div.append(number);
       this.htmlElement = div;
       return div;
     };

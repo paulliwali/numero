@@ -162,10 +162,8 @@ class Condition
 
     createHTMLElement: =>
         div = $("<div>")
-        xPos = $("<div class='col-xs-4'>").text("Grid X: " + @blockPositionX)
-        yPos =$("<div class='col-xs-4'>").text("Grid Y: " + @blockPositionY)
-        number = $("<div class='col-xs-4'>").text("Face Up Number: " + @number)
-        div.append(xPos).append(yPos).append(number)
+        number = $("<div class='col-xs-12 winning-number-condition'>").text("Land with this Number Facing up on the circle to win: " + @number)
+        div.append(number)
 
         @htmlElement = div
         return div

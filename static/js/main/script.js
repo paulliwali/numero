@@ -19,9 +19,10 @@ $("#login").on("click", function(){
 
 // Gives top track widget
   SC.get("/tracks", { genres: 'edm', license: 'cc-by-sa' }, function(tracks){
+    var track_url = 'https://soundcloud.com/incrediblelove4ever2/chamillionaire-ridin-dirty';
     var randomnumber=Math.floor(Math.random()*11);
     var track = tracks[randomnumber];
-    SC.oEmbed(track.uri, {maxheight: "250", color: "ff0066"}, document.getElementById("player"));
+    SC.oEmbed(track_url/*track.uri*/, {maxheight: "250", color: "ff0066"}, document.getElementById("player"));
   });
 
 

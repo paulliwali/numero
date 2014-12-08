@@ -87,6 +87,7 @@
         }
         dice2 = new Dice();
         player2.setDice(dice2);
+        dice2.getHTMLElement().css("background", URL_FOR_DICE + "-2" + ("/Dice-" + (dice2.getFaceUp()) + ".png)"));
         dice2.orientation.assignHTMLElement($(".player-two .layout-container"));
         if (__indexOf.call(Game.prototype.players, player2) < 0) {
           Game.prototype.addPlayer(player2);
@@ -651,18 +652,19 @@
       return this.getHTMLElement().on("animationend webkitAnimationEnd oAnimationEnd MSAnimationEnd", function(e) {
         Dice.getHTMLElement().removeClass().addClass("block-dice block");
         Dice.moveToGrid();
-        Dice.setAnimationUnlock();
-        return console.log("finished animation");
+        return Dice.setAnimationUnlock();
       });
     };
 
     Dice.prototype.moveToGrid = function() {
       var faceUp;
       faceUp = this.getFaceUp();
-      this.htmlElement.text(faceUp);
-      this.htmlElement.css("background", URL_FOR_DICE + ("/Dice-" + faceUp + ".png)"));
+      if (this.getPlayer() != null) {
+        this.htmlElement.css("background", URL_FOR_DICE + ("-" + (this.getPlayer().getID())) + ("/Dice-" + faceUp + ".png)"));
+      } else {
+        this.htmlElement.css("background", URL_FOR_DICE + "-1" + ("/Dice-" + faceUp + ".png)"));
+      }
       this.orientation.updateDiceLayout();
-      console.log("MOVING TO GRID");
       Grid.prototype.getBlockElement(this.gridIndex_X, this.gridIndex_Y).getHTMLElement().append(this.htmlElement);
       return this.isGameWon();
     };
@@ -692,7 +694,6 @@
     Dice.prototype.isGameWonSetup = function() {
       var faceUp, winningConditions;
       faceUp = this.getFaceUp();
-      console.log("Checking if already won. FACEUP: " + faceUp);
       winningConditions = Game.prototype.getWinningConditions();
       return winningConditions.checkConditionsSetup(faceUp, this.gridIndex_X, this.gridIndex_Y);
     };
@@ -889,7 +890,7 @@
         case "right":
           this.htmlElement.addClass("rotate180");
       }
-      return this.htmlElement.addClass("rollDice" + currentFaceup + "To" + nextFaceup + " " + direction);
+      return this.htmlElement.addClass("rollDice" + currentFaceup + "To" + nextFaceup + "-v" + (this.getPlayer().id) + " " + direction);
     };
 
     Dice.prototype.setAnimationLock = function() {
@@ -1049,17 +1050,17 @@
 
   URL_FOR_DICE = URL_FOR_SPRITES + "/Dice-face";
 
-  URL_FOR_DICE_1 = "" + URL_FOR_SPRITES + "/Dice-face/Dice-1.png)";
+  URL_FOR_DICE_1 = "" + URL_FOR_SPRITES + "/Dice-face-1/Dice-1.png)";
 
-  URL_FOR_DICE_2 = "" + URL_FOR_SPRITES + "/Dice-face/Dice-2.png)";
+  URL_FOR_DICE_2 = "" + URL_FOR_SPRITES + "/Dice-face-1/Dice-2.png)";
 
-  URL_FOR_DICE_3 = "" + URL_FOR_SPRITES + "/Dice-face/Dice-3.png)";
+  URL_FOR_DICE_3 = "" + URL_FOR_SPRITES + "/Dice-face-1/Dice-3.png)";
 
-  URL_FOR_DICE_4 = "" + URL_FOR_SPRITES + "/Dice-face/Dice-4.png)";
+  URL_FOR_DICE_4 = "" + URL_FOR_SPRITES + "/Dice-face-1/Dice-4.png)";
 
-  URL_FOR_DICE_5 = "" + URL_FOR_SPRITES + "/Dice-face/Dice-5.png)";
+  URL_FOR_DICE_5 = "" + URL_FOR_SPRITES + "/Dice-face-1/Dice-5.png)";
 
-  URL_FOR_DICE_6 = "" + URL_FOR_SPRITES + "/Dice-face/Dice-6.png)";
+  URL_FOR_DICE_6 = "" + URL_FOR_SPRITES + "/Dice-face-1/Dice-6.png)";
 
   DICE_FACE_ALL = "face-1  face-2 face-3 face-4 face-5 face-6 active-face";
 
@@ -1184,7 +1185,7 @@
       return $(this).addClass(CLASS_ACTIVE);
     });
     return $(".start-game").click(function() {
-      var boardSize, numberPlayers, player, _i, _len, _ref;
+      var boardSize, numberPlayers;
       boardSize = $(".board-size .active").val() === "" ? "small" : $(".board-size .active").val();
       numberPlayers = $(".number-players .active").val() === "" ? "1" : $(".number-players .active").val();
       $("#gameOptions").modal("hide");
@@ -1192,13 +1193,6 @@
       Game.prototype.numberOfPlayers = parseInt(numberPlayers);
       Game.prototype.newGame();
       Game.prototype.addNewPlayers("PlayerA", "PlayerB");
-      _ref = Game.prototype.players;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        player = _ref[_i];
-        console.log(player.getDice());
-      }
-      console.log(Game.prototype);
-      console.log(Grid.prototype);
       $(".scores").show();
       return $(".dice-layout").show();
     });

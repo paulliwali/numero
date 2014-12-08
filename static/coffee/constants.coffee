@@ -47,12 +47,12 @@ BOARD_SIZE_RANDOM = "random"
 
 URL_FOR_SPRITES = "url(static/icons/Sprite/"
 URL_FOR_DICE = URL_FOR_SPRITES + "/Dice-face"
-URL_FOR_DICE_1 = "#{URL_FOR_SPRITES}/Dice-face/Dice-1.png)"
-URL_FOR_DICE_2 = "#{URL_FOR_SPRITES}/Dice-face/Dice-2.png)"
-URL_FOR_DICE_3 = "#{URL_FOR_SPRITES}/Dice-face/Dice-3.png)"
-URL_FOR_DICE_4 = "#{URL_FOR_SPRITES}/Dice-face/Dice-4.png)"
-URL_FOR_DICE_5 = "#{URL_FOR_SPRITES}/Dice-face/Dice-5.png)"
-URL_FOR_DICE_6 = "#{URL_FOR_SPRITES}/Dice-face/Dice-6.png)"
+URL_FOR_DICE_1 = "#{URL_FOR_SPRITES}/Dice-face-1/Dice-1.png)"
+URL_FOR_DICE_2 = "#{URL_FOR_SPRITES}/Dice-face-1/Dice-2.png)"
+URL_FOR_DICE_3 = "#{URL_FOR_SPRITES}/Dice-face-1/Dice-3.png)"
+URL_FOR_DICE_4 = "#{URL_FOR_SPRITES}/Dice-face-1/Dice-4.png)"
+URL_FOR_DICE_5 = "#{URL_FOR_SPRITES}/Dice-face-1/Dice-5.png)"
+URL_FOR_DICE_6 = "#{URL_FOR_SPRITES}/Dice-face-1/Dice-6.png)"
 
 # REMOVE FACES
 # ===============

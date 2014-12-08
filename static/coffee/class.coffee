@@ -68,6 +68,7 @@ class Game
                 window.player2 = new Player(name2)
             dice2 = new Dice()
             player2.setDice(dice2)
+            dice2.getHTMLElement().css("background",URL_FOR_DICE + "-2" + "/Dice-#{dice2.getFaceUp()}.png)")
             dice2.orientation.assignHTMLElement($(".player-two .layout-container"))
             if player2 not in Game::players
                 Game::addPlayer(player2)
@@ -398,7 +399,6 @@ class Size
             console.log "MISSING HEIGHT OBJECT" unless @height?
             console.log "MISSING WIDTH OBJECT" unless @width?
             return
-        # console.log "New Size created: (#{@height},#{@width})"
 
     getWidthWithUnit: =>
         return @width + @unit
@@ -456,14 +456,15 @@ class Dice extends Block
             Dice.getHTMLElement().removeClass().addClass("block-dice block")
             Dice.moveToGrid()
             Dice.setAnimationUnlock()
-            console.log "finished animation"
 
     moveToGrid: () =>
         faceUp = @getFaceUp()
-        @htmlElement.text(faceUp)
-        @htmlElement.css("background",URL_FOR_DICE + "/Dice-#{faceUp}.png)")
+        if @getPlayer()?
+            @htmlElement.css("background",URL_FOR_DICE + "-#{@getPlayer().getID()}" + "/Dice-#{faceUp}.png)")
+        else 
+            @htmlElement.css("background",URL_FOR_DICE + "-1" + "/Dice-#{faceUp}.png)")
+
         @orientation.updateDiceLayout()
-        console.log "MOVING TO GRID"
         Grid::getBlockElement(
             @gridIndex_X, @gridIndex_Y
             ).getHTMLElement().append(@htmlElement)
@@ -488,7 +489,6 @@ class Dice extends Block
 
     isGameWonSetup: =>
         faceUp = @getFaceUp()
-        console.log "Checking if already won. FACEUP: #{faceUp}"
         winningConditions = Game::getWinningConditions()
         winningConditions.checkConditionsSetup(faceUp,@gridIndex_X,@gridIndex_Y)
 
@@ -565,16 +565,6 @@ class Dice extends Block
 
             @animateDice(oldFaceUp, @orientation.faceup, "up")
 
-            # console.log "Dice moved up"
-            # console.log "New orientation is:"
-            # console.log "FACEUP: #{@orientation.faceup}"
-            # console.log "BOTTOM: #{@orientation.bottom}"
-            # console.log "LEFT: #{@orientation.left}"
-            # console.log "RIGHT: #{@orientation.right}"
-            # console.log "UP: #{@orientation.up}"
-            # console.log "DOWN: #{@orientation.down}"
-            # console.log @gridIndex_X,@gridIndex_Y
-            # @moveToGrid()
 
 
     moveDown: () => 
@@ -620,16 +610,6 @@ class Dice extends Block
 
             @animateDice(oldFaceUp, @orientation.faceup, "down")
 
-            # console.log "Dice moved down"
-            # console.log "New orientation is:"
-            # console.log "FACEUP: #{@orientation.faceup}"
-            # console.log "BOTTOM: #{@orientation.bottom}"
-            # console.log "LEFT: #{@orientation.left}"
-            # console.log "RIGHT: #{@orientation.right}"
-            # console.log "UP: #{@orientation.up}"
-            # console.log "DOWN: #{@orientation.down}"
-            # console.log @gridIndex_X,@gridIndex_Y
-            # @moveToGrid()
 
     moveLeft: () =>
 
@@ -671,16 +651,6 @@ class Dice extends Block
 
             @animateDice(oldFaceUp, @orientation.faceup, "left")
 
-            # console.log "Dice moved left"
-            # console.log "New orientation is:"
-            # console.log "FACEUP: #{@orientation.faceup}"
-            # console.log "BOTTOM: #{@orientation.bottom}"
-            # console.log "LEFT: #{@orientation.left}"
-            # console.log "RIGHT: #{@orientation.right}"
-            # console.log "UP: #{@orientation.up}"
-            # console.log "DOWN: #{@orientation.down}"
-            # console.log @gridIndex_X,@gridIndex_Y
-            # @moveToGrid()
 
     moveRight: () =>
 
@@ -722,16 +692,6 @@ class Dice extends Block
 
             @animateDice(oldFaceUp, @orientation.faceup, "right")
 
-            # console.log "Dice moved right"
-            # console.log "New orientation is:"
-            # console.log "FACEUP: #{@orientation.faceup}"
-            # console.log "BOTTOM: #{@orientation.bottom}"
-            # console.log "LEFT: #{@orientation.left}"
-            # console.log "RIGHT: #{@orientation.right}"
-            # console.log "UP: #{@orientation.up}"
-            # console.log "DOWN: #{@orientation.down}"
-            # console.log @gridIndex_X,@gridIndex_Y
-            # @moveToGrid()
 
     animateDice: (currentFaceup, nextFaceup, direction) =>
         finalAnimation = @rotateAnimation(currentFaceup, nextFaceup, direction)
@@ -741,7 +701,7 @@ class Dice extends Block
             when "down" then  @htmlElement.addClass("rotate270")
             when "left" then @htmlElement.addClass("rotate0")
             when "right" then @htmlElement.addClass("rotate180")
-        @htmlElement.addClass("rollDice#{currentFaceup}To#{nextFaceup} #{direction}")
+        @htmlElement.addClass("rollDice#{currentFaceup}To#{nextFaceup}-v#{@getPlayer().id} #{direction}")
     setAnimationLock: () =>
         @animationLock = true
 
@@ -753,18 +713,6 @@ class Dice extends Block
 
 
 # ======================== END DICE ==================
-# class Position
-#     # PROPERTIES
-#     @x = null
-#     @y = null
-
-#     # METHODS
-#     constructor: (@x,@y) ->
-#         if @x is null  or @y is null
-#             console.log "MISSING X VARIABLE" unless @x?
-#             console.log "MISSING Y VARIABLE" unless @y?
-#             return
-#         console.log "New Position created: (#{@x},#{@y})"
 
 # ==================== START ORIENTATION ========================
 class Orientation
